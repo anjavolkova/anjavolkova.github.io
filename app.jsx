@@ -100,7 +100,7 @@ const Icon = {
 function Squiggle({ style }) {
   return (
     <img
-      src="assets/vector 10.svg"
+      src="assets/Vector 10.svg"
       alt=""
       aria-hidden="true"
       style={{
