@@ -24,17 +24,17 @@
     --frosted-bg: rgba(253,252,253,0.96);
   }
   html.dark {
-    --ink: rgb(237,232,242);
+    --ink: rgb(253,252,253);
     --muted: rgb(159,126,182);
-    --muted-2: rgb(200,170,220);
-    --bg: rgb(13,6,21);
-    --card: rgb(24,14,37);
-    --line: rgba(159,126,182,0.2);
-    --line-soft: rgba(159,126,182,0.12);
+    --muted-2: rgb(190,160,210);
+    --bg: rgb(21,2,34);
+    --card: rgb(36,16,52);
+    --line: rgba(159,126,182,0.22);
+    --line-soft: rgba(159,126,182,0.13);
     --dark: rgb(159,126,182);
-    --accent: rgb(175,145,200);
-    --header-bg: rgba(13,6,21,0.75);
-    --frosted-bg: rgba(13,6,21,0.95);
+    --accent: rgb(175,148,200);
+    --header-bg: rgba(21,2,34,0.75);
+    --frosted-bg: rgba(21,2,34,0.96);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: "Inter", system-ui, sans-serif; transition: background-color .3s, color .3s; }
@@ -69,7 +69,7 @@
   .header .nav a { color: var(--muted); font-family: "Space Mono", monospace; font-size: 15px; letter-spacing: -0.06em; transition: color .18s; }
   .header .nav a:hover, .header .nav a.active { color: var(--accent); }
   .btn-chat {
-    background: var(--ink); color: #fff;
+    background: var(--ink); color: var(--bg);
     border-radius: 12px;
     padding: 10px 16px; height: 44px;
     font-family: "Space Mono", monospace; font-size: 15px; letter-spacing: -0.06em;
@@ -496,7 +496,7 @@
       margin-top: 12px;
       width: 100%; height: 52px;
       justify-content: center;
-      background: var(--ink); color: #fff;
+      background: var(--ink); color: var(--bg);
       border-bottom: 0;
     }
 

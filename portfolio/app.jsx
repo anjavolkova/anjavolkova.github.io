@@ -94,7 +94,7 @@ const Icon = {
 function Squiggle({ style }) {
   return (
     <img
-      src="assets/scribble.png"
+      src="assets/vector 10.svg"
       alt=""
       aria-hidden="true"
       style={{
@@ -102,7 +102,7 @@ function Squiggle({ style }) {
         width: 300,
         height: "auto",
         pointerEvents: "none",
-        opacity: 0.9,
+        opacity: 1,
         ...style
       }} />);
 
