@@ -32,8 +32,7 @@ function applyLinks() {
 }
 
 // The Cal.com booking calendar, embedded inline in the contact panel. It
-// loads once the contact section is near the viewport; the fallback with the
-// "Book a time" link stays on top until the calendar reports it is ready.
+// loads once the contact section is near the viewport.
 const CAL = {
   namespace: "30min",
   link: "anna-volkova-selo8r/30min",
@@ -47,7 +46,6 @@ const CAL = {
 
 function initBooking() {
   const container = document.querySelector(".booking-embed");
-  const fallback = document.querySelector(".booking-fallback");
 
   function embed() {
     const Cal = loadCal();
@@ -55,7 +53,6 @@ function initBooking() {
     const cal = Cal.ns[CAL.namespace];
     cal("inline", { elementOrSelector: container, calLink: CAL.link, config: CAL.config });
     cal("ui", CAL.ui);
-    cal("on", { action: "linkReady", callback: () => { fallback.hidden = true; } });
   }
 
   const observer = new IntersectionObserver(([entry]) => {

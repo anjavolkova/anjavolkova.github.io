@@ -5,35 +5,43 @@
    --u = one design pixel at the current container width.
    ========================================================================== */
 
-/* Custom fonts. Licensed webfont files go in assets/fonts/; local() lets the
-   page use an installed copy meanwhile. */
+/* Custom fonts, served from assets/. They're loaded only from these files
+   (no local() lookup), so a preview on a machine with the fonts installed
+   shows exactly what visitors get. The Fiyona Test trial files cover
+   letters, digits and ! , - . ? only; other characters fall back to Georgia. */
 @font-face {
   font-family: "Fiyona Test";
-  src: local("Fiyona Test"), local("FiyonaTest-Regular"), url("../assets/fonts/FiyonaTest-Regular.woff2") format("woff2");
+  src: url("../assets/fiyonatest-regular.woff2") format("woff2");
   font-weight: 400;
   font-display: swap;
 }
 @font-face {
   font-family: "Fiyona Test";
-  src: local("Fiyona Test Medium"), local("FiyonaTest-Medium"), url("../assets/fonts/FiyonaTest-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Fiyona Test";
-  src: local("Fiyona Test SemiBold"), local("FiyonaTest-SemiBold"), url("../assets/fonts/FiyonaTest-SemiBold.woff2") format("woff2");
+  src: url("../assets/fiyonatest-semibold.woff2") format("woff2");
   font-weight: 600;
   font-display: swap;
 }
 @font-face {
   font-family: "Fiyona Test";
-  src: local("Fiyona Test Bold"), local("FiyonaTest-Bold"), url("../assets/fonts/FiyonaTest-Bold.woff2") format("woff2");
+  src: url("../assets/fiyonatest-bold.woff2") format("woff2");
   font-weight: 700;
   font-display: swap;
 }
 @font-face {
+  font-family: "Fiyona Test";
+  src: url("../assets/fiyonatest-extrabold.woff2") format("woff2");
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fiyona Test";
+  src: url("../assets/fiyonatest-black.woff2") format("woff2");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
   font-family: "Achilleus";
-  src: local("Achilleus Script"), local("Achilleus-Script"), url("../assets/fonts/Achilleus-Script.woff2") format("woff2");
+  src: url("../assets/AchilleusScript-V4rXy.woff2") format("woff2");
   font-display: swap;
 }
 
@@ -67,6 +75,11 @@
     drop-shadow(28px 34px 13px rgba(47, 9, 19, 0.05));
 
   --tab-h: 51px;
+
+  /* Scroll stops on desktop: how far below the top of the window each
+     section comes to rest. */
+  --stop-work: 112px;    /* top edge of the work showcase */
+  --stop-quests: 20px;   /* the "Side quests" heading */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -716,9 +729,6 @@ img.is-missing { visibility: hidden; }
   scroll-margin-top: 100px;
 }
 
-.mb-6 {display: none;
-margin-bottom:none;}
-
 .stipple--contact {
   --u: calc(100cqw / 1440);
   position: absolute;
@@ -760,44 +770,6 @@ margin-bottom:none;}
 
 /* Cal.com sizes its iframe to the calendar's height. */
 .booking-embed { width: 100%; min-height: 440px; overflow: auto; }
-
-.booking-fallback {
-  position: absolute;
-  inset: 0;
-  background: var(--white);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 24px;
-}
-.booking-fallback[hidden] { display: none; }
-
-.booking-host {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--line);
-}
-.booking-title {
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-.booking-button {
-  margin-top: 12px;
-  padding: 10px 22px;
-  border: 1px solid var(--body);
-  border-radius: 40px;
-  font-family: var(--font-mono);
-  font-size: 16px;
-  letter-spacing: -0.05em;
-  color: var(--body);
-  text-decoration: none;
-  transition: background-color 0.2s ease;
-}
-.booking-button:hover { background: var(--panel); }
 
 /* ---------- 5. Footer ---------- */
 
@@ -846,6 +818,26 @@ margin-bottom:none;}
 /* ==========================================================================
    Responsive
    ========================================================================== */
+
+/* Desktop scroll stops: scrolling settles on the hero, the work showcase,
+   the side-quests collage and the end of the page (contact + footer).
+   Firm stops need a window tall enough to show the whole work showcase
+   (--stop-work + 666px); shorter windows get gentle stops so nothing is
+   left unreachable between them. */
+@media (min-width: 1024px) {
+  html { scroll-snap-type: y proximity; }
+  /* The top stop sits on the header: the hero clips its photo, which makes
+     it a scroll container of its own, so it can't hold the stop itself. */
+  .site-header { scroll-snap-align: start; }
+  .work { scroll-snap-align: start; scroll-margin-top: var(--stop-work); }
+  .quests { scroll-margin-top: 0; }
+  .quests .section-title { scroll-snap-align: start; scroll-margin-top: var(--stop-quests); }
+  .contact { scroll-margin-top: 0; }
+  .site-footer { scroll-snap-align: end; }
+}
+@media (min-width: 1024px) and (min-height: 780px) {
+  html { scroll-snap-type: y mandatory; }
+}
 
 @media (max-width: 1280px) {
   .work-body { padding-right: 112px; }
