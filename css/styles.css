@@ -716,6 +716,9 @@ img.is-missing { visibility: hidden; }
   scroll-margin-top: 100px;
 }
 
+.mb-6 {display: none;
+margin-bottom:none;}
+
 .stipple--contact {
   --u: calc(100cqw / 1440);
   position: absolute;
