@@ -105,27 +105,27 @@ function initTabs() {
   }
 }
 
-// Side quests: hovering, focusing or tapping a collage piece brings it to the
-// front and shows its note. The last.fm note shows from the start, and the
-// last note shown stays up after the pointer leaves; only the piece drops
-// back. Switching from one piece to another waits briefly, so crossing a
-// piece on the way to a link doesn't swap the note out.
-const HOVER_SWITCH_DELAY = 150;
+// Side quests: resting the pointer on a collage piece (or focusing or
+// tapping it) lifts it, puts it on top of the pile and shows its note.
+// Pieces keep their new place in the pile, so nothing else shuffles. Passing
+// over a piece on the way somewhere else doesn't count: the pointer has to
+// slow down on it (less than REST_DISTANCE px moved in REST_INTERVAL ms).
+// The last.fm note shows from the start, and the last note shown stays up
+// after the pointer leaves.
+const REST_INTERVAL = 100;
+const REST_DISTANCE = 6;
 
 function initQuests() {
-  const layout = document.querySelector(".quests-layout");
+  const collage = document.querySelector(".collage");
+  const pieces = [...collage.querySelectorAll(".piece")];
   const noteFor = (piece) => document.getElementById(piece.getAttribute("aria-describedby")).closest(".quest");
-  let active = null;
-  let shownNote = document.querySelector(".quest.is-active");
-  let hoverTimer = null;
+  let shownNote = collage.querySelector(".quest.is-active");
+  let topOfPile = 10;
 
   function activate(piece) {
-    clearTimeout(hoverTimer);
-    if (piece === active) return;
-    active?.classList.remove("is-active");
-    active = piece;
-    if (!piece) return;
-    piece.classList.add("is-active");
+    for (const other of pieces) if (other !== piece) other.classList.remove("is-lifted");
+    piece.classList.add("is-lifted");
+    if (Number(piece.style.zIndex) !== topOfPile) piece.style.zIndex = ++topOfPile;
     const note = noteFor(piece);
     if (note !== shownNote) {
       shownNote?.classList.remove("is-active");
@@ -134,23 +134,82 @@ function initQuests() {
     }
   }
 
-  for (const piece of document.querySelectorAll(".piece")) {
-    piece.addEventListener("pointerenter", (e) => {
-      if (e.pointerType !== "mouse") return;
-      clearTimeout(hoverTimer);
-      if (active) hoverTimer = setTimeout(() => activate(piece), HOVER_SWITCH_DELAY);
-      else activate(piece);
+  // Mouse: check every REST_INTERVAL ms whether the pointer has come to rest.
+  let pointer = null;
+  let lastCheck = null;
+  let underPointer = null;
+  let poll = null;
+
+  collage.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    pointer = { x: e.clientX, y: e.clientY };
+    underPointer = e.target.closest(".piece");
+    poll ??= setInterval(() => {
+      const resting = lastCheck && Math.hypot(pointer.x - lastCheck.x, pointer.y - lastCheck.y) < REST_DISTANCE;
+      if (resting && underPointer && !underPointer.classList.contains("is-lifted")) activate(underPointer);
+      lastCheck = pointer;
+    }, REST_INTERVAL);
+  });
+  collage.addEventListener("pointerleave", () => {
+    clearInterval(poll);
+    poll = null;
+    lastCheck = null;
+  });
+
+  for (const piece of pieces) {
+    piece.addEventListener("pointerleave", (e) => {
+      if (e.pointerType === "mouse") piece.classList.remove("is-lifted");
     });
-    piece.addEventListener("pointerleave", () => clearTimeout(hoverTimer));
     piece.addEventListener("focus", () => activate(piece));
+    piece.addEventListener("blur", () => piece.classList.remove("is-lifted"));
     piece.addEventListener("click", () => activate(piece));
   }
-  layout.addEventListener("pointerleave", (e) => {
-    if (e.pointerType === "mouse" && !layout.querySelector(":focus-visible")) activate(null);
-  });
-  layout.addEventListener("focusout", (e) => {
-    if (!layout.contains(e.relatedTarget)) activate(null);
-  });
+}
+
+// Desktop scrolling moves one section per gesture: a trackpad swipe (with
+// its momentum) or a burst of mouse-wheel scrolling glides to the next stop
+// and no further. The stops are the CSS scroll-snap targets in styles.css.
+// Used only where those stops are firm (same media query as the CSS);
+// scrolling inside something scrollable, such as the calendar, is left alone.
+const SECTION_SCROLL = "(min-width: 1024px) and (min-height: 780px)";
+const GESTURE_GAP = 200; // ms without wheel events that ends a gesture
+
+function initSectionScroll() {
+  const wide = window.matchMedia(SECTION_SCROLL);
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const targets = [".work", ".quests .section-title"].map((s) => document.querySelector(s));
+  let inGesture = false;
+  let gestureTimer = null;
+
+  function stops() {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const starts = targets.map((el) => el.getBoundingClientRect().top + scrollY - parseFloat(getComputedStyle(el).scrollMarginTop));
+    return [0, ...starts, max].map((y) => Math.round(Math.min(max, Math.max(0, y))));
+  }
+
+  function scrollsInside(el, dy) {
+    for (; el && el !== document.body; el = el.parentElement) {
+      const overflow = getComputedStyle(el).overflowY;
+      if ((overflow === "auto" || overflow === "scroll") && el.scrollHeight > el.clientHeight + 1) {
+        if (dy > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0) return true;
+      }
+    }
+    return false;
+  }
+
+  window.addEventListener("wheel", (e) => {
+    if (!wide.matches || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    if (document.querySelector("dialog[open]") || scrollsInside(e.target, e.deltaY)) return;
+    e.preventDefault();
+    clearTimeout(gestureTimer);
+    gestureTimer = setTimeout(() => { inGesture = false; }, GESTURE_GAP);
+    if (inGesture) return;
+    inGesture = true;
+    const y = scrollY;
+    const all = stops();
+    const next = e.deltaY > 0 ? all.find((s) => s > y + 2) : all.reverse().find((s) => s < y - 2);
+    if (next !== undefined) window.scrollTo({ top: next, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  }, { passive: false });
 }
 
 // After 60+ seconds of playing with the stipple (moving the pointer over a
@@ -214,4 +273,5 @@ initTabs();
 initQuests();
 initBooking();
 initNudge();
+initSectionScroll();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);
