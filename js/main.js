@@ -171,15 +171,25 @@ function initQuests() {
 // and no further. The stops are the CSS scroll-snap targets in styles.css.
 // Used only where those stops are firm (same media query as the CSS);
 // scrolling inside something scrollable, such as the calendar, is left alone.
+//
+// A wheel event starts a new gesture when
+//  - it follows a pause of GESTURE_GAP ms, or
+//  - it goes the opposite way to the last section move, or
+//  - the deltas pick up again (a fresh swipe while the previous one's
+//    momentum is still trailing off), at least LOCK ms after the last move.
+// A new gesture moves on from where the previous move is heading, so a quick
+// second swipe isn't lost while the page is still gliding.
 const SECTION_SCROLL = "(min-width: 1024px) and (min-height: 780px)";
-const GESTURE_GAP = 200; // ms without wheel events that ends a gesture
+const GESTURE_GAP = 200;
+const LOCK = 450;
 
 function initSectionScroll() {
   const wide = window.matchMedia(SECTION_SCROLL);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const targets = [".work", ".quests .section-title"].map((s) => document.querySelector(s));
-  let inGesture = false;
-  let gestureTimer = null;
+  let lastTime = -Infinity;
+  let lastAbs = 0;
+  let lastMove = { time: -Infinity, dir: 0, target: null };
 
   function stops() {
     const max = document.documentElement.scrollHeight - innerHeight;
@@ -201,13 +211,20 @@ function initSectionScroll() {
     if (!wide.matches || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
     if (document.querySelector("dialog[open]") || scrollsInside(e.target, e.deltaY)) return;
     e.preventDefault();
-    clearTimeout(gestureTimer);
-    gestureTimer = setTimeout(() => { inGesture = false; }, GESTURE_GAP);
-    if (inGesture) return;
-    inGesture = true;
-    const y = scrollY;
+    const now = e.timeStamp;
+    const abs = Math.abs(e.deltaY);
+    const dir = Math.sign(e.deltaY);
+    const fresh = now - lastTime > GESTURE_GAP
+      || (dir !== lastMove.dir && abs >= 2)
+      || (abs > lastAbs * 1.5 && abs > 4 && now - lastMove.time > LOCK);
+    lastTime = now;
+    lastAbs = abs;
+    if (!fresh) return;
+    const gliding = lastMove.target !== null && now - lastMove.time < 1200 && Math.abs(scrollY - lastMove.target) > 2;
+    const from = gliding ? lastMove.target : scrollY;
     const all = stops();
-    const next = e.deltaY > 0 ? all.find((s) => s > y + 2) : all.reverse().find((s) => s < y - 2);
+    const next = dir > 0 ? all.find((s) => s > from + 2) : all.reverse().find((s) => s < from - 2);
+    lastMove = { time: now, dir, target: next ?? from };
     if (next !== undefined) window.scrollTo({ top: next, behavior: reducedMotion.matches ? "auto" : "smooth" });
   }, { passive: false });
 }
