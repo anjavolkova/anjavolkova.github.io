@@ -708,7 +708,7 @@ img.is-missing { visibility: hidden; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 24px;
   padding: 72px 16px 16px;
   text-align: center;
   background: var(--bg);
@@ -733,7 +733,7 @@ margin-bottom:none;}
 
 .contact-title {
   font-family: var(--font-serif);
-  font-size: 64px;
+  font-size: 58px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.09em;
@@ -993,6 +993,7 @@ margin-bottom:none;}
   .quest-title--caps { max-width: 240px; }
 
   .contact { gap: 24px; padding-top: 56px; }
+
   .stipple--contact {
     --u: calc(100cqw / 900);
     left: calc(-200 * var(--u));
