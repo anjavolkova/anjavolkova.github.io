@@ -134,15 +134,6 @@ img.is-missing { visibility: hidden; }
   z-index: 50;
 }
 
-.brand {
-  position: absolute;
-  left: 56px;
-  top: 63px;
-  width: 53px;
-  height: 57px;
-}
-.brand img { width: 100%; height: 100%; object-fit: contain; }
-
 .nav {
   position: fixed;
   top: clamp(12px, 4.375vw, 63px);
@@ -604,8 +595,14 @@ img.is-missing { visibility: hidden; }
   top: calc(var(--y) * var(--u));
   width: calc(var(--w) * var(--u));
   height: calc(var(--h) * var(--u));
+  padding: 0;
+  border: 0;
+  background: none;
   transform: rotate(var(--r));
+  transition: translate 0.3s ease;
 }
+.piece.is-active { z-index: 5; translate: 0 -6px; }
+.piece:focus-visible { outline-offset: 4px; }
 
 .piece-inner { position: absolute; inset: 0; }
 .piece img { width: 100%; height: 100%; }
@@ -659,16 +656,28 @@ img.is-missing { visibility: hidden; }
 .piece--coffee { --x: 497.27; --y: 184.92; --w: 226.2; --h: 223.47; --r: 62.93deg; filter: var(--object-shadow); }
 .piece--coffee img { object-fit: cover; object-position: bottom; }
 
-/* Project notes */
-.quest-list {
+/* Project notes share one slot to the right of the collage, level with its
+   top (the width of the second grid column); the active note fades in. */
+.quest {
+  position: absolute;
+  left: calc(100% + 30px);
+  top: 6%;
+  width: calc(100% * 433 / 880);
   display: flex;
   flex-direction: column;
-  gap: 96px;
-  padding-top: 26px;
+  align-items: flex-end;
   text-align: right;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 8px;
+  transition: opacity 0.25s ease, translate 0.25s ease, visibility 0s linear 0.25s;
 }
-
-.quest { display: flex; flex-direction: column; align-items: flex-end; }
+.quest.is-active {
+  opacity: 1;
+  visibility: visible;
+  translate: none;
+  transition: opacity 0.25s ease, translate 0.25s ease, visibility 0s;
+}
 
 .quest-title {
   margin-bottom: 40px;
@@ -691,7 +700,7 @@ img.is-missing { visibility: hidden; }
 .quest .cta {
   height: 50px;
   margin-top: 8px;
-  padding: 0 0 0 24px;
+  padding: 0 4px 0 24px;
   font-weight: 500;
 }
 
@@ -837,7 +846,6 @@ img.is-missing { visibility: hidden; }
 
 @media (max-width: 1280px) {
   .work-body { padding-right: 112px; }
-  .quests-layout { grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); }
   .quest-title { font-size: 48px; line-height: 50px; }
 }
 
@@ -864,13 +872,17 @@ img.is-missing { visibility: hidden; }
     row-gap: 56px;
     padding: 0 32px;
   }
-  .quest-list { gap: 64px; padding-top: 0; }
-  .quest { max-width: 480px; margin-left: auto; }
+  .collage { margin-bottom: 300px; }
+  .quest {
+    left: auto;
+    right: 0;
+    top: calc(100% + 48px);
+    width: min(480px, 100%);
+  }
 }
 
 /* Phone */
 @media (max-width: 719px) {
-  .brand { display: none; }
 
   .nav {
     left: 12px;
@@ -929,10 +941,10 @@ img.is-missing { visibility: hidden; }
   /* Collage loosens into a stacked arrangement with little overlap. */
   .collage {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
     aspect-ratio: auto;
-    margin-top: 16px;
+    margin: 16px 0 0;
   }
   .piece {
     --u: calc(100cqw / 480);
@@ -941,15 +953,32 @@ img.is-missing { visibility: hidden; }
     top: auto;
     justify-self: center;
   }
-  .piece--lastfm { grid-column: 1 / -1; order: 1; --r: -3deg; }
-  .piece--health { grid-column: 1 / -1; order: 2; --r: 3deg; margin-top: 8px; }
-  .piece--albums { order: 3; --u: calc(100cqw / 600); --r: 6deg; margin-top: 12px; }
-  .piece--phone { order: 4; --u: calc(100cqw / 600); margin-top: 12px; }
-  .piece--coffee { grid-column: 1 / -1; order: 5; --u: calc(100cqw / 640); }
+  .piece { margin-top: 24px; }
+  .piece--lastfm { order: 1; --r: -3deg; margin-top: 0; }
+  #quest-lastfm { order: 2; }
+  .piece--health { order: 3; --r: 3deg; }
+  #quest-health { order: 4; }
+  .piece--albums { order: 5; --r: 6deg; }
+  #quest-books { order: 6; }
+  .piece--phone { order: 7; }
+  #quest-llm { order: 8; }
+  .piece--coffee { order: 9; --u: calc(100cqw / 560); }
+  #quest-allergy { order: 10; }
+
+  .quest,
+  .quest.is-active {
+    position: static;
+    width: auto;
+    align-items: flex-start;
+    text-align: left;
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+  }
+  .quest .cta { padding-left: 0; }
 
   .quest-title { font-size: 40px; line-height: 42px; margin-bottom: 20px; }
   .quest-title--caps { max-width: 240px; }
-  .quest-list { gap: 48px; }
 
   .contact { gap: 24px; padding-top: 56px; }
   .stipple--contact {

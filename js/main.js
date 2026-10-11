@@ -78,7 +78,54 @@ function initTabs() {
   }
 }
 
+// Side quests: hovering, focusing or tapping a collage piece shows its note.
+// The note stays while the pointer is anywhere in the collage area, so its
+// link can be reached, and hides once the pointer (or focus) leaves it.
+// Switching from one note to another waits briefly, so crossing a piece on
+// the way to a link doesn't swap the note out.
+const HOVER_SWITCH_DELAY = 150;
+
+function initQuests() {
+  const layout = document.querySelector(".quests-layout");
+  const noteFor = (piece) => document.getElementById(piece.getAttribute("aria-describedby")).closest(".quest");
+  let active = null;
+  let hoverTimer = null;
+
+  function activate(piece) {
+    clearTimeout(hoverTimer);
+    if (piece === active) return;
+    if (active) {
+      active.classList.remove("is-active");
+      noteFor(active).classList.remove("is-active");
+    }
+    active = piece;
+    if (piece) {
+      piece.classList.add("is-active");
+      noteFor(piece).classList.add("is-active");
+    }
+  }
+
+  for (const piece of document.querySelectorAll(".piece")) {
+    piece.addEventListener("pointerenter", (e) => {
+      if (e.pointerType !== "mouse") return;
+      clearTimeout(hoverTimer);
+      if (active) hoverTimer = setTimeout(() => activate(piece), HOVER_SWITCH_DELAY);
+      else activate(piece);
+    });
+    piece.addEventListener("pointerleave", () => clearTimeout(hoverTimer));
+    piece.addEventListener("focus", () => activate(piece));
+    piece.addEventListener("click", () => activate(piece));
+  }
+  layout.addEventListener("pointerleave", (e) => {
+    if (e.pointerType === "mouse" && !layout.querySelector(":focus-visible")) activate(null);
+  });
+  layout.addEventListener("focusout", (e) => {
+    if (!layout.contains(e.relatedTarget)) activate(null);
+  });
+}
+
 applyLinks();
 hideMissingImages();
 initTabs();
+initQuests();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);

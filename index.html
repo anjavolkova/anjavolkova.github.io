@@ -17,9 +17,6 @@
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
-  <a class="brand" href="#top" aria-label="Anna Volkova, home">
-    <img src="assets/img/brand-mark.png" alt="" width="53" height="57">
-  </a>
   <nav class="nav" aria-label="Main">
     <ul class="nav-links">
       <li><a href="#work">Work</a></li>
@@ -283,56 +280,58 @@
   <section class="quests" id="side-quests" aria-labelledby="quests-title">
     <h2 class="section-title" id="quests-title">Side quests</h2>
     <div class="quests-layout">
-      <div class="collage" aria-label="Side-project screenshots" role="group">
-        <figure class="piece piece--health">
-          <div class="piece-inner paper">
-            <img src="assets/img/side/health-dashboard.png" alt="Health dashboard charts tracking fatigue and symptoms over time." width="357" height="220">
+      <!-- Each piece reveals its note on hover, keyboard focus or tap. -->
+      <div class="collage">
+        <button class="piece piece--health" type="button" aria-labelledby="quest-health-title" aria-describedby="quest-health-text">
+          <span class="piece-inner paper">
+            <img src="assets/img/side/health-dashboard.png" alt="" width="357" height="220">
             <img class="paper-grain" src="assets/img/side/paper-grain.png" alt="">
-          </div>
-        </figure>
-        <figure class="piece piece--lastfm">
-          <div class="piece-inner paper paper--card">
-            <img class="paper-grain" src="assets/img/side/paper-grain.png" alt="">
-            <img class="lastfm-shot" src="assets/img/side/lastfm-widget.png" alt="last.fm × Notion widget: a grid of album covers with listening stats for the last 30 days." width="800" height="353">
-          </div>
-        </figure>
-        <figure class="piece piece--albums">
-          <div class="piece-inner paper">
-            <img src="assets/img/side/top-albums.png" alt="Pink music summary graphic listing top albums and top artists." width="266" height="333">
-            <img class="paper-grain paper-grain--soft" src="assets/img/side/top-albums-grain.png" alt="">
-          </div>
-        </figure>
-        <figure class="piece piece--phone">
-          <img src="assets/img/side/llm-app.png" alt="inspo.ai app on a phone showing a generated image and a story plot." width="584" height="585">
-        </figure>
-        <figure class="piece piece--coffee">
-          <div class="piece-inner">
-            <img src="assets/img/side/coffee.png" alt="" width="226" height="223">
-          </div>
-        </figure>
-      </div>
+          </span>
+        </button>
+        <article class="quest" id="quest-health">
+          <h3 class="quest-title" id="quest-health-title">Health dashboard</h3>
+          <p id="quest-health-text">I built a custom dashboard to track my fatigue and brain fog alongside weather patterns and geomagnetic storms.</p>
+        </article>
 
-      <div class="quest-list">
-        <article class="quest">
-          <h3 class="quest-title quest-title--caps">LLM creative block solver</h3>
-          <p>Master’s project — I trained an LLM &amp; built a recommender system to help artists beat creative block 3 months before ChatGPT dropped.</p>
+        <button class="piece piece--lastfm" type="button" aria-labelledby="quest-lastfm-title" aria-describedby="quest-lastfm-text">
+          <span class="piece-inner paper paper--card">
+            <img class="paper-grain" src="assets/img/side/paper-grain.png" alt="">
+            <img class="lastfm-shot" src="assets/img/side/lastfm-widget.png" alt="" width="800" height="353">
+          </span>
+        </button>
+        <article class="quest" id="quest-lastfm">
+          <h3 class="quest-title" id="quest-lastfm-title">last.fm x notion widget</h3>
+          <p id="quest-lastfm-text">I built a widget that displays your music statistics in a layout optimised to your Notion dashboard.</p>
+          <a class="cta" href="#" data-link="lastfm-widget">Try it out <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </article>
-        <article class="quest">
-          <h3 class="quest-title">last.fm x notion widget</h3>
-          <p>I built a widget that displays your music statistics in a layout optimised to your Notion dashboard.</p>
-          <a class="cta cta--plain" href="#" data-link="lastfm-widget">Try it out <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+
+        <button class="piece piece--albums" type="button" aria-labelledby="quest-books-title" aria-describedby="quest-books-text">
+          <span class="piece-inner paper">
+            <img src="assets/img/side/top-albums.png" alt="" width="266" height="333">
+            <img class="paper-grain paper-grain--soft" src="assets/img/side/top-albums-grain.png" alt="">
+          </span>
+        </button>
+        <article class="quest" id="quest-books">
+          <h3 class="quest-title" id="quest-books-title">Books and music account</h3>
+          <p id="quest-books-text">I started a Bookstagram in 2024 to share my honest opinions about my interests. My content has since generated 1.08M impressions and reached 540k+ unique users, with a 5.2% engagement rate.</p>
         </article>
-        <article class="quest">
-          <h3 class="quest-title">Books and music account</h3>
-          <p>I started a Bookstagram in 2024 to share my honest opinions about my interests. My content has since generated 1.08M impressions and reached 540k+ unique users, with a 5.2% engagement rate.</p>
+
+        <button class="piece piece--phone" type="button" aria-labelledby="quest-llm-title" aria-describedby="quest-llm-text">
+          <img src="assets/img/side/llm-app.png" alt="" width="584" height="585">
+        </button>
+        <article class="quest" id="quest-llm">
+          <h3 class="quest-title quest-title--caps" id="quest-llm-title">LLM creative block solver</h3>
+          <p id="quest-llm-text">Master’s project — I trained an LLM &amp; built a recommender system to help artists beat creative block 3 months before ChatGPT dropped.</p>
         </article>
-        <article class="quest">
-          <h3 class="quest-title">Health dashboard</h3>
-          <p>I built a custom dashboard to track my fatigue and brain fog alongside weather patterns and geomagnetic storms.</p>
-        </article>
-        <article class="quest">
-          <h3 class="quest-title">Allergy checker</h3>
-          <p>One time I wrote a python script that tells me which teas in Albert Heijn I'm not allergic to.</p>
+
+        <button class="piece piece--coffee" type="button" aria-labelledby="quest-allergy-title" aria-describedby="quest-allergy-text">
+          <span class="piece-inner">
+            <img src="assets/img/side/coffee.png" alt="" width="226" height="223">
+          </span>
+        </button>
+        <article class="quest" id="quest-allergy">
+          <h3 class="quest-title" id="quest-allergy-title">Allergy checker</h3>
+          <p id="quest-allergy-text">One time I wrote a python script that tells me which teas in Albert Heijn I'm not allergic to.</p>
         </article>
       </div>
     </div>
