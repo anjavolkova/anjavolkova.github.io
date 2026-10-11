@@ -614,9 +614,8 @@ img.is-missing { visibility: hidden; }
   border: 0;
   background: none;
   transform: rotate(var(--r));
-  transition: translate 0.3s ease;
 }
-.piece.is-active { z-index: 5; translate: 0 -6px; }
+.piece.is-active { z-index: 5; }
 .piece:focus-visible { outline-offset: 4px; }
 
 .piece-inner { position: absolute; inset: 0; }
@@ -664,6 +663,18 @@ img.is-missing { visibility: hidden; }
 
 .piece--coffee { --x: 497.27; --y: 184.92; --w: 226.2; --h: 223.47; --r: 62.93deg; filter: var(--object-shadow); }
 .piece--coffee img { object-fit: fill; }
+/* Only the cup and saucer respond to the pointer, so the image's empty
+   corners don't catch hovers meant for the pieces underneath. */
+.piece--coffee { pointer-events: none; }
+.piece--coffee .piece-hit {
+  position: absolute;
+  left: 2.9%;
+  top: 1.4%;
+  width: 94%;
+  height: 97%;
+  border-radius: 50%;
+  pointer-events: auto;
+}
 
 /* Project notes share one slot to the right of the collage, level with its
    top (the width of the second grid column); the active note fades in. */
@@ -770,6 +781,89 @@ img.is-missing { visibility: hidden; }
 
 /* Cal.com sizes its iframe to the calendar's height. */
 .booking-embed { width: 100%; min-height: 440px; overflow: auto; max-height: 465.7px;}
+
+/* ---------- "Get in touch" message ---------- */
+
+.nudge {
+  width: min(520px, calc(100vw - 32px));
+  padding: 40px 32px 32px;
+  border: 1px solid var(--body);
+  border-radius: 24px;
+  background: var(--bg);
+  color: var(--body);
+}
+.nudge::backdrop {
+  background: rgba(39, 26, 33, 0.25);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.nudge-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  padding: 4px 8px;
+  border: 0;
+  background: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--body);
+  cursor: pointer;
+}
+
+.nudge-text {
+  margin-bottom: 24px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.nudge-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nudge-form label {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: -0.05em;
+}
+.nudge-form input,
+.nudge-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  font: inherit;
+  font-size: 16px;
+  color: var(--ink);
+}
+.nudge-form textarea { resize: vertical; }
+.nudge-honey { position: absolute; left: -9999px; }
+
+.nudge-send {
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 10px 22px;
+  border: 1px solid var(--body);
+  border-radius: 40px;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: -0.05em;
+  color: var(--body);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.nudge-send:hover { background: var(--panel); }
+.nudge-send:disabled { opacity: 0.5; cursor: default; }
+
+.nudge-status { font-size: 14px; color: var(--body); }
+.nudge-status:empty { display: none; }
 
 /* ---------- 5. Footer ---------- */
 

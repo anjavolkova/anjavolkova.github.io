@@ -105,30 +105,32 @@ function initTabs() {
   }
 }
 
-// Side quests: hovering, focusing or tapping a collage piece shows its note.
-// The note stays while the pointer is anywhere in the collage area, so its
-// link can be reached, and hides once the pointer (or focus) leaves it.
-// Switching from one note to another waits briefly, so crossing a piece on
-// the way to a link doesn't swap the note out.
+// Side quests: hovering, focusing or tapping a collage piece brings it to the
+// front and shows its note. The last.fm note shows from the start, and the
+// last note shown stays up after the pointer leaves; only the piece drops
+// back. Switching from one piece to another waits briefly, so crossing a
+// piece on the way to a link doesn't swap the note out.
 const HOVER_SWITCH_DELAY = 150;
 
 function initQuests() {
   const layout = document.querySelector(".quests-layout");
   const noteFor = (piece) => document.getElementById(piece.getAttribute("aria-describedby")).closest(".quest");
   let active = null;
+  let shownNote = document.querySelector(".quest.is-active");
   let hoverTimer = null;
 
   function activate(piece) {
     clearTimeout(hoverTimer);
     if (piece === active) return;
-    if (active) {
-      active.classList.remove("is-active");
-      noteFor(active).classList.remove("is-active");
-    }
+    active?.classList.remove("is-active");
     active = piece;
-    if (piece) {
-      piece.classList.add("is-active");
-      noteFor(piece).classList.add("is-active");
+    if (!piece) return;
+    piece.classList.add("is-active");
+    const note = noteFor(piece);
+    if (note !== shownNote) {
+      shownNote?.classList.remove("is-active");
+      shownNote = note;
+      note.classList.add("is-active");
     }
   }
 
@@ -151,9 +153,65 @@ function initQuests() {
   });
 }
 
+// After 60+ seconds of playing with the stipple (moving the pointer over a
+// stipple while the shader is running), a message invites the visitor to get
+// in touch. Its form is sent through FormSubmit to CONTACT_EMAIL.
+const CONTACT_EMAIL = "iamannavolkova@gmail.com";
+const PLAY_SECONDS = 60;
+
+function initNudge() {
+  const dialog = document.getElementById("nudge");
+  const form = document.getElementById("nudge-form");
+  const status = form.querySelector(".nudge-status");
+  const send = form.querySelector(".nudge-send");
+  let played = 0;
+  let lastMove = 0;
+
+  function onMove(e) {
+    const now = performance.now();
+    const over = [...document.querySelectorAll("canvas.stipple")].some((canvas) => {
+      if (canvas.dataset.renderer !== "webgpu") return false;
+      const r = canvas.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    });
+    // Count time between consecutive moves over the stipple; pauses don't count.
+    if (over && lastMove) played += Math.min(now - lastMove, 250);
+    lastMove = over ? now : 0;
+    if (played >= PLAY_SECONDS * 1000) {
+      window.removeEventListener("pointermove", onMove);
+      dialog.showModal();
+    }
+  }
+  window.addEventListener("pointermove", onMove, { passive: true });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    if (data._honey) return;
+    send.disabled = true;
+    status.textContent = "Sending…";
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ ...data, _subject: "New message from annavolkova.design" }),
+      });
+      const reply = await res.json();
+      if (!res.ok || String(reply.success) !== "true") throw new Error(reply.message);
+      form.reset();
+      status.textContent = "Sent, thank you! I’ll get back to you soon.";
+    } catch {
+      status.textContent = `That didn’t send. You can email me at ${CONTACT_EMAIL} instead.`;
+    } finally {
+      send.disabled = false;
+    }
+  });
+}
+
 applyLinks();
 hideMissingImages();
 initTabs();
 initQuests();
 initBooking();
+initNudge();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);
