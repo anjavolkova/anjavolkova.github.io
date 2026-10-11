@@ -136,7 +136,7 @@ img.is-missing { visibility: hidden; }
 
 .nav {
   position: fixed;
-  top: clamp(12px, 4.375vw, 63px);
+  top: clamp(12px, 4.375vw, 28px);
   right: clamp(16px, 3.33vw, 48px);
   display: flex;
   align-items: center;
@@ -731,7 +731,7 @@ img.is-missing { visibility: hidden; }
 .contact-title {
   font-family: var(--font-serif);
   font-size: 64px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
   letter-spacing: -0.09em;
   color: var(--ink);
@@ -751,9 +751,7 @@ img.is-missing { visibility: hidden; }
   z-index: 1;
   width: min(944px, 100%);
   min-height: 440px;
-  border: 1px solid var(--line-pale);
   border-radius: 7px;
-  background: var(--white);
   overflow: hidden;
 }
 
