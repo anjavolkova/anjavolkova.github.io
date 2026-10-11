@@ -769,7 +769,7 @@ img.is-missing { visibility: hidden; }
 }
 
 /* Cal.com sizes its iframe to the calendar's height. */
-.booking-embed { width: 100%; min-height: 440px; overflow: auto; }
+.booking-embed { width: 100%; min-height: 440px; overflow: auto; max-height: 465.7px;}
 
 /* ---------- 5. Footer ---------- */
 
