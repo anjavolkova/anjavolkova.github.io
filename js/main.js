@@ -1,4 +1,5 @@
 import { mountParticles } from "./particles.js";
+import { loadCal } from "./cal-embed.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
 const LINKS = {
@@ -9,7 +10,7 @@ const LINKS = {
   "study-home": "",
   shop: "",
   "lastfm-widget": "",
-  booking: "",   // booking page; also embedded in the contact panel when set
+  booking: "https://cal.com/anna-volkova-selo8r/30min",
   linkedin: "",
   instagram: "",
   github: "https://github.com/anjavolkova",
@@ -28,12 +29,41 @@ function applyLinks() {
     }
   }
 
-  if (LINKS.booking) {
-    const embed = document.querySelector(".booking-embed");
-    embed.src = LINKS.booking;
-    embed.hidden = false;
-    document.querySelector(".booking-fallback").hidden = true;
+}
+
+// The Cal.com booking calendar, embedded inline in the contact panel. It
+// loads once the contact section is near the viewport; the fallback with the
+// "Book a time" link stays on top until the calendar reports it is ready.
+const CAL = {
+  namespace: "30min",
+  link: "anna-volkova-selo8r/30min",
+  config: { layout: "month_view", useSlotsViewOnSmallScreen: "true", theme: "light" },
+  ui: {
+    cssVarsPerTheme: { light: { "cal-brand": "#271A21" }, dark: { "cal-brand": "#FCFBF8" } },
+    hideEventTypeDetails: false,
+    layout: "month_view",
+  },
+};
+
+function initBooking() {
+  const container = document.querySelector(".booking-embed");
+  const fallback = document.querySelector(".booking-fallback");
+
+  function embed() {
+    const Cal = loadCal();
+    Cal("init", CAL.namespace);
+    const cal = Cal.ns[CAL.namespace];
+    cal("inline", { elementOrSelector: container, calLink: CAL.link, config: CAL.config });
+    cal("ui", CAL.ui);
+    cal("on", { action: "linkReady", callback: () => { fallback.hidden = true; } });
   }
+
+  const observer = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    observer.disconnect();
+    embed();
+  }, { rootMargin: "800px 0px" });
+  observer.observe(container);
 }
 
 // Hide images that failed to load rather than showing broken-image icons.
@@ -128,4 +158,5 @@ applyLinks();
 hideMissingImages();
 initTabs();
 initQuests();
+initBooking();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);

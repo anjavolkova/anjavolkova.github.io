@@ -1,0 +1,34 @@
+// Cal.com embed loader, copied from the official @calcom/embed-snippet
+// package (v1.3.3). It defines window.Cal, queues calls, and loads Cal's
+// embed.js the first time it is used.
+const EMBED_JS = "https://app.cal.com/embed/embed.js";
+
+export function loadCal(embedJsUrl = EMBED_JS) {
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal;
+      let ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {};
+        cal.q = cal.q || [];
+        d.head.appendChild(d.createElement("script")).src = A;
+        cal.loaded = true;
+      }
+      if (ar[0] === L) {
+        const api = function () { p(api, arguments); };
+        const namespace = ar[1];
+        api.q = api.q || [];
+        if (typeof namespace === "string") {
+          cal.ns[namespace] = cal.ns[namespace] || api;
+          p(cal.ns[namespace], ar);
+          p(cal, ["initNamespace", namespace]);
+        } else p(cal, ar);
+        return;
+      }
+      p(cal, ar);
+    };
+  })(window, embedJsUrl, "init");
+  return window.Cal;
+}
