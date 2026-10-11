@@ -299,7 +299,7 @@
             <img loading="lazy" class="lastfm-shot" src="assets/img/side/lastfm-widget.webp" alt="" width="800" height="353">
           </span>
         </button>
-        <article class="quest" id="quest-lastfm">
+        <article class="quest is-active" id="quest-lastfm">
           <h3 class="quest-title" id="quest-lastfm-title">last.fm x notion widget</h3>
           <p id="quest-lastfm-text">I built a widget that displays your music statistics in a layout optimised to your Notion dashboard.</p>
           <a class="cta" href="#" data-link="lastfm-widget">Try it out <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
@@ -328,6 +328,8 @@
           <span class="piece-inner">
             <img loading="lazy" src="assets/img/side/coffee.webp" alt="" width="226" height="223">
           </span>
+          <!-- Hover area: just the cup and saucer, not the image's empty corners. -->
+          <span class="piece-hit" aria-hidden="true"></span>
         </button>
         <article class="quest" id="quest-allergy">
           <h3 class="quest-title" id="quest-allergy-title">Allergy checker</h3>
@@ -359,6 +361,25 @@
     <li><a href="#" data-link="email">email</a></li>
   </ul>
 </footer>
+
+<!-- Shown once someone has played with the stipple for 60+ seconds. -->
+<dialog class="nudge" id="nudge" aria-labelledby="nudge-text">
+  <form method="dialog">
+    <button class="nudge-close" aria-label="Close">&times;</button>
+  </form>
+  <p class="nudge-text" id="nudge-text">seems like you’ve been playing with the design of this page for 60+ seconds now, so it should be safe to say it would be worth getting in touch ;)</p>
+  <form class="nudge-form" id="nudge-form">
+    <label for="nudge-name">name</label>
+    <input id="nudge-name" name="name" autocomplete="name" required>
+    <label for="nudge-email">email</label>
+    <input id="nudge-email" name="email" type="email" autocomplete="email" required>
+    <label for="nudge-message">message</label>
+    <textarea id="nudge-message" name="message" rows="4" required></textarea>
+    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="nudge-send" type="submit">Send</button>
+    <p class="nudge-status" role="status"></p>
+  </form>
+</dialog>
 
 </body>
 </html>
