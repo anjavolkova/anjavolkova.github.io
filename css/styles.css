@@ -956,11 +956,6 @@ img.is-missing { visibility: hidden; }
   .quests .section-title { scroll-snap-align: start; scroll-margin-top: var(--stop-quests); }
   .contact { scroll-margin-top: 0; }
   .site-footer { scroll-snap-align: end; }
-  /* A fast swipe stops at the next section instead of flying past it. */
-  .site-header,
-  .work,
-  .quests .section-title,
-  .site-footer { scroll-snap-stop: always; }
 }
 @media (min-width: 1024px) and (min-height: 780px) {
   html { scroll-snap-type: y mandatory; }

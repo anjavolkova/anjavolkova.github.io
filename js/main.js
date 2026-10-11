@@ -166,69 +166,6 @@ function initQuests() {
   }
 }
 
-// Desktop scrolling moves one section per gesture: a trackpad swipe (with
-// its momentum) or a burst of mouse-wheel scrolling glides to the next stop
-// and no further. The stops are the CSS scroll-snap targets in styles.css.
-// Used only where those stops are firm (same media query as the CSS);
-// scrolling inside something scrollable, such as the calendar, is left alone.
-//
-// A wheel event starts a new gesture when
-//  - it follows a pause of GESTURE_GAP ms, or
-//  - it goes the opposite way to the last section move, or
-//  - the deltas pick up again (a fresh swipe while the previous one's
-//    momentum is still trailing off), at least LOCK ms after the last move.
-// A new gesture moves on from where the previous move is heading, so a quick
-// second swipe isn't lost while the page is still gliding.
-const SECTION_SCROLL = "(min-width: 1024px) and (min-height: 780px)";
-const GESTURE_GAP = 200;
-const LOCK = 450;
-
-function initSectionScroll() {
-  const wide = window.matchMedia(SECTION_SCROLL);
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const targets = [".work", ".quests .section-title"].map((s) => document.querySelector(s));
-  let lastTime = -Infinity;
-  let lastAbs = 0;
-  let lastMove = { time: -Infinity, dir: 0, target: null };
-
-  function stops() {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const starts = targets.map((el) => el.getBoundingClientRect().top + scrollY - parseFloat(getComputedStyle(el).scrollMarginTop));
-    return [0, ...starts, max].map((y) => Math.round(Math.min(max, Math.max(0, y))));
-  }
-
-  function scrollsInside(el, dy) {
-    for (; el && el !== document.body; el = el.parentElement) {
-      const overflow = getComputedStyle(el).overflowY;
-      if ((overflow === "auto" || overflow === "scroll") && el.scrollHeight > el.clientHeight + 1) {
-        if (dy > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0) return true;
-      }
-    }
-    return false;
-  }
-
-  window.addEventListener("wheel", (e) => {
-    if (!wide.matches || e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-    if (document.querySelector("dialog[open]") || scrollsInside(e.target, e.deltaY)) return;
-    e.preventDefault();
-    const now = e.timeStamp;
-    const abs = Math.abs(e.deltaY);
-    const dir = Math.sign(e.deltaY);
-    const fresh = now - lastTime > GESTURE_GAP
-      || (dir !== lastMove.dir && abs >= 2)
-      || (abs > lastAbs * 1.5 && abs > 4 && now - lastMove.time > LOCK);
-    lastTime = now;
-    lastAbs = abs;
-    if (!fresh) return;
-    const gliding = lastMove.target !== null && now - lastMove.time < 1200 && Math.abs(scrollY - lastMove.target) > 2;
-    const from = gliding ? lastMove.target : scrollY;
-    const all = stops();
-    const next = dir > 0 ? all.find((s) => s > from + 2) : all.reverse().find((s) => s < from - 2);
-    lastMove = { time: now, dir, target: next ?? from };
-    if (next !== undefined) window.scrollTo({ top: next, behavior: reducedMotion.matches ? "auto" : "smooth" });
-  }, { passive: false });
-}
-
 // After 60+ seconds of playing with the stipple (moving the pointer over a
 // stipple while the shader is running), a message invites the visitor to get
 // in touch. Its form is sent through FormSubmit to CONTACT_EMAIL.
@@ -290,5 +227,4 @@ initTabs();
 initQuests();
 initBooking();
 initNudge();
-initSectionScroll();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);
