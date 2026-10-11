@@ -32,9 +32,9 @@
 
   <!-- 1. Hero -->
   <section class="hero" id="top" aria-labelledby="hero-name">
-    <canvas class="stipple stipple--hero" data-src="assets/img/stipple-source.png" aria-hidden="true"></canvas>
+    <canvas class="stipple stipple--hero" data-src="assets/img/stipple-source.webp" aria-hidden="true"></canvas>
     <div class="hero-photo">
-      <img src="assets/img/hero-trees.jpg" alt="" width="1456" height="517">
+      <img src="assets/img/hero-trees-1440.webp" srcset="assets/img/hero-trees-1440.webp 1440w, assets/img/hero-trees.webp 2880w" sizes="101vw" alt="" width="1456" height="517" fetchpriority="high">
     </div>
     <h1 class="hero-name" id="hero-name">
       <span class="visually-hidden">Anna Volkova</span>
@@ -58,8 +58,8 @@
     <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0">
       <div class="work-visual">
         <div class="stage">
-          <img class="shot shot--panel" src="assets/img/work/node-management.png" alt="Lumia alarm history screen: a table of network alarms with source, timestamp, status and description." width="829" height="799">
-          <img class="grain grain--panel" src="assets/img/work/grain.png" alt="" width="758" height="536">
+          <img loading="lazy" class="shot shot--panel" src="assets/img/work/node-management.webp" alt="Lumia alarm history screen: a table of network alarms with source, timestamp, status and description." width="829" height="799">
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
@@ -76,13 +76,13 @@
             <ul class="badges">
               <li class="badge badge--cream">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-node-1" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-node-1" startOffset="50%">Reduced time-on-task</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">55<span class="badge-script">%</span></span>
                 <span class="visually-hidden">reduced time-on-task</span>
               </li>
               <li class="badge badge--blue">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-node-2" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-node-2" startOffset="50%">Reduced clicks</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">62<span class="badge-script">%</span></span>
                 <span class="visually-hidden">reduced clicks</span>
               </li>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-node">Full study <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-node">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -103,8 +103,8 @@
     <article class="work-panel" role="tabpanel" id="panel-lumia" aria-labelledby="tab-lumia" tabindex="0" hidden>
       <div class="work-visual">
         <div class="stage">
-          <img class="shot shot--panel" src="assets/img/work/lumia-design-system.png" alt="Lumia design system overview: colour tokens, typography, components and spacing tokens." width="829" height="799">
-          <img class="grain grain--panel" src="assets/img/work/grain.png" alt="" width="758" height="536">
+          <img loading="lazy" class="shot shot--panel" src="assets/img/work/lumia-design-system.webp" alt="Lumia design system overview: colour tokens, typography, components and spacing tokens." width="829" height="799">
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
@@ -121,13 +121,13 @@
             <ul class="badges">
               <li class="badge badge--cream badge--small">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-lumia-1" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-lumia-1" startOffset="50%">standardized components</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">403</span>
                 <span class="visually-hidden">standardized components</span>
               </li>
               <li class="badge badge--blue badge--small" style="--label-turn: 40deg">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-lumia-2" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-lumia-2" startOffset="50%">design tokens</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">381</span>
                 <span class="visually-hidden">design tokens</span>
               </li>
@@ -139,7 +139,7 @@
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-lumia">Full study <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-lumia">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -149,9 +149,9 @@
       <div class="work-visual">
         <div class="stage">
           <div class="shot shot--post">
-            <img src="assets/img/work/smm-post.png" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
+            <img loading="lazy" src="assets/img/work/smm-post.webp" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
           </div>
-          <img class="grain grain--panel" src="assets/img/work/grain-smm.png" alt="" width="758" height="536">
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain-smm.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
@@ -168,13 +168,13 @@
             <ul class="badges">
               <li class="badge badge--cream badge--large" style="--value-turn: 25.89deg">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-smm-1" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-smm-1" startOffset="50%">Reduced time-on-task</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">55<span class="badge-script">%</span></span>
                 <span class="visually-hidden">reduced time-on-task</span>
               </li>
               <li class="badge badge--blue badge--large">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-smm-2" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-smm-2" startOffset="50%">Increased ER</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">20<span class="badge-script">%</span></span>
                 <span class="visually-hidden">increased engagement rate</span>
               </li>
@@ -186,7 +186,7 @@
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-smm">Full study <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-smm">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -198,10 +198,10 @@
       <div class="work-visual">
         <div class="stage">
           <div class="shot shot--phone">
-            <img src="assets/img/work/home-network-app.png" alt="Home network app on a phone: network overview with routers, mesh points and connected devices." width="282" height="614">
+            <img loading="lazy" src="assets/img/work/home-network-app.webp" alt="Home network app on a phone: network overview with routers, mesh points and connected devices." width="282" height="614">
           </div>
-          <img class="grain grain--phone" src="assets/img/work/grain.png" alt="" width="758" height="536">
-          <img class="shot shot--phone-glare" src="assets/img/work/home-network-app.png" alt="" width="282" height="614">
+          <img loading="lazy" class="grain grain--phone" src="assets/img/work/grain.webp" alt="" width="758" height="536">
+          <img loading="lazy" class="shot shot--phone-glare" src="assets/img/work/home-network-app.webp" alt="" width="282" height="614">
           <span class="phone-island" aria-hidden="true"></span>
         </div>
       </div>
@@ -219,13 +219,13 @@
             <ul class="badges">
               <li class="badge badge--cream badge--large">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-home-1" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-home-1" startOffset="50%">Faster setup</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">61<span class="badge-script">%</span></span>
                 <span class="visually-hidden">faster setup</span>
               </li>
               <li class="badge badge--blue badge--large" style="--label-turn: 20deg">
                 <svg class="badge-label" viewBox="0 0 124 124" aria-hidden="true"><path id="arc-home-2" d="M62 112a50 50 0 1 1 .01 0"/><text><textPath href="#arc-home-2" startOffset="50%">Fewer errors</textPath></text></svg>
-                <img class="badge-grain" src="assets/img/work/badge-grain.png" alt="" width="201" height="142">
+                <img loading="lazy" class="badge-grain" src="assets/img/work/badge-grain.webp" alt="" width="201" height="142">
                 <span class="badge-value">75<span class="badge-script">%</span></span>
                 <span class="visually-hidden">fewer errors</span>
               </li>
@@ -237,7 +237,7 @@
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-home">Full study <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-home">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -247,9 +247,9 @@
       <div class="work-visual">
         <div class="stage">
           <div class="shot shot--sheet">
-            <img src="assets/img/work/heartseas-goals.png" alt="Heartseas “2027 goals” notepad page with ten numbered lines and checkboxes over a floral illustration." width="374" height="529">
+            <img loading="lazy" src="assets/img/work/heartseas-goals.webp" alt="Heartseas “2027 goals” notepad page with ten numbered lines and checkboxes over a floral illustration." width="374" height="529">
           </div>
-          <img class="grain grain--panel grain--faint" src="assets/img/work/grain-heartseas.png" alt="" width="758" height="536">
+          <img loading="lazy" class="grain grain--panel grain--faint" src="assets/img/work/grain-heartseas.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
@@ -270,7 +270,7 @@
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta cta--strong" href="#" data-link="shop">Go to shop <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta cta--strong" href="#" data-link="shop">Go to shop <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -284,8 +284,8 @@
       <div class="collage">
         <button class="piece piece--health" type="button" aria-labelledby="quest-health-title" aria-describedby="quest-health-text">
           <span class="piece-inner paper">
-            <img src="assets/img/side/health-dashboard.png" alt="" width="357" height="220">
-            <img class="paper-grain" src="assets/img/side/paper-grain.png" alt="">
+            <img loading="lazy" src="assets/img/side/health-dashboard.webp" alt="" width="357" height="220">
+            <img loading="lazy" class="paper-grain" src="assets/img/side/paper-grain.webp" alt="">
           </span>
         </button>
         <article class="quest" id="quest-health">
@@ -295,20 +295,20 @@
 
         <button class="piece piece--lastfm" type="button" aria-labelledby="quest-lastfm-title" aria-describedby="quest-lastfm-text">
           <span class="piece-inner paper paper--card">
-            <img class="paper-grain" src="assets/img/side/paper-grain.png" alt="">
-            <img class="lastfm-shot" src="assets/img/side/lastfm-widget.png" alt="" width="800" height="353">
+            <img loading="lazy" class="paper-grain" src="assets/img/side/paper-grain.webp" alt="">
+            <img loading="lazy" class="lastfm-shot" src="assets/img/side/lastfm-widget.webp" alt="" width="800" height="353">
           </span>
         </button>
         <article class="quest" id="quest-lastfm">
           <h3 class="quest-title" id="quest-lastfm-title">last.fm x notion widget</h3>
           <p id="quest-lastfm-text">I built a widget that displays your music statistics in a layout optimised to your Notion dashboard.</p>
-          <a class="cta" href="#" data-link="lastfm-widget">Try it out <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="lastfm-widget">Try it out <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </article>
 
         <button class="piece piece--albums" type="button" aria-labelledby="quest-books-title" aria-describedby="quest-books-text">
           <span class="piece-inner paper">
-            <img src="assets/img/side/top-albums.png" alt="" width="266" height="333">
-            <img class="paper-grain paper-grain--soft" src="assets/img/side/top-albums-grain.png" alt="">
+            <img loading="lazy" src="assets/img/side/top-albums.webp" alt="" width="266" height="333">
+            <img loading="lazy" class="paper-grain paper-grain--soft" src="assets/img/side/top-albums-grain.webp" alt="">
           </span>
         </button>
         <article class="quest" id="quest-books">
@@ -317,7 +317,7 @@
         </article>
 
         <button class="piece piece--phone" type="button" aria-labelledby="quest-llm-title" aria-describedby="quest-llm-text">
-          <img src="assets/img/side/llm-app.png" alt="" width="584" height="585">
+          <img loading="lazy" src="assets/img/side/llm-app.webp" alt="" width="342" height="703">
         </button>
         <article class="quest" id="quest-llm">
           <h3 class="quest-title quest-title--caps" id="quest-llm-title">LLM creative block solver</h3>
@@ -326,7 +326,7 @@
 
         <button class="piece piece--coffee" type="button" aria-labelledby="quest-allergy-title" aria-describedby="quest-allergy-text">
           <span class="piece-inner">
-            <img src="assets/img/side/coffee.png" alt="" width="226" height="223">
+            <img loading="lazy" src="assets/img/side/coffee.webp" alt="" width="226" height="223">
           </span>
         </button>
         <article class="quest" id="quest-allergy">
@@ -339,7 +339,7 @@
 
   <!-- 4. Contact / booking -->
   <section class="contact" id="contact" aria-labelledby="contact-title">
-    <canvas class="stipple stipple--contact" data-src="assets/img/stipple-source.png" aria-hidden="true"></canvas>
+    <canvas class="stipple stipple--contact" data-src="assets/img/stipple-source.webp" aria-hidden="true"></canvas>
     <h2 class="contact-title" id="contact-title">Tell me what you’re working on</h2>
     <p class="contact-sub">I’d love to chat and collaborate with you!</p>
     <div class="booking">
@@ -355,7 +355,7 @@
 
 <!-- 5. Footer -->
 <footer class="site-footer">
-  <p class="footer-credit">Designed &amp; coded with <img src="assets/img/icons/heart.svg" alt="love" width="15" height="13"> by Anya</p>
+  <p class="footer-credit">Designed &amp; coded with <img loading="lazy" src="assets/img/icons/heart.svg" alt="love" width="15" height="13"> by Anya</p>
   <ul class="footer-links">
     <li><a href="#" data-link="linkedin">linkedin</a></li>
     <li><a href="#" data-link="instagram">instagram</a></li>

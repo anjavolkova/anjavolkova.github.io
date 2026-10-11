@@ -190,6 +190,7 @@ img.is-missing { visibility: hidden; }
 .hero {
   position: relative;
   container-type: inline-size;
+  background: var(--bg);
   aspect-ratio: 1440 / 921;
   overflow: hidden;
 }
@@ -267,7 +268,7 @@ img.is-missing { visibility: hidden; }
 .work-tabs::-webkit-scrollbar { display: none; }
 
 .work-tab {
-  flex: 1 0 auto;
+  flex: 1 0 0;
   padding: 0 24px;
   border: 0;
   border-right: 1px solid var(--body);
@@ -291,7 +292,7 @@ img.is-missing { visibility: hidden; }
   grid-row: 2;
   display: grid;
   grid-template-columns: 35% minmax(0, 1fr);
-  min-height: calc(714px - var(--tab-h));
+  min-height: calc(666px - var(--tab-h));
 }
 .work-panel[hidden] { display: none; }
 .work-panel:focus-visible { outline-offset: -2px; }
@@ -307,13 +308,14 @@ img.is-missing { visibility: hidden; }
   --u: calc(100cqw / 504);
 }
 
+/* No transform on the stage: it must not become a stacking context, so the
+   colour-burn grain blends with the panel colour behind it. */
 .stage {
   position: absolute;
   left: 0;
-  top: 50%;
+  top: calc(50% - 357 * var(--u));
   width: calc(504 * var(--u));
   height: calc(714 * var(--u));
-  transform: translateY(-50%);
 }
 .stage > * { position: absolute; }
 
@@ -645,16 +647,10 @@ img.is-missing { visibility: hidden; }
     28px 34px 26px rgba(47, 9, 19, 0.05),
     51px 60px 31px rgba(47, 9, 19, 0.01);
 }
-.piece--phone img {
-  position: absolute;
-  left: -178.43%;
-  top: -33.36%;
-  width: 341.5%;
-  height: 167.24%;
-}
+.piece--phone img { object-fit: cover; }
 
 .piece--coffee { --x: 497.27; --y: 184.92; --w: 226.2; --h: 223.47; --r: 62.93deg; filter: var(--object-shadow); }
-.piece--coffee img { object-fit: cover; object-position: bottom; }
+.piece--coffee img { object-fit: fill; }
 
 /* Project notes share one slot to the right of the collage, level with its
    top (the width of the second grid column); the active note fades in. */
@@ -715,6 +711,7 @@ img.is-missing { visibility: hidden; }
   gap: 40px;
   padding: 72px 16px 16px;
   text-align: center;
+  background: var(--bg);
   overflow-x: clip;
   scroll-margin-top: 100px;
 }
@@ -722,12 +719,14 @@ img.is-missing { visibility: hidden; }
 .stipple--contact {
   --u: calc(100cqw / 1440);
   position: absolute;
-  z-index: 2;
+  z-index: 0;
   left: calc(-28 * var(--u));
   top: calc(-160 * var(--u));
   width: calc(1343 * var(--u));
   height: calc(652 * var(--u));
 }
+
+.contact > :not(.stipple) { position: relative; z-index: 1; }
 
 .contact-title {
   font-family: var(--font-serif);
@@ -862,7 +861,16 @@ img.is-missing { visibility: hidden; }
     border-bottom: 1px solid var(--line);
     --u: calc(100cqh / 714);
   }
-  .stage { left: 50%; top: 0; transform: translateX(-50%); }
+  .stage { left: calc(50% - 252 * var(--u)); top: 0; }
+  /* The panel is wider than the stage here, so the grain covers all of it. */
+  .stage .grain {
+    left: calc(252 * var(--u));
+    top: calc(357 * var(--u));
+    width: 100cqh;
+    height: 100cqw;
+    object-fit: cover;
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
 
   .work-body { padding: 80px 96px 40px 32px; }
 

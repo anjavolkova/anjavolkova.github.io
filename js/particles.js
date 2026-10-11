@@ -80,6 +80,36 @@ function rasterizeSource(img, width, height) {
 
 function fract(x) { return x - Math.floor(x); }
 
+function smoothstep(e0, e1, x) {
+  const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0)));
+  return t * t * (3 - 2 * t);
+}
+
+// One dot with the scatter pass's soft edge, stamped for every particle.
+function dotSprite(radius, color) {
+  const half = Math.ceil(radius + 2);
+  const size = half * 2;
+  const sprite = document.createElement("canvas");
+  sprite.width = size;
+  sprite.height = size;
+  const ctx = sprite.getContext("2d");
+  const pixels = ctx.createImageData(size, size);
+  const feather = Math.max(1, radius * (PARAMS.particleSoftness / 100));
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const d = Math.hypot(x + 0.5 - half, y + 0.5 - half);
+      const edge = 1 - smoothstep(radius - feather, radius + 1, d);
+      const i = (y * size + x) * 4;
+      pixels.data[i] = color.r * 255;
+      pixels.data[i + 1] = color.g * 255;
+      pixels.data[i + 2] = color.b * 255;
+      pixels.data[i + 3] = edge * color.a * 255;
+    }
+  }
+  ctx.putImageData(pixels, 0, 0);
+  return { sprite, half };
+}
+
 function drawStatic(canvas, img) {
   const { width, height } = cssSize(canvas);
   canvas.width = width;
@@ -95,13 +125,11 @@ function drawStatic(canvas, img) {
   const gridSize = Math.max(2, Math.min(32, 400 / (10 + PARAMS.dotDensity * 1.9)));
   const radius = gridSize * (PARAMS.dotScale / 100) * 0.5;
   const threshold = PARAMS.threshold / 100;
-  const c = PARAMS.particleGradient.stops[0].color;
-  ctx.fillStyle = `rgb(${c.r * 255}, ${c.g * 255}, ${c.b * 255})`;
   if (radius < 0.5) return;
+  const { sprite, half } = dotSprite(radius, PARAMS.particleGradient.stops[0].color);
 
   const cellsX = Math.ceil(width / gridSize);
   const cellsY = Math.ceil(height / gridSize);
-  ctx.beginPath();
   for (let row = 0; row < cellsY; row++) {
     for (let col = 0; col < cellsX; col++) {
       // "Noise" arrangement: hash2() jitter from the particle-gen pass.
@@ -112,11 +140,9 @@ function drawStatic(canvas, img) {
       if (x >= width || y >= height) continue;
       const alpha = source[(Math.floor(y) * width + Math.floor(x)) * 4 + 3] / 255;
       if (alpha < threshold) continue;
-      ctx.moveTo(x + radius, y);
-      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.drawImage(sprite, x - half, y - half);
     }
   }
-  ctx.fill();
 }
 
 /* ---------- WebGPU: the shader itself ---------- */
