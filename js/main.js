@@ -209,7 +209,7 @@ function initNudge() {
       dialog.close();
     };
     const onEnd = (e) => { if (e.animationName === "nudge-backdrop-out") done(); };
-    const fallback = setTimeout(done, 800);
+    const fallback = setTimeout(done, 1200);
     dialog.addEventListener("animationend", onEnd);
   }
 

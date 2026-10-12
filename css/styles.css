@@ -815,30 +815,33 @@ img.is-missing { visibility: hidden; }
 }
 
 /* Ease in rather than pop up: the page dims and blurs first, then the
-   message fades in and rises into place. */
+   message fades in and rises into place. The blurs fade with them (a blur
+   doesn't fade with opacity); keyframes without an end value animate to
+   the blur set in the rules above. */
 .nudge[open] { animation: nudge-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
 .nudge[open]::backdrop { animation: nudge-backdrop-in 0.6s ease both; }
 
 @keyframes nudge-in {
-  from { opacity: 0; transform: translateY(24px) scale(0.98); }
+  from { opacity: 0; transform: translateY(24px) scale(0.98); -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); }
   to { opacity: 1; transform: none; }
 }
 @keyframes nudge-backdrop-in {
-  from { opacity: 0; }
+  from { opacity: 0; -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); }
   to { opacity: 1; }
 }
 
-/* Closing reverses it: the message sinks and fades, then the page clears. */
-.nudge.is-closing { animation: nudge-out 0.35s ease-in both; }
-.nudge.is-closing::backdrop { animation: nudge-backdrop-out 0.45s ease 0.1s both; }
+/* Closing is the opening played backwards: same durations, reversed
+   easing, and the message leaves before the page clears. */
+.nudge.is-closing { animation: nudge-out 0.7s cubic-bezier(0.64, 0, 0.78, 0) both; }
+.nudge.is-closing::backdrop { animation: nudge-backdrop-out 0.6s cubic-bezier(0.75, 0, 0.75, 0.9) 0.25s both; }
 
 @keyframes nudge-out {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 0; transform: translateY(24px) scale(0.98); -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); }
 }
 @keyframes nudge-backdrop-out {
   from { opacity: 1; }
-  to { opacity: 0; }
+  to { opacity: 0; -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); }
 }
 
 .nudge-close {
