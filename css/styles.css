@@ -862,9 +862,6 @@ img.is-missing { visibility: hidden; }
 
 /* Cal.com sizes its iframe to the calendar's height. */
 .booking-embed { width: 100%; min-height: 440px; overflow: auto; max-height: 465.7px;}
-/* Still scrolls (wheel, trackpad, touch), just without the bar. */
-.booking-embed { scrollbar-width: none; }
-.booking-embed::-webkit-scrollbar { display: none; }
 
 /* ---------- "Get in touch" message ---------- */
 
