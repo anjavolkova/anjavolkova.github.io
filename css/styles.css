@@ -159,7 +159,7 @@ img.is-missing { visibility: hidden; }
   padding: 0 36px;
   border: 1px solid var(--body);
   border-radius: 40px;
-  background: rgba(246, 244, 245, 0.8);
+  background: rgba(246, 244, 245, 0.7);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   font-family: var(--font-mono);
@@ -561,7 +561,7 @@ img.is-missing { visibility: hidden; }
 .badge-label path { fill: none; }
 .badge-label text {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 13px;
   letter-spacing: 0.02em;
   fill: var(--plum);
   text-anchor: middle;
@@ -803,8 +803,10 @@ img.is-missing { visibility: hidden; }
   padding: 40px 32px 32px;
   border: 1px solid var(--body);
   border-radius: 24px;
-  background: var(--bg);
   color: var(--body);
+  background: hsla(45, 40%, 98%, 0.7);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 .nudge::backdrop {
   background: rgba(39, 26, 33, 0.25);
@@ -841,11 +843,21 @@ img.is-missing { visibility: hidden; }
 
 .nudge-text {
   margin-bottom: 24px;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   line-height: 1.35;
   letter-spacing: -0.03em;
   color: var(--ink);
+}
+
+h1.nudge-text {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.09em;
+  color: var(--ink);
+  text-box: trim-both cap alphabetic;
 }
 
 .nudge-form {
@@ -856,7 +868,7 @@ img.is-missing { visibility: hidden; }
 .nudge-form label {
   margin-top: 8px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: -0.05em;
 }
 .nudge-form input,
@@ -874,20 +886,22 @@ img.is-missing { visibility: hidden; }
 .nudge-honey { position: absolute; left: -9999px; }
 
 .nudge-send {
-  align-self: flex-start;
+align-self: flex-start;
   margin-top: 16px;
-  padding: 10px 22px;
+  padding: 8px 22px;
   border: 1px solid var(--body);
-  border-radius: 40px;
-  background: none;
+  border-radius: 12px;
+  background-color: var(--body);
   font-family: var(--font-mono);
   font-size: 16px;
   letter-spacing: -0.05em;
-  color: var(--body);
+  color: var(--white);
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-weight: 800;
+  letter-spacing: -12.4%;
 }
-.nudge-send:hover { background: var(--panel); }
+.nudge-send:hover { background: hsla(330, 17%, 49%, 0.25); color: var(--ink);border: 1px solid hsla(346, 48%, 5%, 0.25);}
 .nudge-send:disabled { opacity: 0.5; cursor: default; }
 
 .nudge-status { font-size: 14px; color: var(--body); }
