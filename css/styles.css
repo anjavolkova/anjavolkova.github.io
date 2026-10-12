@@ -189,7 +189,8 @@ img.is-missing { visibility: hidden; }
   padding-bottom: 3px;
   transition: background-size 0.25s ease;
 }
-.nav a:hover { background-size: 100% 1px; }
+.nav a:hover,
+.nav a[aria-current] { background-size: 100% 1px; }
 
 .nav-rule {
   flex: 1;
