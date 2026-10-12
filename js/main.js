@@ -12,7 +12,7 @@ const LINKS = {
   "lastfm-widget": "https://lastfm-notion-widget.vercel.app/",
   booking: "https://cal.com/anna-volkova-selo8r/30min",
   linkedin: "https://www.linkedin.com/in/iamannavolkova/",
-  instagram: "",
+  instagram: "https://www.instagram.com/heartseas.studio/",
   github: "https://github.com/anjavolkova",
   email: "iamannavolkova@gmail.com",     // plain address, e.g. "hello@example.com"
 };
