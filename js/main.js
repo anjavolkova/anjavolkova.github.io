@@ -31,6 +31,39 @@ function applyLinks() {
 
 }
 
+// Underline the menu link of the section in view: the one crossing a line a
+// third of the way down the screen (the last one once the page bottoms out).
+function initNav() {
+  const items = [...document.querySelectorAll('.nav a[href^="#"]')]
+    .map((link) => ({ link, section: document.getElementById(link.getAttribute("href").slice(1)) }))
+    .filter(({ section }) => section);
+  let current = null;
+
+  function update() {
+    const line = window.innerHeight / 3;
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    const item = atBottom ? items.at(-1) : items.find(({ section }) => {
+      const r = section.getBoundingClientRect();
+      return r.top <= line && r.bottom > line;
+    });
+    const link = item?.link ?? null;
+    if (link === current) return;
+    current?.removeAttribute("aria-current");
+    current = link;
+    current?.setAttribute("aria-current", "location");
+  }
+
+  let queued = false;
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; update(); });
+  };
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
+  update();
+}
+
 // The Cal.com booking calendar, embedded inline in the contact panel. It
 // loads once the contact section is near the viewport.
 const CAL = {
@@ -292,6 +325,7 @@ function initIntro() {
 
 initIntro();
 applyLinks();
+initNav();
 hideMissingImages();
 initTabs();
 initQuests();
