@@ -77,6 +77,22 @@ const CAL = {
   },
 };
 
+// Cal.com sizes its iframe to the calendar's exact height, which in Firefox
+// leaves the calendar's page a few pixels short, so it shows its own scrollbar
+// inside the frame. A little extra height avoids that; the box crops it anyway.
+const CAL_EXTRA_HEIGHT = 24;
+
+function padCalFrame(container) {
+  let padded = null;
+  new MutationObserver(() => {
+    const iframe = container.querySelector("iframe");
+    const height = iframe?.style.height;
+    if (!height?.endsWith("px") || height === padded) return;
+    padded = `${parseFloat(height) + CAL_EXTRA_HEIGHT}px`;
+    iframe.style.height = padded;
+  }).observe(container, { subtree: true, childList: true, attributeFilter: ["style"] });
+}
+
 function initBooking() {
   const container = document.querySelector(".booking-embed");
 
@@ -86,6 +102,7 @@ function initBooking() {
     const cal = Cal.ns[CAL.namespace];
     cal("inline", { elementOrSelector: container, calLink: CAL.link, config: CAL.config });
     cal("ui", CAL.ui);
+    padCalFrame(container);
   }
 
   const observer = new IntersectionObserver(([entry]) => {
