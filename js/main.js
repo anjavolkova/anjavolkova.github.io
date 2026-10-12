@@ -74,20 +74,50 @@ function hideMissingImages() {
 
 // WAI-ARIA tabs with automatic activation: arrow keys, Home and End move
 // between projects; the visual, metadata, badges and CTA swap together.
+//
+// The current panel fades out (.is-leaving) before the new one animates in
+// (.is-entering); see styles.css. Hovering or focusing a tab starts loading
+// its panel's images, so they're ready when it opens.
+const PANEL_OUT = 160;
+
 function initTabs() {
   const tabs = [...document.querySelectorAll(".work-tab")];
+  const panelFor = (tab) => document.getElementById(tab.getAttribute("aria-controls"));
+  const panels = tabs.map(panelFor);
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let switchTimer = null;
 
   function select(tab, { focus = false } = {}) {
     for (const t of tabs) {
       const active = t === tab;
       t.setAttribute("aria-selected", String(active));
       t.tabIndex = active ? 0 : -1;
-      document.getElementById(t.getAttribute("aria-controls")).hidden = !active;
     }
     if (focus) tab.focus();
+
+    const next = panelFor(tab);
+    const current = panels.find((p) => !p.hidden);
+    clearTimeout(switchTimer);
+    for (const p of panels) p.classList.remove("is-leaving", "is-entering");
+    if (next === current) return;
+
+    const show = () => {
+      current?.classList.remove("is-leaving");
+      for (const p of panels) p.hidden = p !== next;
+      if (!reducedMotion.matches) next.classList.add("is-entering");
+    };
+    if (reducedMotion.matches || !current) return show();
+    current.classList.add("is-leaving");
+    switchTimer = setTimeout(show, PANEL_OUT);
   }
 
+  const preload = (tab) => {
+    for (const img of panelFor(tab).querySelectorAll('img[loading="lazy"]')) img.loading = "eager";
+  };
+
   for (const tab of tabs) {
+    tab.addEventListener("pointerenter", () => preload(tab));
+    tab.addEventListener("focus", () => preload(tab));
     tab.addEventListener("click", () => select(tab));
     tab.addEventListener("keydown", (e) => {
       const i = tabs.indexOf(tab);
@@ -249,6 +279,18 @@ function initNudge() {
   });
 }
 
+// Page-load intro: start it (html.intro-play, see styles.css and the script
+// in <head>) once the hero photo and name artwork are ready, or after 2s.
+function initIntro() {
+  const root = document.documentElement;
+  if (!root.classList.contains("intro")) return;
+  const images = [...document.querySelectorAll(".hero-photo img, .hero-name img")];
+  const ready = Promise.all(images.map((img) => img.decode().catch(() => {})));
+  const timeout = new Promise((resolve) => setTimeout(resolve, 2000));
+  Promise.race([ready, timeout]).then(() => requestAnimationFrame(() => root.classList.add("intro-play")));
+}
+
+initIntro();
 applyLinks();
 hideMissingImages();
 initTabs();

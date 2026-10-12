@@ -10,6 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  // Page-load intro: hide the hero until js/main.js plays it (skipped with
+  // reduced motion). If the script never runs, show it after 3s anyway.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("intro");
+    setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
+  }
+</script>
 <script type="module" src="js/main.js"></script>
 </head>
 <body>
