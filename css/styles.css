@@ -859,6 +859,7 @@ img.is-missing { visibility: hidden; }
   min-height: 440px;
   border-radius: 7px;
   overflow: hidden;
+  box-shadow: var(--soft-shadow);
 }
 
 /* Cal.com sizes its iframe to the calendar's height. */
