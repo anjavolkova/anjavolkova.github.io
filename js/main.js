@@ -9,12 +9,12 @@ const LINKS = {
   "study-smm": "",
   "study-home": "",
   shop: "",
-  "lastfm-widget": "",
+  "lastfm-widget": "https://lastfm-notion-widget.vercel.app/",
   booking: "https://cal.com/anna-volkova-selo8r/30min",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/iamannavolkova/",
   instagram: "",
   github: "https://github.com/anjavolkova",
-  email: "",     // plain address, e.g. "hello@example.com"
+  email: "iamannavolkova@gmail.com",     // plain address, e.g. "hello@example.com"
 };
 
 function applyLinks() {
