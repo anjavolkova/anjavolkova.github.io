@@ -197,6 +197,34 @@ function initNudge() {
   }
   window.addEventListener("pointermove", onMove, { passive: true });
 
+  // The × button, Esc and a click on the dimmed background all close the
+  // message, playing the closing animation first.
+  function close() {
+    if (!dialog.open || dialog.classList.contains("is-closing")) return;
+    dialog.classList.add("is-closing");
+    const done = () => {
+      clearTimeout(fallback);
+      dialog.removeEventListener("animationend", onEnd);
+      dialog.classList.remove("is-closing");
+      dialog.close();
+    };
+    const onEnd = (e) => { if (e.animationName === "nudge-backdrop-out") done(); };
+    const fallback = setTimeout(done, 800);
+    dialog.addEventListener("animationend", onEnd);
+  }
+
+  const onBackdrop = (e) => {
+    const r = dialog.getBoundingClientRect();
+    return e.target === dialog && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom);
+  };
+  // Only a click that starts and ends on the background counts, so a text
+  // selection dragged out of the form doesn't close it.
+  let pressedBackdrop = false;
+  dialog.addEventListener("pointerdown", (e) => { pressedBackdrop = onBackdrop(e); });
+  dialog.addEventListener("click", (e) => { if (pressedBackdrop && onBackdrop(e)) close(); });
+  dialog.addEventListener("cancel", (e) => { e.preventDefault(); close(); });
+  dialog.querySelector('form[method="dialog"]').addEventListener("submit", (e) => { e.preventDefault(); close(); });
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form));

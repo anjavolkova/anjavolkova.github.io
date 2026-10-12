@@ -828,6 +828,19 @@ img.is-missing { visibility: hidden; }
   to { opacity: 1; }
 }
 
+/* Closing reverses it: the message sinks and fades, then the page clears. */
+.nudge.is-closing { animation: nudge-out 0.35s ease-in both; }
+.nudge.is-closing::backdrop { animation: nudge-backdrop-out 0.45s ease 0.1s both; }
+
+@keyframes nudge-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(16px) scale(0.98); }
+}
+@keyframes nudge-backdrop-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 .nudge-close {
   position: absolute;
   top: 12px;
