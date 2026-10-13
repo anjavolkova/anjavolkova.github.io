@@ -1226,20 +1226,29 @@ align-self: flex-start;
   .contact,
   .work-tab { scroll-margin-top: 64px; }
 
-  /* Hero: 390 × 425 design px, scaled with the width. The intro line sits in
-     the flow, so the hero grows if it wraps. */
-  .hero { aspect-ratio: auto; }
+  /* Hero: fills the screen except for the first project row, which peeks in
+     at the bottom. From the photo's bottom edge down it follows the Figma
+     frame (390 wide, scaled with the width); the photo takes the rest. */
+  .hero {
+    aspect-ratio: auto;
+    height: max(calc(100vh - 52px), calc(482 * 100vw / 390));
+    height: max(calc(100svh - 52px), calc(482 * 100vw / 390));
+  }
   .hero > * { --u: calc(100cqw / 390); }
-  .hero-photo { top: 0; width: 100%; height: calc(217 * var(--u)); }
-  .stipple--hero { left: 0; top: calc(217 * var(--u)); width: calc(390 * var(--u)); height: calc(190 * var(--u)); }
-  .hero-name-anna { left: calc(19 * var(--u)); top: calc(81 * var(--u)); width: calc(335 * var(--u)); }
-  .hero-name-volkova { left: calc(3 * var(--u)); top: calc(197 * var(--u)); width: calc(401 * var(--u)); }
+  .hero-photo { top: 0; bottom: calc(302 * var(--u)); width: 100%; height: auto; }
+  .stipple--hero {
+    left: calc(-139 * var(--u));
+    top: auto;
+    bottom: calc(-23 * var(--u));
+    width: calc(668 * var(--u));
+    height: calc(325 * var(--u));
+  }
+  .hero-name-anna { left: calc(19 * var(--u)); top: auto; bottom: calc(319 * var(--u)); width: calc(335 * var(--u)); }
+  .hero-name-volkova { left: calc(3 * var(--u)); top: auto; bottom: calc(227 * var(--u)); width: calc(401 * var(--u)); }
   .hero-intro {
-    position: relative;
-    max-width: none;
-    margin: calc(353.5 * var(--u)) calc(20 * var(--u)) 0;
-    padding-bottom: 23.5px;
-    inset: auto;
+    left: calc(20 * var(--u));
+    top: calc(100% - 205.5 * var(--u));
+    max-width: calc(350 * var(--u));
     line-height: 1.5;
   }
 
@@ -1297,8 +1306,8 @@ align-self: flex-start;
 
   .work-title { order: 1; font-size: 48px; line-height: 1.15; text-box: none; }
 
-  /* Pictures, centred, their shadows left uncut: the composed stages keep
-     their own box... */
+  /* Pictures, centred, their shadows left uncut, no grain: the composed
+     stages keep their own box... */
   .work-visual { order: 2; height: 440px; border-bottom: 0; overflow: visible; }
   /* ...and the two app screenshots are sized and placed by their cards, full
      width, with the shadow around the card spilling out. */
@@ -1311,10 +1320,9 @@ align-self: flex-start;
     width: 100%;
     height: auto;
     aspect-ratio: var(--crop);
-    container-type: size;
   }
   .shot--panel { left: var(--crop-x); top: var(--crop-y); width: var(--crop-w); height: auto; }
-  .work-visual:has(.shot--panel) .grain { left: 50%; top: 50%; width: 100cqh; height: 100cqw; }
+  .work-visual .grain { display: none; }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }
