@@ -1180,7 +1180,6 @@ align-self: flex-start;
     position: absolute;
     inset: 0 0 auto;
     height: 64px;
-    background: var(--bg);
   }
   .nav-brand {
     position: absolute;
