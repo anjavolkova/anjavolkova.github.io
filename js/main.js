@@ -34,7 +34,7 @@ function applyLinks() {
 // Underline the menu link of the section in view: the one crossing a line a
 // third of the way down the screen (the last one once the page bottoms out).
 function initNav() {
-  const items = [...document.querySelectorAll('.nav a[href^="#"]')]
+  const items = [...document.querySelectorAll('.nav a[href^="#"]:not(.nav-brand)')]
     .map((link) => ({ link, section: document.getElementById(link.getAttribute("href").slice(1)) }))
     .filter(({ section }) => section);
   let current = null;
@@ -62,6 +62,33 @@ function initNav() {
   window.addEventListener("scroll", queue, { passive: true });
   window.addEventListener("resize", queue);
   update();
+}
+
+// Phones: the menu button opens the links as a full-screen menu over a
+// blurred page. Picking a link, the × or Esc closes it.
+const PHONE = window.matchMedia("(max-width: 719px)");
+
+function initMenu() {
+  const root = document.documentElement;
+  const toggle = document.querySelector(".menu-toggle");
+  const nav = document.getElementById("site-nav");
+  const behind = [document.querySelector("main"), document.querySelector(".site-footer")];
+
+  function setOpen(open) {
+    root.classList.toggle("menu-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    for (const el of behind) el.inert = open;
+  }
+
+  toggle.addEventListener("click", () => setOpen(!root.classList.contains("menu-open")));
+  nav.addEventListener("click", (e) => { if (e.target.closest("a")) setOpen(false); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape" || !root.classList.contains("menu-open")) return;
+    setOpen(false);
+    toggle.focus();
+  });
+  PHONE.addEventListener("change", () => setOpen(false));
 }
 
 // The Cal.com booking calendar, embedded inline in the contact panel. It
@@ -128,9 +155,14 @@ function hideMissingImages() {
 // The current panel fades out (.is-leaving) before the new one animates in
 // (.is-entering); see styles.css. Hovering or focusing a tab starts loading
 // its panel's images, so they're ready when it opens.
+//
+// On phones the same buttons work as an accordion instead: each one slides
+// its project open below it (closing the one that was open), or shut again.
 const PANEL_OUT = 160;
+const SLIDE_TIME = 400;
 
 function initTabs() {
+  const tablist = document.querySelector(".work-tabs");
   const tabs = [...document.querySelectorAll(".work-tab")];
   const panelFor = (tab) => document.getElementById(tab.getAttribute("aria-controls"));
   const panels = tabs.map(panelFor);
@@ -161,6 +193,76 @@ function initTabs() {
     switchTimer = setTimeout(show, PANEL_OUT);
   }
 
+  // Accordion: animate the panel's height between 0 and its full height.
+  function slide(panel, open) {
+    for (const animation of panel.getAnimations()) animation.cancel();
+    panel.classList.remove("is-sliding");
+    panel.hidden = false;
+    if (reducedMotion.matches) {
+      panel.hidden = !open;
+      return;
+    }
+    if (open) panel.classList.add("is-entering");
+    const height = `${panel.offsetHeight}px`;
+    panel.classList.add("is-sliding");
+    const animation = panel.animate(
+      open ? [{ height: "0px" }, { height }] : [{ height }, { height: "0px" }],
+      { duration: SLIDE_TIME, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+    );
+    animation.onfinish = () => {
+      panel.classList.remove("is-sliding");
+      panel.hidden = !open;
+    };
+  }
+
+  function toggle(tab) {
+    const open = tab.getAttribute("aria-expanded") !== "true";
+    for (const t of tabs) {
+      const expanded = t === tab && open;
+      if ((t.getAttribute("aria-expanded") === "true") !== expanded) slide(panelFor(t), expanded);
+      t.setAttribute("aria-expanded", String(expanded));
+    }
+    // A project closing above can carry this one off the top of the screen.
+    if (open) {
+      setTimeout(() => {
+        if (tab.getBoundingClientRect().top < 0) {
+          tab.scrollIntoView({ block: "start", behavior: reducedMotion.matches ? "auto" : "smooth" });
+        }
+      }, reducedMotion.matches ? 0 : SLIDE_TIME);
+    }
+  }
+
+  // Switch between tabs (wider screens) and the accordion (phones), keeping
+  // the open project.
+  function setMode() {
+    clearTimeout(switchTimer);
+    for (const p of panels) {
+      for (const animation of p.getAnimations()) animation.cancel();
+      p.classList.remove("is-sliding", "is-leaving", "is-entering");
+    }
+    if (PHONE.matches) {
+      tablist.removeAttribute("role");
+      for (const tab of tabs) {
+        const panel = panelFor(tab);
+        tab.removeAttribute("role");
+        tab.removeAttribute("aria-selected");
+        tab.setAttribute("aria-expanded", String(!panel.hidden));
+        tab.tabIndex = 0;
+        panel.setAttribute("role", "region");
+      }
+    } else {
+      const open = tabs.find((t) => t.getAttribute("aria-expanded") === "true") ?? tabs[0];
+      tablist.setAttribute("role", "tablist");
+      for (const tab of tabs) {
+        tab.setAttribute("role", "tab");
+        tab.removeAttribute("aria-expanded");
+        panelFor(tab).setAttribute("role", "tabpanel");
+      }
+      for (const p of panels) p.hidden = p !== panelFor(open);
+      select(open);
+    }
+  }
+
   const preload = (tab) => {
     for (const img of panelFor(tab).querySelectorAll('img[loading="lazy"]')) img.loading = "eager";
   };
@@ -168,8 +270,9 @@ function initTabs() {
   for (const tab of tabs) {
     tab.addEventListener("pointerenter", () => preload(tab));
     tab.addEventListener("focus", () => preload(tab));
-    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("click", () => (PHONE.matches ? toggle(tab) : select(tab)));
     tab.addEventListener("keydown", (e) => {
+      if (PHONE.matches) return;
       const i = tabs.indexOf(tab);
       const next = {
         ArrowRight: tabs[(i + 1) % tabs.length],
@@ -183,6 +286,9 @@ function initTabs() {
       next.scrollIntoView({ block: "nearest", inline: "nearest" });
     });
   }
+
+  setMode();
+  PHONE.addEventListener("change", setMode);
 }
 
 // Side quests: resting the pointer on a collage piece (or focusing or
@@ -343,6 +449,7 @@ function initIntro() {
 initIntro();
 applyLinks();
 initNav();
+initMenu();
 hideMissingImages();
 initTabs();
 initQuests();
