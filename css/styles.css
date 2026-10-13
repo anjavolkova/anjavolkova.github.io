@@ -661,6 +661,7 @@ img.is-missing { visibility: hidden; }
   inset: 0;
   pointer-events: none;
 }
+.quests-lettering picture { display: contents; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
