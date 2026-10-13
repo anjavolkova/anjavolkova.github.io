@@ -199,6 +199,10 @@ img.is-missing { visibility: hidden; }
   background: currentColor;
 }
 
+/* Phones only (see the end of the file). */
+.menu-toggle,
+.nav-brand { display: none; }
+
 /* ---------- 1. Hero ---------- */
 
 .hero {
@@ -265,7 +269,7 @@ img.is-missing { visibility: hidden; }
    motion is on); html.intro-play, added once the hero images are ready,
    plays it: the photo settles in, the name slides up into place, then
    the intro line and the menu arrive. */
-.intro:not(.intro-play) :is(.hero-photo, .stipple--hero, .hero-intro, .nav) { opacity: 0; }
+.intro:not(.intro-play) :is(.hero-photo, .stipple--hero, .hero-intro, .nav, .menu-toggle) { opacity: 0; }
 .intro:not(.intro-play) .hero-name img { opacity: 0; }
 
 .intro-play .hero-photo { animation: intro-photo 1.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
@@ -273,7 +277,7 @@ img.is-missing { visibility: hidden; }
 .intro-play .hero-name-anna { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s backwards; }
 .intro-play .hero-name-volkova { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards; }
 .intro-play .hero-intro { animation: intro-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.4s backwards; }
-.intro-play .nav { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
+.intro-play :is(.nav, .menu-toggle) { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
 
 @keyframes intro-photo { from { opacity: 0; transform: scale(1.06); } }
 @keyframes intro-fade { from { opacity: 0; } }
@@ -1118,56 +1122,231 @@ align-self: flex-start;
 /* Phone */
 @media (max-width: 719px) {
 
+  /* Header: a menu button over the photo. The links open as a full-screen
+     menu, frosted like the stipple dialog, under a bar with the pansy. */
+  .menu-toggle {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .menu-icon { grid-area: 1 / 1; }
+  .menu-icon--close,
+  .menu-open .menu-icon--open { display: none; }
+  .menu-open .menu-icon--close { display: block; }
+  .menu-open .menu-toggle { position: fixed; right: 20px; }
+  .menu-open { overflow: hidden; }
+
   .nav {
-    left: 12px;
-    right: 12px;
+    inset: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
     width: auto;
-    height: 48px;
-    gap: 10px;
-    padding: 0 18px;
-    font-size: 14px;
+    height: auto;
+    padding: 88px 20px 24px;
+    border: 0;
+    border-radius: 0;
+    background: hsla(45, 40%, 98%, 0.7);
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, -webkit-backdrop-filter 0.3s ease, backdrop-filter 0.3s ease, visibility 0s linear 0.3s;
   }
-  .nav-links, .nav-links li { gap: 10px; }
-
-  .hero {
-    aspect-ratio: 1000 / 960;
-    margin-top: 72px;
+  .menu-open .nav {
+    opacity: 1;
+    visibility: visible;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    transition-delay: 0s;
   }
-  .hero > * { --u: calc(100cqw / 1000); }
-  .stipple--hero { left: calc(-200 * var(--u)); top: calc(60 * var(--u)); }
-  .hero-photo { top: calc(440 * var(--u)); height: calc(520 * var(--u)); }
-  .hero-name-anna { left: calc(40 * var(--u)); top: calc(170 * var(--u)); }
-  .hero-name-volkova { left: calc(30 * var(--u)); top: calc(420 * var(--u)); width: calc(950 * var(--u)); }
-  .hero-intro {
-    left: 16px;
-    top: 0;
-    max-width: calc(100% - 32px);
-    font-size: 14px;
-    line-height: 18px;
+  .intro-play .nav { animation: none; }
+  .nav::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 64px;
+    background: var(--bg);
   }
-
-  .work-visual { height: 380px; }
-  .work-body { gap: 24px; padding: 24px 16px 32px; }
-  .work-title { font-size: 44px; }
-  .work-meta-wrap { display: flex; flex-direction: column; }
-  .badges {
-    position: static;
-    order: -1;
+  .nav-brand {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: none;
+  }
+  .nav-brand img { width: 36px; height: 39px; }
+  .nav-links { flex-direction: column; align-items: stretch; gap: 8px; }
+  .nav-links li { display: block; }
+  .nav-links li + li::before { content: none; }
+  .nav-rule { display: none; }
+  .nav-links a,
+  .nav-cta {
     display: flex;
-    justify-content: flex-end;
-    margin: -8px 0 12px;
+    align-items: center;
+    height: 56px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--body);
+    background: none;
   }
-  .badge { position: relative; inset: auto; width: 104px; height: 104px; }
-  .badge + .badge { margin-left: -14px; }
-  .badge-label { transform: rotate(var(--label-turn)) scale(0.84); }
-  .badge-value { font-size: 46px; }
-  .badge--large .badge-value { font-size: 50px; }
-  .badge--small .badge-value { font-size: 38px; }
-  .badge--small.badge--blue .badge-value { font-size: 40px; }
-  .meta-row { flex-wrap: wrap; row-gap: 4px; }
-  .meta-row--half { grid-column: span 2; }
-  .meta-row--half:nth-last-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
-  .work-footer .cta { padding: 0 16px; }
+  /* The links drop in one after another. */
+  .nav-links li,
+  .nav-cta {
+    opacity: 0;
+    translate: 0 -8px;
+    transition: opacity 0.3s ease, translate 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .menu-open .nav-links li,
+  .menu-open .nav-cta { opacity: 1; translate: none; }
+  .menu-open .nav-links li:nth-child(2) { transition-delay: 0.04s; }
+  .menu-open .nav-links li:nth-child(3) { transition-delay: 0.08s; }
+  .menu-open .nav-cta { transition-delay: 0.12s; }
+
+  /* No fixed header here, so sections scroll right to the top. */
+  .work,
+  .quests,
+  .contact { scroll-margin-top: 0; }
+
+  /* Hero: 390 × 425 design px, scaled with the width. The intro line sits in
+     the flow, so the hero grows if it wraps. */
+  .hero { aspect-ratio: auto; }
+  .hero > * { --u: calc(100cqw / 390); }
+  .hero-photo { top: 0; width: 100%; height: calc(217 * var(--u)); }
+  .stipple--hero { left: 0; top: calc(217 * var(--u)); width: calc(390 * var(--u)); height: calc(190 * var(--u)); }
+  .hero-name-anna { left: calc(19 * var(--u)); top: calc(81 * var(--u)); width: calc(335 * var(--u)); }
+  .hero-name-volkova { left: calc(3 * var(--u)); top: calc(197 * var(--u)); width: calc(401 * var(--u)); }
+  .hero-intro {
+    position: relative;
+    max-width: none;
+    margin: calc(353.5 * var(--u)) calc(20 * var(--u)) 0;
+    padding-bottom: 23.5px;
+    inset: auto;
+    line-height: 1.5;
+  }
+
+  /* Work: an accordion. Each project's row opens it right below. */
+  .work {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 0;
+    overflow-x: clip;
+  }
+  .work-tabs { display: contents; }
+  #tab-node { order: 1; }
+  #panel-node { order: 2; }
+  #tab-lumia { order: 3; }
+  #panel-lumia { order: 4; }
+  #tab-smm { order: 5; }
+  #panel-smm { order: 6; }
+  #tab-home { order: 7; }
+  #panel-home { order: 8; }
+  #tab-shop { order: 9; }
+  #panel-shop { order: 10; }
+
+  .work-tab {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg);
+    text-align: left;
+  }
+  .work-tab::after {
+    content: "";
+    flex: none;
+    width: 24px;
+    height: 24px;
+    background: url("../assets/img/icons/plus.svg") center / 24px no-repeat;
+  }
+  .work-tab[aria-expanded="true"] { background: var(--panel); }
+  .work-tab[aria-expanded="true"]::after { background-image: url("../assets/img/icons/minus.svg"); }
+
+  .work-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+    padding: 16px 16px 0;
+  }
+  .work-panel.is-sliding { overflow: hidden; }
+  .work-info,
+  .work-body { display: contents; }
+
+  .work-title { order: 1; font-size: 48px; line-height: 1.15; text-box: none; }
+
+  /* Pictures, centred and without the grain: the composed stages keep
+     their own box... */
+  .work-visual { order: 2; height: 440px; border-bottom: 0; }
+  /* ...and the two app screenshots are cropped to their cards, full width. */
+  #panel-node { --crop: 962 / 683; --crop-x: -14.657%; --crop-y: -3.66%; --crop-w: 129.314%; }
+  #panel-lumia { --crop: 890 / 646; --crop-x: -19.775%; --crop-y: -6.192%; --crop-w: 139.775%; }
+  .work-visual:has(.shot--panel) { height: auto; container-type: normal; }
+  .work-visual:has(.shot--panel) .stage {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--crop);
+    overflow: hidden;
+  }
+  .shot--panel { left: var(--crop-x); top: var(--crop-y); width: var(--crop-w); height: auto; }
+  .work-visual .grain { display: none; }
+
+  .work-meta-wrap { order: 3; }
+  .work-meta { display: flex; flex-direction: column; }
+  .meta-row,
+  .meta-row--half {
+    align-items: center;
+    min-height: 40px;
+    padding: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .meta-row:last-child { border-bottom: 0; }
+  .meta-row--half:nth-last-child(2) { border-right: 0; }
+  .meta-row dt { width: 62px; }
+  .meta-row dd { flex: 1; min-width: 0; line-height: 1.5; }
+  /* Values in the rows under the stickers wrap before reaching them (each
+     row's space follows the sticker's curve). */
+  .work-meta-wrap:has(.badges) .meta-row:nth-child(3) dd { padding-right: 162px; }
+  .work-meta-wrap:has(.badges) .meta-row:nth-child(4) dd { padding-right: 174px; }
+  .work-meta-wrap:has(.badges) .meta-row:nth-child(5) dd { padding-right: 167px; }
+
+  /* The stickers overlap the table's right edge, the second one partly off
+     screen, as in Figma. */
+  .badge--cream { right: 59px; top: 90px; }
+  .badge--blue { right: -31px; top: 144px; }
+
+  .work-desc { order: 4; margin-top: 8px; line-height: 1.5; }
+  .work-desc p + p { margin-top: 1.5em; }
+  /* Keeps the first line clear of the second sticker. */
+  .work-desc::before { content: ""; float: right; width: 88px; height: 24px; }
+
+  .work-footer {
+    order: 5;
+    justify-content: center;
+    margin: 0 -16px;
+    padding: 0;
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+  }
 
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
   .quests-layout { padding: 0 16px; }
@@ -1225,7 +1404,16 @@ align-self: flex-start;
   .booking,
   .booking-embed { min-height: 560px; }
 
-  .site-footer { flex-direction: column; align-items: flex-start; padding: 24px 16px; }
+  .site-footer { flex-direction: column; align-items: stretch; gap: 16px; padding: 24px 20px; }
+  .footer-credit { display: block; text-align: center; line-height: 1.3; }
+  .footer-credit img { display: inline; vertical-align: -1px; }
+  .footer-links li {
+    position: relative;
+    flex: 1 1 0;
+    justify-content: center;
+    height: 44px;
+  }
+  .footer-links li + li::before { position: absolute; left: -5.5px; top: calc(50% - 1.5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

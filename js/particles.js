@@ -34,6 +34,15 @@ export const PARAMS = {
   mouseStrength: 16,
 };
 
+// A canvas can override some of these on phones (data-phone-params, JSON),
+// as the mobile frame in Figma does for the hero.
+const PHONE = window.matchMedia("(max-width: 719px)");
+
+function paramsFor(canvas) {
+  const phone = canvas.dataset.phoneParams;
+  return phone && PHONE.matches ? { ...PARAMS, ...JSON.parse(phone) } : PARAMS;
+}
+
 // In Figma the image sits 1.11% / 3.52% inside the layer and keeps the
 // layer's size, so it is clipped slightly on the right and bottom.
 const IMAGE_OFFSET = { x: 0.0111, y: 0.0352 };
@@ -86,7 +95,7 @@ function smoothstep(e0, e1, x) {
 }
 
 // One dot with the scatter pass's soft edge, stamped for every particle.
-function dotSprite(radius, color) {
+function dotSprite(radius, color, softness) {
   const half = Math.ceil(radius + 2);
   const size = half * 2;
   const sprite = document.createElement("canvas");
@@ -94,7 +103,7 @@ function dotSprite(radius, color) {
   sprite.height = size;
   const ctx = sprite.getContext("2d");
   const pixels = ctx.createImageData(size, size);
-  const feather = Math.max(1, radius * (PARAMS.particleSoftness / 100));
+  const feather = Math.max(1, radius * (softness / 100));
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const d = Math.hypot(x + 0.5 - half, y + 0.5 - half);
@@ -111,22 +120,23 @@ function dotSprite(radius, color) {
 }
 
 function drawStatic(canvas, img) {
+  const params = paramsFor(canvas);
   const { width, height } = cssSize(canvas);
   canvas.width = width;
   canvas.height = height;
   const source = rasterizeSource(img, width, height).getContext("2d").getImageData(0, 0, width, height).data;
 
   const ctx = canvas.getContext("2d");
-  const bg = PARAMS.backgroundColor;
+  const bg = params.backgroundColor;
   ctx.fillStyle = `rgb(${bg.r * 255}, ${bg.g * 255}, ${bg.b * 255})`;
   ctx.fillRect(0, 0, width, height);
 
   // Same mapping as render(): density -> grid spacing, scale -> radius.
-  const gridSize = Math.max(2, Math.min(32, 400 / (10 + PARAMS.dotDensity * 1.9)));
-  const radius = gridSize * (PARAMS.dotScale / 100) * 0.5;
-  const threshold = PARAMS.threshold / 100;
+  const gridSize = Math.max(2, Math.min(32, 400 / (10 + params.dotDensity * 1.9)));
+  const radius = gridSize * (params.dotScale / 100) * 0.5;
+  const threshold = params.threshold / 100;
   if (radius < 0.5) return;
-  const { sprite, half } = dotSprite(radius, PARAMS.particleGradient.stops[0].color);
+  const { sprite, half } = dotSprite(radius, params.particleGradient.stops[0].color, params.particleSoftness);
 
   const cellsX = Math.ceil(width / gridSize);
   const cellsY = Math.ceil(height / gridSize);
@@ -165,7 +175,7 @@ async function runShader(canvas, img, { animate }) {
     mousePosition: { x: undefined, y: undefined, down: false },
     renderScale: 1,
     dpr: 1,
-    params: PARAMS,
+    params: paramsFor(canvas),
     state: {},
   };
 
@@ -196,6 +206,7 @@ async function runShader(canvas, img, { animate }) {
   allocate();
   effect.setup(device, frame);
   paint();
+  PHONE.addEventListener("change", () => { frame.params = paramsFor(canvas); });
 
   if (!animate) return;
 
@@ -278,6 +289,7 @@ export async function mountParticles(canvas) {
 
   drawStatic(canvas, img);
   canvas.dataset.renderer = "2d";
+  PHONE.addEventListener("change", () => drawStatic(canvas, img));
   let lastWidth = canvas.width;
   new ResizeObserver(() => {
     const { width } = cssSize(canvas);
