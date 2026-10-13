@@ -1125,7 +1125,7 @@ align-self: flex-start;
   /* Header: a menu button over the photo. The links open as a full-screen
      menu, frosted like the stipple dialog, under a bar with the pansy. */
   .menu-toggle {
-    position: absolute;
+    position: fixed;
     z-index: 1;
     top: 10px;
     right: 10px;
@@ -1136,13 +1136,17 @@ align-self: flex-start;
     padding: 0;
     border: 0;
     background: none;
+    color: var(--bg);
     cursor: pointer;
+    transition: color 0.25s ease;
   }
+  .menu-toggle.is-on-light,
+  .menu-open .menu-toggle { color: var(--body); }
   .menu-icon { grid-area: 1 / 1; }
   .menu-icon--close,
   .menu-open .menu-icon--open { display: none; }
   .menu-open .menu-icon--close { display: block; }
-  .menu-open .menu-toggle { position: fixed; right: 20px; }
+  .menu-open .menu-toggle { right: 20px; }
   .menu-open { overflow: hidden; }
 
   .nav {
@@ -1216,10 +1220,11 @@ align-self: flex-start;
   .menu-open .nav-links li:nth-child(3) { transition-delay: 0.08s; }
   .menu-open .nav-cta { transition-delay: 0.12s; }
 
-  /* No fixed header here, so sections scroll right to the top. */
+  /* Sections and project rows stop below the pinned menu button. */
   .work,
   .quests,
-  .contact { scroll-margin-top: 0; }
+  .contact,
+  .work-tab { scroll-margin-top: 64px; }
 
   /* Hero: 390 × 425 design px, scaled with the width. The intro line sits in
      the flow, so the hero grows if it wraps. */
@@ -1292,10 +1297,11 @@ align-self: flex-start;
 
   .work-title { order: 1; font-size: 48px; line-height: 1.15; text-box: none; }
 
-  /* Pictures, centred and without the grain: the composed stages keep
+  /* Pictures, centred, their shadows left uncut: the composed stages keep
      their own box... */
-  .work-visual { order: 2; height: 440px; border-bottom: 0; }
-  /* ...and the two app screenshots are cropped to their cards, full width. */
+  .work-visual { order: 2; height: 440px; border-bottom: 0; overflow: visible; }
+  /* ...and the two app screenshots are sized and placed by their cards, full
+     width, with the shadow around the card spilling out. */
   #panel-node { --crop: 962 / 683; --crop-x: -14.657%; --crop-y: -3.66%; --crop-w: 129.314%; }
   #panel-lumia { --crop: 890 / 646; --crop-x: -19.775%; --crop-y: -6.192%; --crop-w: 139.775%; }
   .work-visual:has(.shot--panel) { height: auto; container-type: normal; }
@@ -1305,10 +1311,10 @@ align-self: flex-start;
     width: 100%;
     height: auto;
     aspect-ratio: var(--crop);
-    overflow: hidden;
+    container-type: size;
   }
   .shot--panel { left: var(--crop-x); top: var(--crop-y); width: var(--crop-w); height: auto; }
-  .work-visual .grain { display: none; }
+  .work-visual:has(.shot--panel) .grain { left: 50%; top: 50%; width: 100cqh; height: 100cqw; }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }

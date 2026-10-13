@@ -65,14 +65,24 @@ function initNav() {
 }
 
 // Phones: the menu button opens the links as a full-screen menu over a
-// blurred page. Picking a link, the × or Esc closes it.
+// blurred page. Picking a link, the × or Esc closes it. The button stays
+// pinned: cream over the hero photo, plum once the page below reaches it.
 const PHONE = window.matchMedia("(max-width: 719px)");
 
 function initMenu() {
   const root = document.documentElement;
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.getElementById("site-nav");
+  const photo = document.querySelector(".hero-photo");
   const behind = [document.querySelector("main"), document.querySelector(".site-footer")];
+
+  function recolor() {
+    const r = toggle.getBoundingClientRect();
+    toggle.classList.toggle("is-on-light", photo.getBoundingClientRect().bottom < r.top + r.height / 2);
+  }
+  window.addEventListener("scroll", recolor, { passive: true });
+  window.addEventListener("resize", recolor);
+  recolor();
 
   function setOpen(open) {
     root.classList.toggle("menu-open", open);
