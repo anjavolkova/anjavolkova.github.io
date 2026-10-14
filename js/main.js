@@ -318,20 +318,52 @@ function initQuests() {
   }
 }
 
-// Phones: the side quests are a swipeable row of cards. The counter under
-// it follows the card in view (the last one once the row is scrolled to its
-// end, where it can't reach the left edge).
-function initQuestCounter() {
-  const collage = document.querySelector(".collage");
+// Phones: the side quests are a row of cards the page pins while you scroll
+// through it. The section is one screen tall plus the row's travel (--pin);
+// scrolling that distance moves the row along, and a snap stop per card
+// settles each swipe on one. The counter follows the card in view.
+function initQuestCarousel() {
+  const section = document.querySelector(".quests");
+  const panel = section.querySelector(".quests-layout");
+  const collage = section.querySelector(".collage");
   const notes = [...collage.querySelectorAll(".quest")];
   const now = document.querySelector(".quests-counter-now");
   document.querySelector(".quests-counter-total").textContent = notes.length;
+  const stops = notes.map(() => {
+    const stop = document.createElement("span");
+    stop.className = "quests-stop";
+    stop.setAttribute("aria-hidden", "true");
+    section.append(stop);
+    return stop;
+  });
 
-  collage.addEventListener("scroll", () => {
-    const step = notes[0].offsetWidth + parseFloat(getComputedStyle(collage).columnGap);
-    const atEnd = collage.scrollLeft >= collage.scrollWidth - collage.clientWidth - 2;
-    now.textContent = atEnd ? notes.length : Math.round(collage.scrollLeft / step) + 1;
-  }, { passive: true });
+  const travel = () => collage.scrollWidth - collage.clientWidth;
+
+  function follow() {
+    if (!PHONE.matches) return;
+    const range = section.offsetHeight - panel.offsetHeight;
+    const progress = range > 0 ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / range)) : 0;
+    collage.scrollLeft = progress * travel();
+    const card = Math.round(progress * (notes.length - 1)) + 1;
+    now.textContent = card;
+  }
+
+  function layout() {
+    if (!PHONE.matches) {
+      section.style.removeProperty("--pin");
+      collage.scrollLeft = 0;
+      return;
+    }
+    const distance = travel();
+    section.style.setProperty("--pin", `${distance}px`);
+    stops.forEach((stop, i) => { stop.style.top = `${(distance * i) / (stops.length - 1)}px`; });
+    follow();
+  }
+
+  window.addEventListener("scroll", follow, { passive: true });
+  window.addEventListener("resize", layout);
+  PHONE.addEventListener("change", layout);
+  layout();
 }
 
 // After 60+ seconds of playing with the stipple (moving the pointer over a
@@ -435,7 +467,7 @@ initMenu();
 hideMissingImages();
 initTabs();
 initQuests();
-initQuestCounter();
+initQuestCarousel();
 initBooking();
 initNudge();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);
