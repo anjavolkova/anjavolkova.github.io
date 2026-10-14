@@ -662,7 +662,8 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .quests-lettering picture { display: contents; }
-.quests-counter { display: none; }
+.quests-counter,
+.quests-stop { display: none; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
@@ -1351,34 +1352,59 @@ align-self: flex-start;
   }
 
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
-  .quests-layout { padding: 0 16px; }
-
-  /* The collage becomes a swipeable carousel: one side quest per card, its
-     picture centred in a box above its note, with the next card peeking in
-     at the right edge. The pictures reach up over the lettering, and their
-     box gets the height the screen has left once the lettering, notes and
-     counter are in, so the whole carousel fits on screen. --card is a
-     card's width, --img-h the pictures' height. */
-  .collage {
+  /* Side quests: the section is one screen tall plus the distance the row
+     of cards travels (--pin, set by js/main.js). The screen-high panel stays
+     pinned while that distance scrolls by, which carries the cards along;
+     snap stops (.quests-stop) settle each swipe on a card. */
+  .quests {
     --screen-h: 100vh;
+    height: calc(var(--screen-h) + var(--pin, 0px));
+    padding: 0;
+  }
+  @supports (height: 100svh) { .quests { --screen-h: 100svh; } }
+  html { scroll-snap-type: y proximity; }
+  .quests-stop {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    scroll-snap-align: start;
+    pointer-events: none;
+  }
+
+  /* The panel: lettering and cards centred, the counter at the bottom. */
+  .quests-layout {
+    position: sticky;
+    top: 0;
+    height: var(--screen-h);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0;
+    padding: 16px 16px 56px;
+  }
+  .quests-lettering { margin-bottom: 0; }
+
+  /* The carousel: one side quest per card, its picture centred in a box
+     above its note, the next card peeking in at the right edge. The pictures
+     overlap the bottom of the lettering a little, and their box gets the
+     height the screen has left once the lettering, notes and counter are
+     in. --card is a card's width, --img-h the pictures' height. */
+  .collage {
     --card: calc(100cqw * 0.84);
-    --img-h: clamp(140px, calc(var(--screen-h) - 360px - 30.5cqw), calc(var(--card) * 0.85));
+    --img-h: clamp(140px, calc(var(--screen-h) - 363px - 40.5cqw), calc(var(--card) * 0.85));
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 84%;
     grid-template-rows: var(--img-h) auto;
     gap: 16px;
     aspect-ratio: auto;
-    margin: calc(-56px - 20cqw) -16px 0;
+    margin: -10cqw -16px 0;
     padding: 0 16px;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 16px;
-    scrollbar-width: none;
+    overflow-x: hidden;
   }
-  @supports (height: 100svh) { .collage { --screen-h: 100svh; } }
-  .collage::-webkit-scrollbar { display: none; }
   .piece {
     position: relative;
     left: auto;
@@ -1386,7 +1412,7 @@ align-self: flex-start;
     grid-row: 1;
     place-self: center;
   }
-  .quest { grid-row: 2; scroll-snap-align: start; }
+  .quest { grid-row: 2; }
   /* Each picture as large as fits its box, by width or by height. */
   .piece--lastfm { grid-column: 1; --r: -3deg; --u: min(calc(var(--card) * 0.95 / 435.43), calc(var(--img-h) * 0.9 / 209.49)); }
   #quest-lastfm { grid-column: 1; }
@@ -1399,10 +1425,11 @@ align-self: flex-start;
   .piece--coffee { grid-column: 5; --u: min(calc(var(--card) * 0.72 / 226.2), calc(var(--img-h) * 0.95 / 223.47)); }
   #quest-allergy { grid-column: 5; }
 
-  /* The rows' 56px gap, less 44: the counter sits 12px under the cards. */
   .quests-counter {
     display: block;
-    margin-top: -44px;
+    position: absolute;
+    left: 16px;
+    bottom: 20px;
     font-family: var(--font-mono);
     font-size: 14px;
     letter-spacing: -0.05em;
