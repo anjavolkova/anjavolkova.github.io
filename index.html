@@ -375,14 +375,18 @@
           <p id="quest-allergy-text">One time I wrote a python script that tells me which teas in Albert Heijn I'm not allergic to.</p>
         </article>
       </div>
-      <!-- Phones: which card of the side-quests carousel is in view. -->
-      <p class="quests-counter" aria-hidden="true"><span class="quests-counter-now">1</span> / <span class="quests-counter-total">5</span></p>
     </div>
   </section>
 
   <!-- 4. Contact / booking -->
+  <!-- Phones: lets the contact section ride tucked under the pinned side
+       quests (see styles.css). -->
+  <div class="contact-tuck">
   <section class="contact" id="contact" aria-labelledby="contact-title">
     <canvas class="stipple stipple--contact" data-src="assets/img/stipple-source.webp" aria-hidden="true"></canvas>
+    <!-- Phones: which card of the side-quests carousel is in view, on this
+         section's stipple. -->
+    <p class="quests-counter" aria-hidden="true"><span class="quests-counter-now">1</span> / <span class="quests-counter-total">5</span></p>
     <h2 class="contact-title" id="contact-title">Tell me what you’re working on</h2>
     <p class="contact-sub">I’d love to chat and collaborate with you!</p>
     <div class="booking">
@@ -390,6 +394,7 @@
       
     </div>
   </section>
+  </div>
 </main>
 
 <!-- 5. Footer -->
