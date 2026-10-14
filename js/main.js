@@ -166,10 +166,9 @@ function hideMissingImages() {
 // (.is-entering); see styles.css. Hovering or focusing a tab starts loading
 // its panel's images, so they're ready when it opens.
 //
-// On phones the same buttons work as an accordion instead: each one slides
-// its project open below it (closing the one that was open), or shut again.
+// On phones the projects are a feed instead: all of them one after another,
+// each under its name bar (the tab buttons, which do nothing there).
 const PANEL_OUT = 160;
-const SLIDE_TIME = 400;
 
 function initTabs() {
   const tablist = document.querySelector(".work-tabs");
@@ -203,73 +202,30 @@ function initTabs() {
     switchTimer = setTimeout(show, PANEL_OUT);
   }
 
-  // Accordion: animate the panel's height between 0 and its full height.
-  function slide(panel, open) {
-    for (const animation of panel.getAnimations()) animation.cancel();
-    panel.classList.remove("is-sliding");
-    panel.hidden = false;
-    if (reducedMotion.matches) {
-      panel.hidden = !open;
-      return;
-    }
-    if (open) panel.classList.add("is-entering");
-    const height = `${panel.offsetHeight}px`;
-    panel.classList.add("is-sliding");
-    const animation = panel.animate(
-      open ? [{ height: "0px" }, { height }] : [{ height }, { height: "0px" }],
-      { duration: SLIDE_TIME, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-    );
-    animation.onfinish = () => {
-      panel.classList.remove("is-sliding");
-      panel.hidden = !open;
-    };
-  }
-
-  function toggle(tab) {
-    const open = tab.getAttribute("aria-expanded") !== "true";
-    for (const t of tabs) {
-      const expanded = t === tab && open;
-      if ((t.getAttribute("aria-expanded") === "true") !== expanded) slide(panelFor(t), expanded);
-      t.setAttribute("aria-expanded", String(expanded));
-    }
-    // A project closing above can carry this one off the top of the screen.
-    if (open) {
-      setTimeout(() => {
-        if (tab.getBoundingClientRect().top < 0) {
-          tab.scrollIntoView({ block: "start", behavior: reducedMotion.matches ? "auto" : "smooth" });
-        }
-      }, reducedMotion.matches ? 0 : SLIDE_TIME);
-    }
-  }
-
-  // Switch between tabs (wider screens) and the accordion (phones), keeping
-  // the open project.
+  // Switch between tabs (wider screens) and the feed (phones).
   function setMode() {
     clearTimeout(switchTimer);
-    for (const p of panels) {
-      for (const animation of p.getAnimations()) animation.cancel();
-      p.classList.remove("is-sliding", "is-leaving", "is-entering");
-    }
+    for (const p of panels) p.classList.remove("is-leaving", "is-entering");
     if (PHONE.matches) {
       tablist.removeAttribute("role");
       for (const tab of tabs) {
-        const panel = panelFor(tab);
         tab.removeAttribute("role");
         tab.removeAttribute("aria-selected");
-        tab.setAttribute("aria-expanded", String(!panel.hidden));
-        tab.tabIndex = 0;
-        panel.setAttribute("role", "region");
+        tab.setAttribute("aria-hidden", "true");
+        tab.tabIndex = -1;
+        panelFor(tab).removeAttribute("role");
+        panelFor(tab).hidden = false;
       }
     } else {
-      const open = tabs.find((t) => t.getAttribute("aria-expanded") === "true") ?? tabs[0];
       tablist.setAttribute("role", "tablist");
       for (const tab of tabs) {
         tab.setAttribute("role", "tab");
-        tab.removeAttribute("aria-expanded");
+        tab.removeAttribute("aria-hidden");
         panelFor(tab).setAttribute("role", "tabpanel");
       }
-      for (const p of panels) p.hidden = p !== panelFor(open);
-      select(open);
+      const current = tabs.find((t) => t.getAttribute("aria-selected") === "true") ?? tabs[0];
+      for (const p of panels) p.hidden = p !== panelFor(current);
+      select(current);
     }
   }
 
@@ -280,7 +236,7 @@ function initTabs() {
   for (const tab of tabs) {
     tab.addEventListener("pointerenter", () => preload(tab));
     tab.addEventListener("focus", () => preload(tab));
-    tab.addEventListener("click", () => (PHONE.matches ? toggle(tab) : select(tab)));
+    tab.addEventListener("click", () => { if (!PHONE.matches) select(tab); });
     tab.addEventListener("keydown", (e) => {
       if (PHONE.matches) return;
       const i = tabs.indexOf(tab);
