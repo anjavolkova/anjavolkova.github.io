@@ -1221,10 +1221,11 @@ align-self: flex-start;
   .menu-open .nav-links li:nth-child(3) { transition-delay: 0.08s; }
   .menu-open .nav-cta { transition-delay: 0.12s; }
 
-  /* Sections stop below the pinned menu button. */
+  /* Sections stop below the pinned menu button; side quests at the very
+     top, so the whole carousel is in view. */
   .work,
-  .quests,
   .contact { scroll-margin-top: 64px; }
+  .quests { scroll-margin-top: 0; }
 
   /* Hero: fills the screen except for the first project row, which peeks in
      at the bottom. From the photo's bottom edge down it follows the Figma
@@ -1354,16 +1355,21 @@ align-self: flex-start;
 
   /* The collage becomes a swipeable carousel: one side quest per card, its
      picture centred in a box above its note, with the next card peeking in
-     at the right edge. --card is a card's width. */
+     at the right edge. The pictures reach up over the lettering, and their
+     box gets the height the screen has left once the lettering, notes and
+     counter are in, so the whole carousel fits on screen. --card is a
+     card's width, --img-h the pictures' height. */
   .collage {
+    --screen-h: 100vh;
     --card: calc(100cqw * 0.84);
+    --img-h: clamp(140px, calc(var(--screen-h) - 360px - 30.5cqw), calc(var(--card) * 0.85));
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 84%;
-    grid-template-rows: calc(var(--card) * 0.85) auto;
-    gap: 24px 16px;
+    grid-template-rows: var(--img-h) auto;
+    gap: 16px;
     aspect-ratio: auto;
-    margin: 16px -16px 0;
+    margin: calc(-56px - 20cqw) -16px 0;
     padding: 0 16px;
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -1371,6 +1377,7 @@ align-self: flex-start;
     scroll-padding-inline: 16px;
     scrollbar-width: none;
   }
+  @supports (height: 100svh) { .collage { --screen-h: 100svh; } }
   .collage::-webkit-scrollbar { display: none; }
   .piece {
     position: relative;
@@ -1380,21 +1387,22 @@ align-self: flex-start;
     place-self: center;
   }
   .quest { grid-row: 2; scroll-snap-align: start; }
-  .piece--lastfm { grid-column: 1; --r: -3deg; --u: calc(var(--card) * 0.95 / 435.43); }
+  /* Each picture as large as fits its box, by width or by height. */
+  .piece--lastfm { grid-column: 1; --r: -3deg; --u: min(calc(var(--card) * 0.95 / 435.43), calc(var(--img-h) * 0.9 / 209.49)); }
   #quest-lastfm { grid-column: 1; }
-  .piece--health { grid-column: 2; --r: 3deg; --u: calc(var(--card) * 0.92 / 356.68); }
-  #quest-health { grid-column: 2; }
-  .piece--albums { grid-column: 3; --r: 6deg; --u: calc(var(--card) * 0.78 / 332.59); }
-  #quest-books { grid-column: 3; }
-  .piece--phone { grid-column: 4; --u: calc(var(--card) * 0.8 / 350); }
-  #quest-llm { grid-column: 4; }
-  .piece--coffee { grid-column: 5; --u: calc(var(--card) * 0.72 / 226.2); }
+  .piece--albums { grid-column: 2; --r: 6deg; --u: min(calc(var(--card) * 0.8 / 266.08), calc(var(--img-h) * 0.88 / 332.59)); }
+  #quest-books { grid-column: 2; }
+  .piece--phone { grid-column: 3; --u: min(calc(var(--card) * 0.6 / 171), calc(var(--img-h) * 0.92 / 350)); }
+  #quest-llm { grid-column: 3; }
+  .piece--health { grid-column: 4; --r: 3deg; --u: min(calc(var(--card) * 0.92 / 356.68), calc(var(--img-h) * 0.88 / 220.03)); }
+  #quest-health { grid-column: 4; }
+  .piece--coffee { grid-column: 5; --u: min(calc(var(--card) * 0.72 / 226.2), calc(var(--img-h) * 0.95 / 223.47)); }
   #quest-allergy { grid-column: 5; }
 
-  /* The rows' 56px gap, less 40: the counter sits 16px under the cards. */
+  /* The rows' 56px gap, less 44: the counter sits 12px under the cards. */
   .quests-counter {
     display: block;
-    margin-top: -40px;
+    margin-top: -44px;
     font-family: var(--font-mono);
     font-size: 14px;
     letter-spacing: -0.05em;
