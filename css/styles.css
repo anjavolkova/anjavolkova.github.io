@@ -662,8 +662,7 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .quests-lettering picture { display: contents; }
-.quests-counter,
-.quests-stop { display: none; }
+.quests-counter { display: none; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
@@ -1354,24 +1353,13 @@ align-self: flex-start;
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
   /* Side quests: the section is one screen tall plus the distance the row
      of cards travels (--pin, set by js/main.js). The screen-high panel stays
-     pinned while that distance scrolls by, which carries the cards along;
-     snap stops (.quests-stop) settle each swipe on a card. */
+     pinned while that distance scrolls by, which carries the cards along. */
   .quests {
     --screen-h: 100vh;
     height: calc(var(--screen-h) + var(--pin, 0px));
     padding: 0;
   }
   @supports (height: 100svh) { .quests { --screen-h: 100svh; } }
-  html { scroll-snap-type: y proximity; }
-  .quests-stop {
-    display: block;
-    position: absolute;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    scroll-snap-align: start;
-    pointer-events: none;
-  }
 
   /* The panel: lettering and cards centred, the counter at the bottom. */
   .quests-layout {

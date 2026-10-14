@@ -320,33 +320,60 @@ function initQuests() {
 
 // Phones: the side quests are a row of cards the page pins while you scroll
 // through it. The section is one screen tall plus the row's travel (--pin);
-// scrolling that distance moves the row along, and a snap stop per card
-// settles each swipe on one. The counter follows the card in view.
+// scrolling that distance moves the row along. When scrolling stops inside
+// that stretch, the page eases to the nearest card. The counter follows the
+// card in view.
+const SETTLE_DELAY = 150;
+
 function initQuestCarousel() {
   const section = document.querySelector(".quests");
   const panel = section.querySelector(".quests-layout");
   const collage = section.querySelector(".collage");
   const notes = [...collage.querySelectorAll(".quest")];
   const now = document.querySelector(".quests-counter-now");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   document.querySelector(".quests-counter-total").textContent = notes.length;
-  const stops = notes.map(() => {
-    const stop = document.createElement("span");
-    stop.className = "quests-stop";
-    stop.setAttribute("aria-hidden", "true");
-    section.append(stop);
-    return stop;
-  });
 
   const travel = () => collage.scrollWidth - collage.clientWidth;
+  const range = () => section.offsetHeight - panel.offsetHeight;
+  // How far through the pinned stretch the page is: 0 at the first card, 1
+  // at the last (below 0 before it, above 1 after).
+  const position = () => -section.getBoundingClientRect().top / range();
 
   function follow() {
-    if (!PHONE.matches) return;
-    const range = section.offsetHeight - panel.offsetHeight;
-    const progress = range > 0 ? Math.min(1, Math.max(0, -section.getBoundingClientRect().top / range)) : 0;
-    collage.scrollLeft = progress * travel();
-    const card = Math.round(progress * (notes.length - 1)) + 1;
-    now.textContent = card;
+    const progress = Math.min(1, Math.max(0, position()));
+    const left = Math.round(progress * travel());
+    if (collage.scrollLeft !== left) collage.scrollLeft = left;
+    now.textContent = Math.round(progress * (notes.length - 1)) + 1;
   }
+
+  function settle() {
+    const p = position();
+    if (!(p > 0 && p < 1)) return;
+    const steps = notes.length - 1;
+    const offset = (Math.round(p * steps) / steps - p) * range();
+    if (Math.abs(offset) < 2) return;
+    window.scrollTo({ top: window.scrollY + offset, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  }
+
+  let queued = false;
+  let touching = false;
+  let settleTimer = null;
+  const settleSoon = () => {
+    clearTimeout(settleTimer);
+    if (!touching) settleTimer = setTimeout(settle, SETTLE_DELAY);
+  };
+
+  window.addEventListener("scroll", () => {
+    if (!PHONE.matches) return;
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(() => { queued = false; follow(); });
+    }
+    settleSoon();
+  }, { passive: true });
+  window.addEventListener("touchstart", () => { touching = true; clearTimeout(settleTimer); }, { passive: true });
+  window.addEventListener("touchend", () => { touching = false; settleSoon(); }, { passive: true });
 
   function layout() {
     if (!PHONE.matches) {
@@ -354,13 +381,9 @@ function initQuestCarousel() {
       collage.scrollLeft = 0;
       return;
     }
-    const distance = travel();
-    section.style.setProperty("--pin", `${distance}px`);
-    stops.forEach((stop, i) => { stop.style.top = `${(distance * i) / (stops.length - 1)}px`; });
+    section.style.setProperty("--pin", `${travel()}px`);
     follow();
   }
-
-  window.addEventListener("scroll", follow, { passive: true });
   window.addEventListener("resize", layout);
   PHONE.addEventListener("change", layout);
   layout();
