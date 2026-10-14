@@ -814,6 +814,9 @@ img.is-missing { visibility: hidden; }
 
 /* ---------- 4. Contact ---------- */
 
+/* A box of its own only on phones (see the phone styles). */
+.contact-tuck { display: contents; }
+
 .contact {
   position: relative;
   container-type: inline-size;
@@ -1354,27 +1357,29 @@ align-self: flex-start;
   /* Side quests: the section is one screen tall plus a pause and the
      distance the row of cards travels (--pin, set by js/main.js). The
      screen-high panel stays pinned while that scrolls by: first the pause,
-     then the cards move along. */
+     then the cards move along. --screen-h is the screen with the browser's
+     bars showing, --panel-h with them tucked away: the panel reaches that far
+     down so nothing after it peeks in when the bars go. */
   .quests {
     --screen-h: 100vh;
-    height: calc(var(--screen-h) + var(--pin, 0px));
+    --panel-h: 100vh;
+    height: calc(var(--panel-h) + var(--pin, 0px));
     padding: 0;
   }
-  @supports (height: 100svh) { .quests { --screen-h: 100svh; } }
+  @supports (height: 100svh) { .quests { --screen-h: 100svh; --panel-h: 100lvh; } }
 
-  /* The panel: lettering and cards centred, the counter at the bottom, on
-     the contact section's stipple (js/main.js keeps that section tucked
-     right under the panel while it's pinned). */
+  /* The panel: lettering and cards centred on the screen with the bars
+     showing, room for the counter below them. */
   .quests-layout {
     position: sticky;
     top: 0;
-    height: var(--screen-h);
+    height: var(--panel-h);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
     gap: 0;
-    padding: 16px 16px 56px;
+    padding: 16px 16px calc(56px + var(--panel-h) - var(--screen-h));
   }
   .quests-lettering { margin-bottom: 0; }
 
@@ -1417,11 +1422,12 @@ align-self: flex-start;
   .piece--coffee { grid-column: 5; --u: min(calc(var(--card) * 0.72 / 226.2), calc(var(--img-h) * 0.95 / 223.47)); }
   #quest-allergy { grid-column: 5; }
 
-  .quests-counter {
+  /* On the contact section's stipple, along the bottom of the screen. */
+  .contact .quests-counter {
     display: block;
     position: absolute;
     left: 16px;
-    bottom: 20px;
+    top: 7px;
     font-family: var(--font-mono);
     font-size: 14px;
     letter-spacing: -0.05em;
@@ -1443,9 +1449,34 @@ align-self: flex-start;
   .quest-title { font-size: 40px; line-height: 42px; margin-bottom: 20px; }
   .quest-title--caps { max-width: 240px; }
 
-  /* Tucked 48px under side quests: its stipple shows behind the counter,
-     its title stays just out of view. */
-  .contact { gap: 24px; margin-top: -48px; padding-top: 56px; }
+  /* Contact rides tucked 48px under side quests while the panel is pinned:
+     its stipple and the counter show along the bottom of the screen, its
+     title stays just out of view, and it scrolls on from there once the
+     cards are done. It's sticky to the bottom of the screen (--contact-h,
+     its height, is set by js/main.js), and its wrapper reaches back up side
+     quests by --pin, to where the panel's bottom is as it pins, so it can't
+     ride any higher than that. */
+  .contact-tuck { display: block; margin-top: calc(-48px - var(--pin, 0px)); }
+  .contact-tuck::before { content: ""; display: block; height: var(--pin, 0px); }
+  .contact {
+    position: sticky;
+    bottom: calc(48px - var(--contact-h));
+    gap: 24px;
+    padding-top: 56px;
+  }
+  /* Let go for a jump to it from a link (js/main.js). */
+  .contact-tuck.is-jumping .contact { bottom: auto; }
+  /* Being sticky puts the section on a layer of its own: the page colour
+     behind the stipple's top edge, which reaches above it, to blend with. */
+  .contact::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 100px;
+    background: var(--bg);
+  }
 
   .stipple--contact {
     --u: calc(100cqw / 900);
