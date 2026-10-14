@@ -1354,12 +1354,13 @@ align-self: flex-start;
   }
 
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
-  /* Side quests: the section is one screen tall plus a pause and the
-     distance the row of cards travels (--pin, set by js/main.js). The
-     screen-high panel stays pinned while that scrolls by: first the pause,
-     then the cards move along. --screen-h is the screen with the browser's
-     bars showing, --panel-h with them tucked away: the panel reaches that far
-     down so nothing after it peeks in when the bars go. */
+  /* Side quests: the section is one screen tall plus the distance the row
+     of cards travels and a pause at each end (--pin, set by js/main.js).
+     The screen-high panel stays pinned while that scrolls by: first a
+     pause, then the cards move along, then another pause on the last one.
+     --screen-h is the screen with the browser's bars showing, --panel-h with
+     them tucked away: the panel reaches that far down so nothing after it
+     peeks in when the bars go. */
   .quests {
     --screen-h: 100vh;
     --panel-h: 100vh;
