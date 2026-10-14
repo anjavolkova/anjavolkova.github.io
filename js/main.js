@@ -318,6 +318,22 @@ function initQuests() {
   }
 }
 
+// Phones: the side quests are a swipeable row of cards. The counter under
+// it follows the card in view (the last one once the row is scrolled to its
+// end, where it can't reach the left edge).
+function initQuestCounter() {
+  const collage = document.querySelector(".collage");
+  const notes = [...collage.querySelectorAll(".quest")];
+  const now = document.querySelector(".quests-counter-now");
+  document.querySelector(".quests-counter-total").textContent = notes.length;
+
+  collage.addEventListener("scroll", () => {
+    const step = notes[0].offsetWidth + parseFloat(getComputedStyle(collage).columnGap);
+    const atEnd = collage.scrollLeft >= collage.scrollWidth - collage.clientWidth - 2;
+    now.textContent = atEnd ? notes.length : Math.round(collage.scrollLeft / step) + 1;
+  }, { passive: true });
+}
+
 // After 60+ seconds of playing with the stipple (moving the pointer over a
 // stipple while the shader is running), a message invites the visitor to get
 // in touch. Its form is sent through FormSubmit to CONTACT_EMAIL.
@@ -419,6 +435,7 @@ initMenu();
 hideMissingImages();
 initTabs();
 initQuests();
+initQuestCounter();
 initBooking();
 initNudge();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);

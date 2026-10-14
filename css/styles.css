@@ -662,6 +662,7 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .quests-lettering picture { display: contents; }
+.quests-counter { display: none; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
@@ -1351,32 +1352,54 @@ align-self: flex-start;
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
   .quests-layout { padding: 0 16px; }
 
-  /* Collage loosens into a stacked arrangement with little overlap. */
+  /* The collage becomes a swipeable carousel: one side quest per card, its
+     picture centred in a box above its note, with the next card peeking in
+     at the right edge. --card is a card's width. */
   .collage {
+    --card: calc(100cqw * 0.84);
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    grid-auto-flow: column;
+    grid-auto-columns: 84%;
+    grid-template-rows: calc(var(--card) * 0.85) auto;
+    gap: 24px 16px;
     aspect-ratio: auto;
-    margin: 16px 0 0;
+    margin: 16px -16px 0;
+    padding: 0 16px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
   }
+  .collage::-webkit-scrollbar { display: none; }
   .piece {
-    --u: calc(100cqw / 480);
     position: relative;
     left: auto;
     top: auto;
-    justify-self: center;
+    grid-row: 1;
+    place-self: center;
   }
-  .piece { margin-top: 24px; }
-  .piece--lastfm { order: 1; --r: -3deg; margin-top: 0; }
-  #quest-lastfm { order: 2; }
-  .piece--health { order: 3; --r: 3deg; }
-  #quest-health { order: 4; }
-  .piece--albums { order: 5; --r: 6deg; }
-  #quest-books { order: 6; }
-  .piece--phone { order: 7; }
-  #quest-llm { order: 8; }
-  .piece--coffee { order: 9; --u: calc(100cqw / 560); }
-  #quest-allergy { order: 10; }
+  .quest { grid-row: 2; scroll-snap-align: start; }
+  .piece--lastfm { grid-column: 1; --r: -3deg; --u: calc(var(--card) * 0.95 / 435.43); }
+  #quest-lastfm { grid-column: 1; }
+  .piece--health { grid-column: 2; --r: 3deg; --u: calc(var(--card) * 0.92 / 356.68); }
+  #quest-health { grid-column: 2; }
+  .piece--albums { grid-column: 3; --r: 6deg; --u: calc(var(--card) * 0.78 / 332.59); }
+  #quest-books { grid-column: 3; }
+  .piece--phone { grid-column: 4; --u: calc(var(--card) * 0.8 / 350); }
+  #quest-llm { grid-column: 4; }
+  .piece--coffee { grid-column: 5; --u: calc(var(--card) * 0.72 / 226.2); }
+  #quest-allergy { grid-column: 5; }
+
+  /* The rows' 56px gap, less 40: the counter sits 16px under the cards. */
+  .quests-counter {
+    display: block;
+    margin-top: -40px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: -0.05em;
+    color: var(--body);
+  }
 
   .quest,
   .quest.is-active {
