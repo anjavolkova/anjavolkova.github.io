@@ -383,11 +383,16 @@ function initQuestCarousel() {
       collage.scrollLeft = 0;
       return;
     }
+    // The pictures' box leaves room for the tallest note (see styles.css).
+    const notesHeight = Math.max(...notes.map((note) =>
+      note.lastElementChild.getBoundingClientRect().bottom - note.getBoundingClientRect().top));
+    collage.style.setProperty("--notes-h", `${Math.ceil(notesHeight)}px`);
     section.style.setProperty("--pin", `${pause() + travel()}px`);
     follow();
   }
   window.addEventListener("resize", layout);
   PHONE.addEventListener("change", layout);
+  document.fonts.ready.then(layout);
   layout();
 }
 

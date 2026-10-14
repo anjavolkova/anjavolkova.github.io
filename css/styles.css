@@ -662,7 +662,8 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .quests-lettering picture { display: contents; }
-.quests-counter { display: none; }
+.quests-counter,
+.stipple--quests { display: none; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
@@ -1362,7 +1363,8 @@ align-self: flex-start;
   }
   @supports (height: 100svh) { .quests { --screen-h: 100svh; } }
 
-  /* The panel: lettering and cards centred, the counter at the bottom. */
+  /* The panel: lettering and cards centred, the counter at the bottom on a
+     stipple: the top half of the stipple field shows along the bottom. */
   .quests-layout {
     position: sticky;
     top: 0;
@@ -1373,17 +1375,29 @@ align-self: flex-start;
     align-items: stretch;
     gap: 0;
     padding: 16px 16px 56px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+  .stipple--quests {
+    --u: calc(100vw / 900);
+    display: block;
+    position: absolute;
+    left: calc(-200 * var(--u));
+    top: calc(100% - 326 * var(--u));
+    width: calc(1343 * var(--u));
+    height: calc(652 * var(--u));
   }
   .quests-lettering { margin-bottom: 0; }
 
   /* The carousel: one side quest per card, full width, its picture centred
      in a box above its note. The pictures overlap the bottom of the
      lettering a little, and their box gets the height the screen has left
-     once the lettering, notes and counter are in. --card is a card's width,
-     --img-h the pictures' height. */
+     once the lettering, notes and counter are in (--notes-h, the tallest
+     note, is measured by js/main.js). --card is a card's width, --img-h the
+     pictures' height. */
   .collage {
     --card: 100cqw;
-    --img-h: clamp(140px, calc(var(--screen-h) - 363px - 40.5cqw), calc(var(--card) * 0.85));
+    --img-h: clamp(140px, calc(var(--screen-h) - 88px - 40.5cqw - var(--notes-h, 248px)), calc(var(--card) * 0.85));
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 100%;
