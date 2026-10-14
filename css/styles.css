@@ -662,8 +662,7 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .quests-lettering picture { display: contents; }
-.quests-counter,
-.stipple--quests { display: none; }
+.quests-counter { display: none; }
 .quests-lettering img { position: absolute; height: auto; }
 .lettering-side { left: calc(56px + 43.9 * var(--uq)); top: calc(-5.1 * var(--uq)); width: calc(593 * var(--uq)); }
 .lettering-quests { left: calc(56px + 84.9 * var(--uq)); top: calc(229.9 * var(--uq)); width: calc(933 * var(--uq)); }
@@ -1363,8 +1362,9 @@ align-self: flex-start;
   }
   @supports (height: 100svh) { .quests { --screen-h: 100svh; } }
 
-  /* The panel: lettering and cards centred, the counter at the bottom on a
-     stipple: the top half of the stipple field shows along the bottom. */
+  /* The panel: lettering and cards centred, the counter at the bottom, on
+     the contact section's stipple (js/main.js keeps that section tucked
+     right under the panel while it's pinned). */
   .quests-layout {
     position: sticky;
     top: 0;
@@ -1375,17 +1375,6 @@ align-self: flex-start;
     align-items: stretch;
     gap: 0;
     padding: 16px 16px 56px;
-    overflow: hidden;
-    background: var(--bg);
-  }
-  .stipple--quests {
-    --u: calc(100vw / 900);
-    display: block;
-    position: absolute;
-    left: calc(-200 * var(--u));
-    top: calc(100% - 326 * var(--u));
-    width: calc(1343 * var(--u));
-    height: calc(652 * var(--u));
   }
   .quests-lettering { margin-bottom: 0; }
 
@@ -1454,7 +1443,9 @@ align-self: flex-start;
   .quest-title { font-size: 40px; line-height: 42px; margin-bottom: 20px; }
   .quest-title--caps { max-width: 240px; }
 
-  .contact { gap: 24px; padding-top: 56px; }
+  /* Tucked 48px under side quests: its stipple shows behind the counter,
+     its title stays just out of view. */
+  .contact { gap: 24px; margin-top: -48px; padding-top: 56px; }
 
   .stipple--contact {
     --u: calc(100cqw / 900);
