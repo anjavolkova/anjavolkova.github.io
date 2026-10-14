@@ -75,13 +75,32 @@ function cssSize(canvas) {
   return { width: Math.max(1, Math.round(rect.width)), height: Math.max(1, Math.round(rect.height)) };
 }
 
-// The source image laid out as the Figma layer, at the canvas's CSS size.
-function rasterizeSource(img, width, height) {
+// Room around a canvas's layer (CSS --stipple-pad, in px) for dots the mouse
+// pushes past the layer's edges, which would otherwise be cut off there. The
+// canvas is that much bigger than the layer on every side.
+function padOf(canvas) {
+  return parseFloat(getComputedStyle(canvas).getPropertyValue("--stipple-pad")) || 0;
+}
+
+// The source image laid out as the Figma layer, at the layer's CSS size. The
+// image runs right up to its right edge, so the stipple stops in a straight
+// line there; a canvas with data-fade-right thins it out instead, over that
+// fraction of the layer's width.
+function rasterizeSource(img, width, height, canvas) {
   const scratch = document.createElement("canvas");
   scratch.width = width;
   scratch.height = height;
   const ctx = scratch.getContext("2d");
   ctx.drawImage(img, IMAGE_OFFSET.x * width, IMAGE_OFFSET.y * height, width, height);
+  const fadeRight = parseFloat(canvas.dataset.fadeRight) || 0;
+  if (fadeRight > 0) {
+    const fade = ctx.createLinearGradient(width * (1 - fadeRight), 0, width, 0);
+    fade.addColorStop(0, "#000");
+    fade.addColorStop(1, "rgba(0, 0, 0, 0)");
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.fillStyle = fade;
+    ctx.fillRect(0, 0, width, height);
+  }
   return scratch;
 }
 
@@ -124,7 +143,11 @@ function drawStatic(canvas, img) {
   const { width, height } = cssSize(canvas);
   canvas.width = width;
   canvas.height = height;
-  const source = rasterizeSource(img, width, height).getContext("2d").getImageData(0, 0, width, height).data;
+  const pad = padOf(canvas);
+  const layerWidth = Math.max(1, width - 2 * pad);
+  const layerHeight = Math.max(1, height - 2 * pad);
+  const source = rasterizeSource(img, layerWidth, layerHeight, canvas)
+    .getContext("2d").getImageData(0, 0, layerWidth, layerHeight).data;
 
   const ctx = canvas.getContext("2d");
   const bg = params.backgroundColor;
@@ -138,8 +161,8 @@ function drawStatic(canvas, img) {
   if (radius < 0.5) return;
   const { sprite, half } = dotSprite(radius, params.particleGradient.stops[0].color, params.particleSoftness);
 
-  const cellsX = Math.ceil(width / gridSize);
-  const cellsY = Math.ceil(height / gridSize);
+  const cellsX = Math.ceil(layerWidth / gridSize);
+  const cellsY = Math.ceil(layerHeight / gridSize);
   for (let row = 0; row < cellsY; row++) {
     for (let col = 0; col < cellsX; col++) {
       // "Noise" arrangement: hash2() jitter from the particle-gen pass.
@@ -147,10 +170,10 @@ function drawStatic(canvas, img) {
       const hy = fract(Math.sin(col * 269.5 + row * 183.3) * 43758.5453);
       const x = (col + hx) * gridSize;
       const y = (row + hy) * gridSize;
-      if (x >= width || y >= height) continue;
-      const alpha = source[(Math.floor(y) * width + Math.floor(x)) * 4 + 3] / 255;
+      if (x >= layerWidth || y >= layerHeight) continue;
+      const alpha = source[(Math.floor(y) * layerWidth + Math.floor(x)) * 4 + 3] / 255;
       if (alpha < threshold) continue;
-      ctx.drawImage(sprite, x - half, y - half);
+      ctx.drawImage(sprite, pad + x - half, pad + y - half);
     }
   }
 }
@@ -180,21 +203,26 @@ async function runShader(canvas, img, { animate }) {
   };
 
   // The shader works in CSS pixels (grid spacing and mouse radius are in px),
-  // so the canvas backing store matches its CSS size.
+  // so the canvas backing store matches its CSS size. The input is the layer;
+  // the shader draws it inset by outputPadding, the room around it.
   function allocate() {
     const { width, height } = cssSize(canvas);
     canvas.width = width;
     canvas.height = height;
+    const pad = padOf(canvas);
+    const layerWidth = Math.max(1, width - 2 * pad);
+    const layerHeight = Math.max(1, height - 2 * pad);
+    frame.outputPadding = pad;
     frame.input?.destroy();
     frame.input = device.createTexture({
-      size: [width, height, 1],
+      size: [layerWidth, layerHeight, 1],
       format,
       usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
     device.queue.copyExternalImageToTexture(
-      { source: rasterizeSource(img, width, height) },
+      { source: rasterizeSource(img, layerWidth, layerHeight, canvas) },
       { texture: frame.input, premultipliedAlpha: true },
-      [width, height],
+      [layerWidth, layerHeight],
     );
   }
 
