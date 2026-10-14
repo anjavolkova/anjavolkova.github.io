@@ -841,6 +841,18 @@ img.is-missing { visibility: hidden; }
   height: calc(652 * var(--u));
 }
 
+/* Above phones: room around the stipple for the dots the mouse pushes and
+   tilts past its edges, so they aren't cut off (js/particles.js draws the
+   layer inside it). */
+@media (min-width: 720px) {
+  .stipple--contact {
+    --stipple-pad: 200px;
+    margin: calc(-1 * var(--stipple-pad));
+    width: calc(1343 * var(--u) + 2 * var(--stipple-pad));
+    height: calc(652 * var(--u) + 2 * var(--stipple-pad));
+  }
+}
+
 .contact > :not(.stipple) { position: relative; z-index: 1; }
 
 .contact-title {
@@ -873,6 +885,10 @@ img.is-missing { visibility: hidden; }
 
 /* Cal.com sizes its iframe to the calendar's height. */
 .booking-embed { width: 100%; min-height: 440px; overflow: auto; max-height: 465.7px;}
+/* Desktop: the calendar doesn't scroll inside its box. */
+@media (min-width: 1024px) {
+  .booking-embed { overflow: hidden; overflow: clip; }
+}
 
 /* ---------- "Get in touch" message ---------- */
 
