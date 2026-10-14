@@ -333,6 +333,7 @@ function initQuestCarousel() {
   const collage = section.querySelector(".collage");
   const notes = [...collage.querySelectorAll(".quest")];
   const now = document.querySelector(".quests-counter-now");
+  const contact = document.querySelector(".contact");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   document.querySelector(".quests-counter-total").textContent = notes.length;
 
@@ -347,7 +348,27 @@ function initQuestCarousel() {
     const left = Math.round(progress * travel());
     if (collage.scrollLeft !== left) collage.scrollLeft = left;
     now.textContent = Math.round(progress * (notes.length - 1)) + 1;
+    tuck();
   }
+
+  // The contact section rides right under the panel while it's pinned, so
+  // its stipple shows along the bottom, and scrolls on from there. Moved with
+  // `top`: a transform would cut the stipple off from the page it blends
+  // into. Left where it is while side quests is still below the screen, and
+  // through a jump to it from a link, so jumps land where it really is.
+  let jumping = false;
+  function tuck() {
+    const sectionBox = section.getBoundingClientRect();
+    const lift = sectionBox.bottom - panel.getBoundingClientRect().bottom;
+    if (lift < 1) jumping = false;
+    const tucked = lift >= 1 && !jumping && sectionBox.top < window.innerHeight;
+    contact.style.top = tucked ? `${-Math.round(lift)}px` : "";
+  }
+  document.addEventListener("click", (e) => {
+    if (!PHONE.matches || !e.target.closest('a[href="#contact"]')) return;
+    jumping = true;
+    tuck();
+  });
 
   function settle() {
     const p = position();
@@ -374,13 +395,14 @@ function initQuestCarousel() {
     }
     settleSoon();
   }, { passive: true });
-  window.addEventListener("touchstart", () => { touching = true; clearTimeout(settleTimer); }, { passive: true });
+  window.addEventListener("touchstart", () => { touching = true; jumping = false; clearTimeout(settleTimer); }, { passive: true });
   window.addEventListener("touchend", () => { touching = false; settleSoon(); }, { passive: true });
 
   function layout() {
     if (!PHONE.matches) {
       section.style.removeProperty("--pin");
       collage.scrollLeft = 0;
+      contact.style.top = "";
       return;
     }
     // The pictures' box leaves room for the tallest note (see styles.css).
