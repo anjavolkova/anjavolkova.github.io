@@ -1330,6 +1330,14 @@ align-self: flex-start;
   }
   .shot--panel { left: var(--crop-x); top: var(--crop-y); width: var(--crop-w); height: auto; }
   .work-visual .grain { display: none; }
+  /* The social post and the notepad, at the same size, in boxes cropped to
+     them, with the room the home app's phone has above and below. */
+  #panel-smm .work-visual,
+  #panel-shop .work-visual { --u: calc(440px / 714); }
+  #panel-smm .work-visual { height: 361px; }
+  #panel-smm .stage { top: -45px; }
+  #panel-shop .work-visual { height: 388px; }
+  #panel-shop .stage { top: -33px; }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }
