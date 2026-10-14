@@ -319,11 +319,12 @@ function initQuests() {
 }
 
 // Phones: the side quests are a row of cards the page pins while you scroll
-// through it. The section is one screen tall plus a pause and the row's
-// travel (--pin): the first card holds still for the pause (QUESTS_PAUSE of
-// the screen's height), then scrolling moves the row along. When scrolling
-// stops partway between cards, the page eases to the nearest one. The
-// counter follows the card in view.
+// through it. The section is one screen tall plus the row's travel and a
+// pause at each end (--pin): the first card holds still for the pause
+// (QUESTS_PAUSE of the screen's height), then scrolling moves the row along,
+// and the last card holds still for the same pause before the page scrolls
+// on. When scrolling stops partway between cards, the page eases to the
+// nearest one. The counter follows the card in view.
 const QUESTS_PAUSE = 0.4;
 const SETTLE_DELAY = 150;
 
@@ -406,8 +407,9 @@ function initQuestCarousel() {
     const notesHeight = Math.max(...notes.map((note) =>
       note.lastElementChild.getBoundingClientRect().bottom - note.getBoundingClientRect().top));
     collage.style.setProperty("--notes-h", `${Math.ceil(notesHeight)}px`);
-    section.style.setProperty("--pin", `${pause() + travel()}px`);
-    tuck.style.setProperty("--pin", `${pause() + travel()}px`);
+    const pin = `${2 * pause() + travel()}px`;
+    section.style.setProperty("--pin", pin);
+    tuck.style.setProperty("--pin", pin);
     follow();
   }
   window.addEventListener("resize", layout);
