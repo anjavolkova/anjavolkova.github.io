@@ -319,10 +319,12 @@ function initQuests() {
 }
 
 // Phones: the side quests are a row of cards the page pins while you scroll
-// through it. The section is one screen tall plus the row's travel (--pin);
-// scrolling that distance moves the row along. When scrolling stops inside
-// that stretch, the page eases to the nearest card. The counter follows the
-// card in view.
+// through it. The section is one screen tall plus a pause and the row's
+// travel (--pin): the first card holds still for the pause (QUESTS_PAUSE of
+// the screen's height), then scrolling moves the row along. When scrolling
+// stops partway between cards, the page eases to the nearest one. The
+// counter follows the card in view.
+const QUESTS_PAUSE = 0.4;
 const SETTLE_DELAY = 150;
 
 function initQuestCarousel() {
@@ -335,10 +337,10 @@ function initQuestCarousel() {
   document.querySelector(".quests-counter-total").textContent = notes.length;
 
   const travel = () => collage.scrollWidth - collage.clientWidth;
-  const range = () => section.offsetHeight - panel.offsetHeight;
-  // How far through the pinned stretch the page is: 0 at the first card, 1
-  // at the last (below 0 before it, above 1 after).
-  const position = () => -section.getBoundingClientRect().top / range();
+  const pause = () => panel.offsetHeight * QUESTS_PAUSE;
+  // How far the row has moved: 0 at the first card (and through the pause),
+  // 1 at the last (below 0 before it, above 1 after).
+  const position = () => (-section.getBoundingClientRect().top - pause()) / travel();
 
   function follow() {
     const progress = Math.min(1, Math.max(0, position()));
@@ -351,7 +353,7 @@ function initQuestCarousel() {
     const p = position();
     if (!(p > 0 && p < 1)) return;
     const steps = notes.length - 1;
-    const offset = (Math.round(p * steps) / steps - p) * range();
+    const offset = (Math.round(p * steps) / steps - p) * travel();
     if (Math.abs(offset) < 2) return;
     window.scrollTo({ top: window.scrollY + offset, behavior: reducedMotion.matches ? "auto" : "smooth" });
   }
@@ -381,7 +383,7 @@ function initQuestCarousel() {
       collage.scrollLeft = 0;
       return;
     }
-    section.style.setProperty("--pin", `${travel()}px`);
+    section.style.setProperty("--pin", `${pause() + travel()}px`);
     follow();
   }
   window.addEventListener("resize", layout);

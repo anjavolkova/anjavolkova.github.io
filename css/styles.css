@@ -1351,9 +1351,10 @@ align-self: flex-start;
   }
 
   .section-title { padding-left: 16px; font-size: 48px; line-height: 64px; }
-  /* Side quests: the section is one screen tall plus the distance the row
-     of cards travels (--pin, set by js/main.js). The screen-high panel stays
-     pinned while that distance scrolls by, which carries the cards along. */
+  /* Side quests: the section is one screen tall plus a pause and the
+     distance the row of cards travels (--pin, set by js/main.js). The
+     screen-high panel stays pinned while that scrolls by: first the pause,
+     then the cards move along. */
   .quests {
     --screen-h: 100vh;
     height: calc(var(--screen-h) + var(--pin, 0px));
@@ -1375,17 +1376,17 @@ align-self: flex-start;
   }
   .quests-lettering { margin-bottom: 0; }
 
-  /* The carousel: one side quest per card, its picture centred in a box
-     above its note, the next card peeking in at the right edge. The pictures
-     overlap the bottom of the lettering a little, and their box gets the
-     height the screen has left once the lettering, notes and counter are
-     in. --card is a card's width, --img-h the pictures' height. */
+  /* The carousel: one side quest per card, full width, its picture centred
+     in a box above its note. The pictures overlap the bottom of the
+     lettering a little, and their box gets the height the screen has left
+     once the lettering, notes and counter are in. --card is a card's width,
+     --img-h the pictures' height. */
   .collage {
-    --card: calc(100cqw * 0.84);
+    --card: 100cqw;
     --img-h: clamp(140px, calc(var(--screen-h) - 363px - 40.5cqw), calc(var(--card) * 0.85));
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: 84%;
+    grid-auto-columns: 100%;
     grid-template-rows: var(--img-h) auto;
     gap: 16px;
     aspect-ratio: auto;
