@@ -14,7 +14,7 @@ const LINKS = {
   linkedin: "https://www.linkedin.com/in/iamannavolkova/",
   instagram: "https://www.instagram.com/heartseas.studio/",
   github: "https://github.com/anjavolkova",
-  email: "iamannavolkova@gmail.com",     // plain address, e.g. "hello@example.com"
+  email: "info@annavolkova.design",     // plain address, e.g. "hello@example.com"
 };
 
 function applyLinks() {
