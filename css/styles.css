@@ -409,7 +409,8 @@ img.is-missing { visibility: hidden; }
   overflow: hidden;
 }
 .shot--phone img { width: 100%; height: 100%; object-fit: cover; }
-.shot--phone-glare { object-fit: cover; opacity: 0.9; }
+/* Rounded like the phone, so its shadow follows the corners too. */
+.shot--phone-glare { object-fit: cover; opacity: 0.9; border-radius: calc(47 * var(--u)); }
 
 .phone-island {
   left: calc(250 * var(--u));
