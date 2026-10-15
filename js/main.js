@@ -421,7 +421,7 @@ function initQuestCarousel() {
 // After 60+ seconds of playing with the stipple (moving the pointer over a
 // stipple while the shader is running), a message invites the visitor to get
 // in touch. Its form is sent through FormSubmit to CONTACT_EMAIL.
-const CONTACT_EMAIL = "iamannavolkova@gmail.com";
+const CONTACT_EMAIL = "info@annavolkova.design";
 const PLAY_SECONDS = 60;
 
 function initNudge() {
