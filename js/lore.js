@@ -17,6 +17,8 @@ const STIFFNESS = 40;       // spring after a drag
 const DAMPING = 0.86;       // just under critical: the paper settles, barely overshooting
 const HOVER_STIFFNESS = 320;
 const ENGAGE = 8;           // px of sideways movement before a drag takes hold
+const REST_MS = 500;        // how long the pointer rests on the cloister photo before its caption shows
+const REST_SLACK = 4;       // px the pointer can wander and still count as resting
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
@@ -75,8 +77,9 @@ export function initLore() {
     for (const p of all) {
       const top = tops.has(p);
       p.el.classList.toggle("is-top", top);
-      if (!top) { p.hoverTo = 0; p.el.classList.remove("is-hovered", "is-revealed"); }
+      if (!top) p.el.classList.remove("is-revealed");
     }
+    if (!cloister.el.classList.contains("is-top")) hideCaption();
     for (const link of folder.querySelectorAll("a.pill, button.pill")) {
       link.tabIndex = paperOf(link)?.el.classList.contains("is-top") ? 0 : -1;
     }
@@ -92,6 +95,7 @@ export function initLore() {
   }
 
   function send(p, toLeft) {
+    if (p.hoverTo) setHover(p, false);
     p.target = toLeft ? p.dx : 0;
     p.dir = toLeft ? -1 : 1;
     p.flight = ++flights;
@@ -188,33 +192,51 @@ export function initLore() {
     if (raf == null) { last = performance.now(); raf = requestAnimationFrame(frame); }
   }
 
-  // Hover: the paper under the pointer rises a little;
-  // the resume, the letter and the photo of the cloister show their button
-  // or caption.
+  // Hover: any paper under the pointer rises a little; the resume and the
+  // letter, once they're on top, show their buttons.
   function setHover(p, on) {
     p.hoverTo = on ? 1 : 0;
     p.el.classList.toggle("is-hovered", on);
+    if (!on && p === cloister) hideCaption();
     kick();
   }
   const handle = (node) => node?.closest?.(".sheet-hit, .pill");
   folder.addEventListener("pointerover", (e) => {
     if (e.pointerType !== "mouse" || gesture?.engaged || !handle(e.target)) return;
     const p = paperOf(e.target);
-    if (p && p.el.classList.contains("is-top")) setHover(p, true);
-    follow(e);
+    if (p) setHover(p, true);
   });
 
-  // The cloister photo's caption sits just above the pointer, like a tooltip,
-  // while the photo is hovered.
+  // The cloister photo's caption: a tooltip that fades in just above the
+  // pointer once it has rested on the photo (on top of its pile) for a
+  // moment, and fades out as soon as the pointer moves on.
   const caption = folder.querySelector(".pill--caption");
   const cloister = byName.get("cathedral");
-  function follow(e) {
-    if (!caption || e.pointerType !== "mouse" || !cloister?.hoverTo) return;
-    const r = folder.getBoundingClientRect();
-    caption.style.setProperty("--tx", `${(e.clientX - r.left).toFixed(1)}px`);
-    caption.style.setProperty("--ty", `${(e.clientY - r.top).toFixed(1)}px`);
+  let rest = null;              // where the pointer came to rest, and the timer
+  function hideCaption() {
+    clearTimeout(rest?.timer);
+    rest = null;
+    caption?.classList.remove("is-shown");
   }
-  folder.addEventListener("pointermove", follow);
+  folder.addEventListener("pointermove", (e) => {
+    if (!caption || e.pointerType !== "mouse") return;
+    const over = cloister.hoverTo && cloister.el.classList.contains("is-top") && !gesture?.engaged;
+    if (over && rest && Math.hypot(e.clientX - rest.x, e.clientY - rest.y) < REST_SLACK) return;
+    hideCaption();
+    if (!over) return;
+    const r = folder.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    rest = {
+      x: e.clientX,
+      y: e.clientY,
+      timer: setTimeout(() => {
+        caption.style.setProperty("--tx", `${x.toFixed(1)}px`);
+        caption.style.setProperty("--ty", `${y.toFixed(1)}px`);
+        caption.classList.add("is-shown");
+      }, REST_MS),
+    };
+  });
   folder.addEventListener("pointerout", (e) => {
     if (e.pointerType !== "mouse" || !handle(e.target)) return;
     const p = paperOf(e.target);
