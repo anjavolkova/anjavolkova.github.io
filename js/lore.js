@@ -208,7 +208,7 @@ export function initLore() {
   });
 
   // The cloister photo's caption sits just above the pointer, like a tooltip,
-  // while the photo is hovered (on touch screens it stays under the photo).
+  // while the photo is hovered.
   const caption = folder.querySelector(".pill--caption");
   const cloister = byName.get("cathedral");
   function follow(e) {
@@ -216,7 +216,6 @@ export function initLore() {
     const r = folder.getBoundingClientRect();
     caption.style.setProperty("--tx", `${(e.clientX - r.left).toFixed(1)}px`);
     caption.style.setProperty("--ty", `${(e.clientY - r.top).toFixed(1)}px`);
-    caption.classList.add("is-following");
   }
   folder.addEventListener("pointermove", follow);
   folder.addEventListener("pointerout", (e) => {

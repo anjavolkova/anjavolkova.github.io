@@ -1136,22 +1136,20 @@ align-self: flex-start;
   transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s linear 0.35s;
 }
 .pill svg { flex: none; }
-/* The caption: under the photo of the cloister (as it lies on the right),
-   and with a mouse, just above the pointer, like a tooltip (js/lore.js). It
-   never takes the pointer itself. */
+/* The caption: a tooltip just above the pointer (js/lore.js), shown with a
+   mouse only. It waits for the pointer to linger on the photo of the
+   cloister before it fades in, and stays a moment after the pointer leaves.
+   It never takes the pointer itself. */
 .pill--caption {
-  --px: 666.65;
-  --py: 583.22;
+  left: var(--tx, 0);
+  top: var(--ty, 0);
+  --rise: calc(-100% - 18px);
   width: clamp(270px, calc(359 * var(--u)), 359px);
   padding: 12px 22px;
   white-space: normal;
   text-align: center;
   text-wrap: balance;
-}
-.pill--caption.is-following {
-  left: var(--tx);
-  top: var(--ty);
-  --rise: calc(-100% - 18px);
+  transition: opacity 0.35s ease 0.3s, translate 0.35s ease 0.3s, visibility 0s linear 0.65s;
 }
 .lore-folder > .pill { z-index: 200; }
 .lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
@@ -1168,6 +1166,9 @@ align-self: flex-start;
   translate: -50% var(--rise, -50%);
   transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s;
 }
+.lore-folder:has([data-sheet="cathedral"].is-top.is-hovered) .pill--caption {
+  transition-delay: 0.5s, 0.5s, 0s, 0.5s;
+}
 .pill:is(a, button) { cursor: pointer; }
 .pill:is(a, button):hover { background: rgba(252, 250, 248, 0.92); }
 .pill:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
@@ -1178,15 +1179,14 @@ align-self: flex-start;
    stipple to blend here, so no background of its own either. */
 .contact--lore { background: none; }
 
-/* Touch screens: no hover, so the caption shows while its photo is on top
-   of the pile on the right, and the two buttons once that pile is gone. */
+/* Touch screens: no hover, so the two buttons show once the pile on the
+   right is gone. */
 @media (hover: none) {
-  .lore-folder[data-left="6"] > .pill:is(a, button) { pointer-events: auto; }
-  .lore-folder[data-left="3"] > .pill--caption,
   .lore-folder[data-left="6"] > .pill:is(a, button) {
     opacity: 1;
     visibility: visible;
     translate: -50% var(--rise, -50%);
+    pointer-events: auto;
     transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s;
   }
 }
