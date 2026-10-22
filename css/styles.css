@@ -1193,13 +1193,16 @@ align-self: flex-start;
   animation: intro-slide 1.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 /* The papers arrive one at a time: each slides in, solid within its first
-   moments, and has all but landed before the next one starts. They carry
-   on after the rest of the page has arrived. */
+   moments, and has all but landed before the next one starts, picking up
+   speed as the pile grows (the gap between them shrinks from 0.55s to
+   0.31s, a slide from 0.75s to 0.5s). They carry on after the rest of the
+   page has arrived. */
 .intro-play .sheet {
-  animation: intro-deal 0.75s cubic-bezier(0.4, 0, 0.2, 1) calc(0.9s + var(--deal) * 0.55s) backwards;
+  --deal-at: calc(0.9s + var(--deal) * 0.57s - var(--deal) * var(--deal) * 0.02s);
+  animation: intro-deal calc(0.75s - var(--deal) * 0.035s) cubic-bezier(0.4, 0, 0.2, 1) var(--deal-at) backwards;
 }
 .intro-play .sheet > :is(.sheet-img, .sheet-frost) {
-  animation: intro-fade 0.25s ease calc(0.9s + var(--deal) * 0.55s) backwards;
+  animation: intro-fade calc(0.25s - var(--deal) * 0.01s) ease var(--deal-at) backwards;
 }
 .intro-play .lore-hint { animation: intro-rise 1.6s cubic-bezier(0.22, 1, 0.36, 1) 3.2s backwards; }
 /* The menu arrives last, as on the homepage, at this pace. */
