@@ -137,16 +137,13 @@ export function initLore() {
     const motion = reducedMotion.matches ? 0 : 1;
     const progress = p.dx ? clamp(p.x / p.dx, 0, 1) : 0;
     const mid = Math.sin(Math.PI * progress);   // 0 at either side, 1 half way
-    const h = p.hover;
-    const towardSpine = p.fixed ? 0 : isLeft(p) ? 1 : -1;
-    const x = p.x + towardSpine * 7 * h;
-    const y = -4 * h * motion + p.dragY;
-    const spin = motion * (-2.4 * mid * p.dir + clamp(-p.v * 0.0016, -5, 5) + towardSpine * 0.9 * h);
-    const scale = 1 + motion * 0.012 * h;
-    const lift = Math.max(mid, h * 0.45, p.drag ? 0.5 : 0);
+    // Hovered, it only rises a little, straight up, so writing on it stays
+    // put and level.
+    const y = -4 * p.hover * motion + p.dragY;
+    const spin = motion * (-2.4 * mid * p.dir + clamp(-p.v * 0.0016, -5, 5));
+    const lift = Math.max(mid, p.hover * 0.25, p.drag ? 0.5 : 0);
     p.el.style.transform =
-      `translate(${(x * unit).toFixed(2)}px, ${(y * unit).toFixed(2)}px) ` +
-      `rotate(${spin.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+      `translate(${(p.x * unit).toFixed(2)}px, ${(y * unit).toFixed(2)}px) rotate(${spin.toFixed(2)}deg)`;
     p.el.style.setProperty("--lift", lift.toFixed(3));
     p.el.style.zIndex = stackOf(p);
   }
@@ -191,7 +188,7 @@ export function initLore() {
     if (raf == null) { last = performance.now(); raf = requestAnimationFrame(frame); }
   }
 
-  // Hover: the paper under the pointer lifts and leans towards the spine;
+  // Hover: the paper under the pointer rises a little;
   // the resume, the letter and the photo of the cloister show their button
   // or caption.
   function setHover(p, on) {
