@@ -1000,6 +1000,9 @@ align-self: flex-start;
   container-type: inline-size;
   aspect-ratio: 1440 / 797;
   overflow-x: clip;
+  /* Below the menu bar, where the screen is too narrow for the frame to
+     leave room for it. */
+  margin-top: max(0px, 118px - 139 * 100vw / 1440);
 }
 .lore > * {
   --u: calc(100cqw / 1440);
@@ -1020,7 +1023,7 @@ align-self: flex-start;
 /* The folder: 948 x 622 units, its own shadow reaching beyond. */
 .lore-folder {
   left: calc(246 * var(--u));
-  top: calc(175 * var(--u));
+  top: calc(165 * var(--u));
   width: calc(948 * var(--u));
   height: calc(622 * var(--u));
   touch-action: pan-y;
@@ -1175,6 +1178,36 @@ align-self: flex-start;
    stipple to blend here, so no background of its own either. */
 .contact--lore { background: none; }
 
+/* Page-load intro (html.intro / html.intro-play, as on the homepage): the
+   stipple fades in, "About me" is written in from left to right, the folder
+   rises into place and the papers are laid in it one by one, from the
+   bottom of the pile up (--deal), each sliding in turned a little
+   (--deal-turn) and settling. A paper's picture and the vellum's frosting
+   fade in rather than the paper itself: a fading paper would cut the
+   frosting off from what's under it. */
+.intro:not(.intro-play) :is(.stipple--lore, .lore-lettering, .lore-folder, .lore-hint) { opacity: 0; }
+.intro-play .stipple--lore { animation: intro-fade 1.4s ease 0.3s backwards; }
+.intro-play .lore-lettering--about { animation: intro-write 1.2s cubic-bezier(0.45, 0, 0.25, 1) 0.1s backwards; }
+.intro-play .lore-lettering--me { animation: intro-write 1s cubic-bezier(0.45, 0, 0.25, 1) 0.8s backwards; }
+.intro-play .lore-folder > :is(.folder-base, .folder-label, .folder-arrow) {
+  animation: intro-slide 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.intro-play .sheet {
+  animation: intro-deal 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--deal) * 0.1s) backwards;
+}
+.intro-play .sheet > :is(.sheet-img, .sheet-frost) {
+  animation: intro-fade 0.2s ease calc(0.45s + var(--deal) * 0.1s) backwards;
+}
+.intro-play .lore-hint { animation: intro-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.6s backwards; }
+
+@keyframes intro-write {
+  from { clip-path: inset(-10% 100% -10% 0); }
+  to { clip-path: inset(-10% 0 -10% 0); }
+}
+@keyframes intro-deal {
+  from { translate: calc(24 * var(--u)) calc(120 * var(--u)); rotate: var(--deal-turn); }
+}
+
 /* Touch screens: no hover, so the two buttons show once the pile on the
    right is gone. */
 @media (hover: none) {
@@ -1271,7 +1304,7 @@ align-self: flex-start;
 @media (min-width: 720px) and (max-width: 1023px) {
   .lore {
     aspect-ratio: 1100 / 797;
-    margin-top: max(0px, 118px - 149 * 100vw / 1100);
+    margin-top: max(0px, 118px - 139 * 100vw / 1100);
   }
   /* Moved along with left/right, not translate, which would cut the stipple
      off from the page it multiplies into. */
@@ -1654,6 +1687,7 @@ align-self: flex-start;
     aspect-ratio: auto;
     height: 100vh;
     height: 100svh;
+    margin-top: 0;
   }
   .lore > * { --u: calc(100cqw / 390); }
   .stipple--lore {
