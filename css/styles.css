@@ -1186,9 +1186,9 @@ align-self: flex-start;
    fade in rather than the paper itself: a fading paper would cut the
    frosting off from what's under it. */
 .intro:not(.intro-play) :is(.stipple--lore, .lore-lettering, .lore-folder, .lore-hint) { opacity: 0; }
-.intro-play :is(.stipple--lore, .lore-lettering, .page-lore .menu-toggle) { animation: intro-fade 2.8s ease 0.6s backwards; }
+.intro-play :is(.stipple--lore, .lore-lettering, .page-lore .menu-toggle) { animation: intro-fade 1.4s ease 0.6s backwards; }
 @media (min-width: 720px) {
-  .intro-play .page-lore .nav { animation: intro-fade 2.8s ease 0.6s backwards; }
+  .intro-play .page-lore .nav { animation: intro-fade 1.4s ease 0.6s backwards; }
 }
 .intro-play .lore-folder > :is(.folder-base, .folder-label, .folder-arrow) {
   animation: intro-slide 1.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
