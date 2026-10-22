@@ -991,6 +991,192 @@ align-self: flex-start;
 }
 .footer-links a:hover { color: var(--accent); }
 
+/* ---------- 6. Lore (lore.html) ---------- */
+
+/* The Figma frame, 1440 wide: the stipple and the "About me" lettering
+   behind an open folder of papers. Everything is placed in its units. */
+.lore {
+  position: relative;
+  container-type: inline-size;
+  aspect-ratio: 1440 / 797;
+  overflow-x: clip;
+}
+.lore > * {
+  --u: calc(100cqw / 1440);
+  position: absolute;
+}
+.lore-backdrop { inset: 0; pointer-events: none; }
+.lore-backdrop > * { position: absolute; }
+.stipple--lore {
+  left: calc(-68 * var(--u));
+  top: calc(55 * var(--u));
+  width: calc(1508 * var(--u));
+  height: calc(732 * var(--u));
+}
+.lore-lettering { height: auto; }
+.lore-lettering--about { left: calc(59 * var(--u)); top: calc(107.3 * var(--u)); width: calc(1123.38 * var(--u)); }
+.lore-lettering--me { left: calc(588.3 * var(--u)); top: calc(367.03 * var(--u)); width: calc(793.49 * var(--u)); }
+
+/* The folder: 948 x 622 units, its own shadow reaching beyond. */
+.lore-folder {
+  left: calc(246 * var(--u));
+  top: calc(175 * var(--u));
+  width: calc(948 * var(--u));
+  height: calc(622 * var(--u));
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lore-folder:focus { outline: none; }
+.lore-folder:focus-visible { outline: 1px solid var(--body); outline-offset: calc(24 * var(--u)); border-radius: calc(24 * var(--u)); }
+.lore-folder > * { position: absolute; }
+.folder-base {
+  left: calc(-88 * var(--u));
+  top: calc(-53 * var(--u));
+  width: calc(1125 * var(--u));
+  height: auto;
+  pointer-events: none;
+}
+.folder-label {
+  left: calc(218 * var(--u));
+  top: calc(275 * var(--u));
+  font-family: var(--font-script);
+  font-size: calc(40 * var(--u));
+  line-height: calc(22 * var(--u));
+  letter-spacing: -0.02em;
+  color: #fff;
+  pointer-events: none;
+}
+.folder-arrow {
+  left: calc(186 * var(--u));
+  top: calc(294 * var(--u));
+  width: calc(105 * var(--u));
+  height: auto;
+  pointer-events: none;
+}
+
+/* A sheet (a paper in the folder): its picture (with its own shadow) in the
+   box Figma renders it in, and, over the paper itself (--cx/--cy/--cw/--ch,
+   turned by --cr), the area that takes the pointer, a deeper shadow for
+   when it's lifted, and the vellum's frosting. js/lore.js moves it. */
+.sheet {
+  left: calc(var(--x) * var(--u));
+  top: calc(var(--y) * var(--u));
+  width: calc(var(--w) * var(--u));
+  height: calc(var(--h) * var(--u));
+  pointer-events: none;
+  transform-origin: calc((var(--cx) + var(--cw) / 2) * var(--u)) calc((var(--cy) + var(--ch) / 2) * var(--u));
+  will-change: transform;
+}
+.sheet-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-user-drag: none;
+}
+.sheet-hit,
+.sheet-lift,
+.sheet-frost {
+  position: absolute;
+  left: calc(var(--cx) * var(--u));
+  top: calc(var(--cy) * var(--u));
+  width: calc(var(--cw) * var(--u));
+  height: calc(var(--ch) * var(--u));
+  transform-origin: 0 0;
+  rotate: var(--cr, 0deg);
+}
+.sheet.is-top .sheet-hit { pointer-events: auto; cursor: grab; }
+.lore-folder.is-dragging,
+.lore-folder.is-dragging .sheet-hit { cursor: grabbing; }
+.sheet-lift {
+  box-shadow: 0 calc(28 * var(--u)) calc(56 * var(--u)) rgba(39, 26, 33, 0.32);
+  opacity: calc(var(--lift, 0) * 0.9);
+  translate: 0 calc(var(--lift, 0) * 20 * var(--u));
+}
+/* Tracing paper: what's under it shows through, blurred (Figma's
+   background blur, 5.7). */
+.sheet-frost {
+  -webkit-backdrop-filter: blur(calc(2.85 * var(--u)));
+  backdrop-filter: blur(calc(2.85 * var(--u)));
+}
+
+/* Buttons and the caption, shown over a paper while it's hovered. */
+.pill {
+  position: absolute;
+  left: calc(var(--px) * var(--u));
+  top: calc(var(--py) * var(--u));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border: 1px solid #f5f1ed;
+  border-radius: 40px;
+  background: rgba(248, 244, 240, 0.82);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow:
+    0 1px 1.5px rgba(152, 129, 129, 0.08),
+    0 6px 3px rgba(152, 129, 129, 0.07),
+    0 13px 4px rgba(152, 129, 129, 0.04),
+    0 23px 4.5px rgba(152, 129, 129, 0.01);
+  font-family: var(--font-mono);
+  font-size: clamp(12px, calc(16 * var(--u)), 16px);
+  line-height: 1.3;
+  letter-spacing: -0.05em;
+  color: #513f49;
+  text-decoration: none;
+  white-space: nowrap;
+  translate: -50% calc(-50% + 6px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s linear 0.25s;
+}
+.pill svg { flex: none; }
+.pill--caption {
+  width: clamp(270px, calc(359 * var(--u)), 359px);
+  padding: 12px 22px;
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+}
+.lore-folder > .pill { z-index: 200; }
+.sheet.is-top:is(.is-hovered, .is-revealed) .pill,
+.lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
+.lore-folder:has([data-sheet="envelope"].is-top:is(.is-hovered, .is-revealed)) .pill--inquiry,
+.pill:focus-visible {
+  opacity: 1;
+  visibility: visible;
+  translate: -50% -50%;
+  pointer-events: auto;
+  transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s;
+}
+.pill:is(a, button) { cursor: pointer; }
+.pill:is(a, button):hover { background: rgba(252, 250, 248, 0.92); }
+.pill:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
+
+.lore-hint { display: none; }
+
+/* The folder's shadow reaches down into the contact section, which has no
+   stipple to blend here, so no background of its own either. */
+.contact--lore { background: none; }
+
+/* Touch screens: no hover, so the caption shows while its photo is on
+   top, and the two buttons once the pile on the right is gone. */
+@media (hover: none) {
+  .sheet.is-top .pill--caption,
+  .lore-folder[data-left="6"] > .pill {
+    opacity: 1;
+    visibility: visible;
+    translate: -50% -50%;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s;
+  }
+}
+
 /* ==========================================================================
    Responsive
    ========================================================================== */
@@ -1068,6 +1254,20 @@ align-self: flex-start;
     top: calc(100% + 48px);
     width: min(480px, 100%);
   }
+}
+
+/* Tablet, lore: a frame of 1100 units around the folder, so the papers stay
+   readable (the lettering runs off the sides), and below the menu bar. */
+@media (min-width: 720px) and (max-width: 1023px) {
+  .lore {
+    aspect-ratio: 1100 / 797;
+    margin-top: max(0px, 118px - 149 * 100vw / 1100);
+  }
+  /* Moved along with left/right, not translate, which would cut the stipple
+     off from the page it multiplies into. */
+  .lore > * { --u: calc(100cqw / 1100); }
+  .lore-backdrop { left: calc(-170 * var(--u)); right: calc(170 * var(--u)); }
+  .lore-folder { left: calc(76 * var(--u)); }
 }
 
 /* Phone */
@@ -1405,10 +1605,10 @@ align-self: flex-start;
      with the section's own background. */
   .contact-tuck { --reach: 100px; display: block; margin-top: calc(-48px - var(--reach) - var(--pin, 0px)); }
   .contact-tuck::before { content: ""; display: block; height: var(--pin, 0px); }
-  .contact {
+  .contact { gap: 24px; }
+  .contact-tuck .contact {
     position: sticky;
     bottom: calc(48px + var(--reach) - var(--contact-h));
-    gap: 24px;
     padding-top: calc(56px + var(--reach));
     scroll-margin-top: calc(64px - var(--reach));
   }
@@ -1434,6 +1634,36 @@ align-self: flex-start;
     height: 44px;
   }
   .footer-links li + li::before { position: absolute; left: -5.5px; top: calc(50% - 1.5px); }
+
+  /* Lore: the "About me" lettering over the stipple, in a frame 390 wide,
+     and under it the folder, close up on its right-hand side (530 of its
+     units across the screen). Papers turned over go off past the left edge. */
+  .lore { aspect-ratio: 390 / 800; }
+  .lore > * { --u: calc(100cqw / 390); }
+  .stipple--lore {
+    left: calc(-150 * var(--u));
+    top: calc(30 * var(--u));
+    width: calc(690 * var(--u));
+    height: calc(335 * var(--u));
+  }
+  .lore-lettering--about { left: calc(12 * var(--u)); top: calc(76 * var(--u)); width: calc(326 * var(--u)); }
+  .lore-lettering--me { left: calc(165.5 * var(--u)); top: calc(151.3 * var(--u)); width: calc(230 * var(--u)); }
+  .lore-folder {
+    --u: calc(100cqw / 530);
+    left: calc(-424 * var(--u));
+    top: calc(270 / 390 * 100cqw);
+  }
+  .lore-hint {
+    display: block;
+    left: 0;
+    right: 0;
+    top: calc(756 * var(--u));
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: -0.05em;
+    text-align: center;
+    color: #513f49;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
