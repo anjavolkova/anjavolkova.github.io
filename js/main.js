@@ -442,7 +442,9 @@ function initNudge() {
 
   function onMove(e) {
     const now = performance.now();
-    const over = [...document.querySelectorAll("canvas.stipple")].some((canvas) => {
+    // The lore page's folder lies over its stipple: time spent there is
+    // time with the papers, not the dots.
+    const over = !e.target.closest?.(".lore-folder") && [...document.querySelectorAll("canvas.stipple")].some((canvas) => {
       if (canvas.dataset.renderer !== "webgpu") return false;
       const r = canvas.getBoundingClientRect();
       return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;

@@ -31,7 +31,7 @@
   <nav class="nav" id="site-nav" aria-label="Main">
     <a class="nav-brand" href="index.html" aria-label="Home"><img src="assets/img/brand-mark.png" alt="" width="36" height="39"></a>
     <ul class="nav-links">
-      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html">Work</a></li>
       <li><a href="index.html#side-quests">Side quests</a></li>
       <li><a href="#lore">Lore</a></li>
     </ul>
@@ -93,9 +93,8 @@
       </div>
       <div class="sheet" data-sheet="cathedral" data-label="A photo of a cloister" style="--x: 465.9; --y: 255.22; --w: 428; --h: 412; --left: 105.9; --cx: 21; --cy: 7; --cw: 359.5; --ch: 287.78;">
         <span class="sheet-lift" aria-hidden="true"></span>
-        <img class="sheet-img" src="assets/img/lore/cathedral-1x.webp" srcset="assets/img/lore/cathedral-1x.webp 1x, assets/img/lore/cathedral.webp 2x" alt="A photo of a Gothic cloister garden." width="428" height="412">
+        <img class="sheet-img" src="assets/img/lore/cathedral-1x.webp" srcset="assets/img/lore/cathedral-1x.webp 1x, assets/img/lore/cathedral.webp 2x" alt="A photo of a Gothic cloister garden. I’ve lived in Utrecht, NL, Antwerp, BE &amp; Yekaterinburg, RU." width="428" height="412">
         <span class="sheet-hit" aria-hidden="true"></span>
-        <p class="pill pill--caption" style="--px: 200.75; --py: 328;">I’ve lived in Utrecht, NL, Antwerp, BE &amp; Yekaterinburg, RU</p>
       </div>
       <div class="sheet" data-sheet="about" data-label="About the designer" style="--x: 465; --y: 18; --w: 478; --h: 694; --left: -6; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
         <span class="sheet-lift" aria-hidden="true"></span>
@@ -121,8 +120,11 @@
         <span class="sheet-hit" aria-hidden="true"></span>
       </div>
 
-      <!-- The resume's and the letter's buttons, above both of them. -->
-      <a class="pill pill--resume" href="#" data-link="resume" data-for="resume" download style="--px: 710.5; --py: 181;">
+      <!-- The cloister photo's caption, which follows the pointer like a
+           tooltip, and the resume's and the letter's buttons: above all the
+           papers. -->
+      <p class="pill pill--caption" data-for="cathedral" aria-hidden="true">I’ve lived in Utrecht, NL, Antwerp, BE &amp; Yekaterinburg, RU</p>
+      <a class="pill pill--resume" href="#" data-link="resume" data-for="resume" download style="--px: 710.5; --py: 165;">
         Download PDF
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M17.5 12.5v1c0 1.4 0 2.1-.27 2.64a2.5 2.5 0 0 1-1.1 1.09c-.53.27-1.23.27-2.63.27h-7c-1.4 0-2.1 0-2.63-.27a2.5 2.5 0 0 1-1.1-1.1C2.5 15.6 2.5 14.9 2.5 13.5v-1m11.67-4.17L10 12.5m0 0L5.83 8.33M10 12.5v-10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>

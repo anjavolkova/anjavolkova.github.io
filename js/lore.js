@@ -7,17 +7,15 @@
 // Each paper keeps its place and rotation from the Figma layouts and only
 // slides across. Sent by a key or a tap, it eases over in TURN_MS; let go of
 // after a drag, it carries on (or back) on a spring from where it was, at the
-// speed it was flicked. On the way over it lifts off the folder: it rises in
-// an arc, grows a little, tilts towards you and casts a deeper shadow, so it
-// reads like a sheet being turned over.
+// speed it was flicked. On the way over it stays flat on the folder, like a
+// sheet being leafed across: it turns a little as it goes and its shadow
+// deepens, attached to it.
 
 const FOLDER_WIDTH = 948;   // the folder in Figma, in design units
-const TURN_MS = 720;        // a full turn, sent by a key or a tap
-const STIFFNESS = 70;       // spring after a drag
+const TURN_MS = 1000;       // a full turn, sent by a key or a tap
+const STIFFNESS = 40;       // spring after a drag
 const DAMPING = 0.86;       // just under critical: the paper settles, barely overshooting
 const HOVER_STIFFNESS = 320;
-const ARC = 30;             // how high a paper rises on the way over (units)
-const TILT = 13;            // degrees it turns towards you mid-way
 const ENGAGE = 8;           // px of sideways movement before a drag takes hold
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
@@ -98,7 +96,7 @@ export function initLore() {
     p.dir = toLeft ? -1 : 1;
     p.flight = ++flights;
     const share = p.dx ? Math.abs(p.target - p.x) / Math.abs(p.dx) : 0;
-    const ms = reducedMotion.matches ? 200 : Math.max(280, TURN_MS * Math.sqrt(share));
+    const ms = reducedMotion.matches ? 200 : Math.max(400, TURN_MS * Math.sqrt(share));
     p.turn = { from: p.x, to: p.target, t0: performance.now(), ms };
     kick();
   }
@@ -128,7 +126,7 @@ export function initLore() {
   }
 
   // Stacking: the pile on the right, the pile on the left above it (in the
-  // order the papers arrived), and anything in the air above both.
+  // order the papers arrived), and anything on the move above both.
   function stackOf(p) {
     if (p.fixed) return 1 + p.i;
     if (moving(p)) return 100 + p.flight;
@@ -138,18 +136,17 @@ export function initLore() {
   function render(p) {
     const motion = reducedMotion.matches ? 0 : 1;
     const progress = p.dx ? clamp(p.x / p.dx, 0, 1) : 0;
-    const air = Math.sin(Math.PI * progress);
+    const mid = Math.sin(Math.PI * progress);   // 0 at either side, 1 half way
     const h = p.hover;
     const towardSpine = p.fixed ? 0 : isLeft(p) ? 1 : -1;
     const x = p.x + towardSpine * 7 * h;
-    const y = -(ARC * air + 4 * h) * motion + p.dragY;
-    const spin = motion * (-2.4 * air * p.dir + clamp(-p.v * 0.0016, -5, 5) + towardSpine * 0.9 * h);
-    const tilt = motion * TILT * air * -p.dir;
-    const scale = 1 + motion * (0.045 * air + 0.012 * h);
-    const lift = Math.max(air, h * 0.45, p.drag ? 0.5 : 0);
+    const y = -4 * h * motion + p.dragY;
+    const spin = motion * (-2.4 * mid * p.dir + clamp(-p.v * 0.0016, -5, 5) + towardSpine * 0.9 * h);
+    const scale = 1 + motion * 0.012 * h;
+    const lift = Math.max(mid, h * 0.45, p.drag ? 0.5 : 0);
     p.el.style.transform =
-      `perspective(${(1600 * unit).toFixed(0)}px) translate3d(${(x * unit).toFixed(2)}px, ${(y * unit).toFixed(2)}px, 0) ` +
-      `rotateY(${tilt.toFixed(2)}deg) rotate(${spin.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+      `translate(${(x * unit).toFixed(2)}px, ${(y * unit).toFixed(2)}px) ` +
+      `rotate(${spin.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
     p.el.style.setProperty("--lift", lift.toFixed(3));
     p.el.style.zIndex = stackOf(p);
   }
@@ -207,7 +204,21 @@ export function initLore() {
     if (e.pointerType !== "mouse" || gesture?.engaged || !handle(e.target)) return;
     const p = paperOf(e.target);
     if (p && p.el.classList.contains("is-top")) setHover(p, true);
+    follow(e);
   });
+
+  // The cloister photo's caption sits just above the pointer, like a tooltip,
+  // while the photo is hovered (on touch screens it stays under the photo).
+  const caption = folder.querySelector(".pill--caption");
+  const cloister = byName.get("cathedral");
+  function follow(e) {
+    if (!caption || e.pointerType !== "mouse" || !cloister?.hoverTo) return;
+    const r = folder.getBoundingClientRect();
+    caption.style.setProperty("--tx", `${(e.clientX - r.left).toFixed(1)}px`);
+    caption.style.setProperty("--ty", `${(e.clientY - r.top).toFixed(1)}px`);
+    caption.classList.add("is-following");
+  }
+  folder.addEventListener("pointermove", follow);
   folder.addEventListener("pointerout", (e) => {
     if (e.pointerType !== "mouse" || !handle(e.target)) return;
     const p = paperOf(e.target);
