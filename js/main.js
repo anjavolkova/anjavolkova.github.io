@@ -160,7 +160,7 @@ function hideMissingImages() {
 }
 
 // WAI-ARIA tabs with automatic activation: arrow keys, Home and End move
-// between projects; the visual, metadata, badges and CTA swap together.
+// between projects; the visual, metadata and CTA swap together.
 //
 // The current panel fades out (.is-leaving) before the new one animates in
 // (.is-entering); see styles.css. Hovering or focusing a tab starts loading

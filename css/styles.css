@@ -337,8 +337,7 @@ img.is-missing { visibility: hidden; }
 
 /* Switching projects: the current one fades out, then the new one comes in.
    The image area fades (fading .work-visual keeps the grain blending with
-   its background), the text rises in one block after another, and the
-   number badges fade in. */
+   its background) and the text rises in one block after another. */
 .work-panel.is-leaving { animation: panel-out 0.16s ease-in both; }
 .work-panel.is-entering .work-visual { animation: panel-fade 0.5s ease both; }
 .work-panel.is-entering .work-body > *,
@@ -346,12 +345,10 @@ img.is-missing { visibility: hidden; }
 .work-panel.is-entering .work-body > :nth-child(2) { animation-delay: 0.06s; }
 .work-panel.is-entering .work-body > :nth-child(3) { animation-delay: 0.12s; }
 .work-panel.is-entering .work-footer { animation-delay: 0.18s; }
-.work-panel.is-entering .badge { animation: badge-dissolve 0.5s ease 0.15s both; }
 
 @keyframes panel-out { to { opacity: 0; } }
 @keyframes panel-fade { from { opacity: 0; } }
 @keyframes panel-rise { from { opacity: 0; transform: translateY(12px); } }
-@keyframes badge-dissolve { from { opacity: 0; } }
 .work-panel:focus-visible { outline-offset: -2px; }
 
 /* Project visual: a 504 × 714 stage, pulled up beside the tab row. */
@@ -543,74 +540,6 @@ img.is-missing { visibility: hidden; }
 }
 .cta:hover .arrow { transform: rotate(180deg) translateX(-3px); }
 .cta:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-
-/* Number stickers. Their positions are measured from the metadata table's
-   top-right corner. */
-.badges {
-  position: absolute;
-  inset: 0 0 auto auto;
-  pointer-events: none;
-}
-
-.badge {
-  --turn: 0deg;
-  --value-turn: 0deg;
-  --label-turn: -20deg;
-  position: absolute;
-  display: grid;
-  place-items: center;
-  width: 124px;
-  height: 124px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  overflow: hidden;
-  transform: rotate(var(--turn));
-  color: var(--plum);
-}
-.badge--cream { --turn: -6.98deg; right: 7.7px; top: -133.2px; background: var(--cream); }
-.badge--blue { --turn: 15.45deg; --value-turn: 6.63deg; right: -68.4px; top: -50.7px; background: var(--blue); }
-
-.badge-grain {
-  position: absolute;
-  left: -46.1px;
-  top: -13.6px;
-  width: 201px;
-  height: 142px;
-  transform: rotate(-105.45deg);
-  mix-blend-mode: color-burn;
-}
-
-.badge-value {
-  position: relative;
-  transform: translateY(5px) rotate(var(--value-turn));
-  font-family: var(--font-serif);
-  font-size: 55px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  white-space: nowrap;
-}
-.badge--large .badge-value { font-size: 60px; }
-.badge--small .badge-value { font-size: 44px; }
-.badge--small.badge--blue .badge-value { font-size: 48px; }
-.badge-script { font-family: var(--font-script); font-weight: 400; }
-
-.badge-label {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform: rotate(var(--label-turn));
-  overflow: visible;
-}
-.badge-label path { fill: none; }
-.badge-label text {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  fill: var(--plum);
-  text-anchor: middle;
-}
 
 /* ---------- 3. Side quests ---------- */
 
@@ -1353,17 +1282,6 @@ align-self: flex-start;
   .meta-row--half:nth-last-child(2) { border-right: 0; }
   .meta-row dt { width: 62px; }
   .meta-row dd { flex: 1; min-width: 0; line-height: 1.5; }
-  /* Values in the rows under the stickers wrap before reaching them (each
-     row's space follows the sticker's curve). */
-  .work-meta-wrap:has(.badges) .meta-row:nth-child(3) dd { padding-right: 162px; }
-  .work-meta-wrap:has(.badges) .meta-row:nth-child(4) dd { padding-right: 174px; }
-  .work-meta-wrap:has(.badges) .meta-row:nth-child(5) dd { padding-right: 167px; }
-
-  /* The stickers overlap the table's right edge, the second one partly off
-     screen, as in Figma. */
-  .badge--cream { right: 59px; top: 90px; }
-  .badge--blue { right: -31px; top: 144px; }
-
   .work-desc { order: 4; margin-top: 8px; line-height: 1.5; }
   .work-desc p + p { margin-top: 1.5em; }
   /* Keeps the first line clear of the second sticker. */
