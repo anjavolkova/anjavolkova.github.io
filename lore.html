@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#F6F4F5" />
+<meta name="description" content="About Anna Volkova — a folder of bits and pieces: who I am, what I love, what I don’t." />
+<title>Lore — Anna Volkova</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script>
+  // Always open at the top, even on a reload. Links to a section still go there.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+</script>
+<script type="module" src="js/main.js"></script>
+</head>
+<body class="page-lore">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <!-- Phones: the links open from this button as a full-screen menu. -->
+  <button class="menu-toggle is-on-light" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+    <svg class="menu-icon menu-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="menu-icon menu-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a class="nav-brand" href="index.html" aria-label="Home"><img src="assets/img/brand-mark.png" alt="" width="36" height="39"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="index.html#side-quests">Side quests</a></li>
+      <li><a href="#lore">Lore</a></li>
+    </ul>
+    <span class="nav-rule" aria-hidden="true"></span>
+    <a class="nav-cta" href="#contact">Let’s chat</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- Lore: a folder of papers. The top paper on the right moves over to the
+       left when you swipe, drag or press → (← brings it back). See
+       js/lore.js. Positions are Figma's, in units of the 1440px frame. -->
+  <section class="lore" id="lore" aria-labelledby="lore-title">
+    <h1 class="visually-hidden" id="lore-title">About me</h1>
+
+    <div class="lore-backdrop" aria-hidden="true">
+      <canvas class="stipple stipple--lore" data-src="assets/img/stipple-source.webp"></canvas>
+      <img class="lore-lettering lore-lettering--about" src="assets/img/lore/lettering-about.svg" alt="" width="1123" height="355">
+      <img class="lore-lettering lore-lettering--me" src="assets/img/lore/lettering-me.svg" alt="" width="793" height="368">
+    </div>
+
+    <div class="lore-folder" tabindex="0" role="group" aria-roledescription="folder"
+         aria-label="A folder of papers about me. Press the right arrow key, swipe or drag to leaf through, and the left arrow key to go back."
+         aria-describedby="lore-status">
+      <img class="folder-base" src="assets/img/lore/folder-1x.webp" srcset="assets/img/lore/folder-1x.webp 1x, assets/img/lore/folder.webp 2x" alt="" width="1125" height="854">
+      <span class="folder-label" aria-hidden="true">lore</span>
+      <img class="folder-arrow" src="assets/img/lore/arrow.webp" alt="" width="105" height="18">
+
+      <!-- At the back of the right-hand side, never moved: the resume and the letter. -->
+      <div class="sheet sheet--fixed" data-sheet="resume" style="--x: 473; --y: 9; --w: 475; --h: 730; --cx: 48; --cy: 9; --cw: 379; --ch: 552;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/resume-1x.webp" srcset="assets/img/lore/resume-1x.webp 1x, assets/img/lore/resume.webp 2x" alt="My resume, in a document wallet." width="475" height="730">
+        <span class="sheet-hit" aria-hidden="true"></span>
+      </div>
+      <div class="sheet sheet--fixed" data-sheet="envelope" style="--x: 616.63; --y: 195.39; --w: 321; --h: 394.5; --cx: 0; --cy: 13.6; --cw: 304; --ch: 381; --cr: -2.57deg;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/envelope-1x.webp" srcset="assets/img/lore/envelope-1x.webp 1x, assets/img/lore/envelope.webp 2x" alt="A letter sealed with wax, “write to me” on the front." width="321" height="395">
+        <span class="sheet-hit" aria-hidden="true"></span>
+      </div>
+
+      <!-- The papers that move, top of the pile last. --left is where each
+           one lies once it's over on the left-hand side. -->
+      <div class="sheet" data-sheet="things" data-label="Things I love, things I hate" style="--x: 463; --y: 3; --w: 478; --h: 694; --left: -17; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/things-1x.webp" srcset="assets/img/lore/things-1x.webp 1x, assets/img/lore/things.webp 2x" alt="" width="478" height="694">
+        <span class="sheet-hit" aria-hidden="true"></span>
+        <div class="visually-hidden">
+          <h2>Things I love</h2>
+          <ul><li>Affinity design suite</li><li>Live music</li><li>Muji pens</li><li>English Breakfast tea</li><li>Reading by a body of water</li></ul>
+          <h2>Things I hate</h2>
+          <ul><li>Matcha</li><li>Any sport that involves me throwing or catching something</li><li>Rebasing Git</li><li>Pen tool (people who can use it are wizards)</li></ul>
+        </div>
+      </div>
+      <div class="sheet" data-sheet="receipt" data-label="My most played songs last month" style="--x: 633.17; --y: -13.37; --w: 322; --h: 625; --left: 25.17; --cx: 101.38; --cy: 7; --cw: 184; --ch: 465; --cr: 7.83deg;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/receipt-1x.webp" srcset="assets/img/lore/receipt-1x.webp 1x, assets/img/lore/receipt.webp 2x" alt="A Receiptify receipt of my most played songs last month." width="322" height="625">
+        <span class="sheet-hit" aria-hidden="true"></span>
+      </div>
+      <div class="sheet" data-sheet="cathedral" data-label="A photo of a cloister" style="--x: 465.9; --y: 255.22; --w: 428; --h: 412; --left: 105.9; --cx: 21; --cy: 7; --cw: 359.5; --ch: 287.78;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/cathedral-1x.webp" srcset="assets/img/lore/cathedral-1x.webp 1x, assets/img/lore/cathedral.webp 2x" alt="A photo of a Gothic cloister garden." width="428" height="412">
+        <span class="sheet-hit" aria-hidden="true"></span>
+        <p class="pill pill--caption" style="--px: 200.75; --py: 328;">I’ve lived in Utrecht, NL, Antwerp, BE &amp; Yekaterinburg, RU</p>
+      </div>
+      <div class="sheet" data-sheet="about" data-label="About the designer" style="--x: 465; --y: 18; --w: 478; --h: 694; --left: -6; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/about-1x.webp" srcset="assets/img/lore/about-1x.webp 1x, assets/img/lore/about.webp 2x" alt="" width="478" height="694">
+        <span class="sheet-hit" aria-hidden="true"></span>
+        <div class="visually-hidden">
+          <h2>About the designer</h2>
+          <dl><dt>occupation</dt><dd>Product &amp; visual designer</dd><dt>based in</dt><dd>Ljubljana, Slovenia</dd><dt>speak</dt><dd>English, Russian, Slovene</dd><dt>education</dt><dd>Masters Data-Driven Design</dd></dl>
+          <p>Hi! I’m glad to see you here. I started designing when I got bored of playing The Sims 2 and discovered Photoshop on the family computer in 2007 &amp; I haven’t looked back since.</p>
+          <p>I enjoy problem solving, learning new things and bringing my ideas to life - so I’ve tried my hand at many areas of design. But what I love the most is having fun with the visuals!</p>
+        </div>
+      </div>
+      <div class="sheet sheet--vellum" data-sheet="vellum" data-label="Anna Volkova" style="--x: 591.74; --y: 88; --w: 394; --h: 612; --left: 103.74; --cx: 48; --cy: 9; --cw: 298; --ch: 434;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <span class="sheet-frost" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/vellum-1x.webp" srcset="assets/img/lore/vellum-1x.webp 1x, assets/img/lore/vellum.webp 2x" alt="" width="394" height="612">
+        <span class="sheet-hit" aria-hidden="true"></span>
+        <p class="visually-hidden">Anna Volkova is a designer working across interface, systems, and visual design to create products that are rigorous underneath, intuitive in use, and alive with personality.</p>
+      </div>
+      <div class="sheet" data-sheet="photo" data-label="A photo of me" style="--x: 408; --y: -33; --w: 372.5; --h: 477.5; --left: -16; --cx: 81.52; --cy: 7; --cw: 248.57; --ch: 310.52; --cr: 11.24deg;">
+        <span class="sheet-lift" aria-hidden="true"></span>
+        <img class="sheet-img" src="assets/img/lore/photo-1x.webp" srcset="assets/img/lore/photo-1x.webp 1x, assets/img/lore/photo.webp 2x" alt="A photo of me, paper-clipped to the folder." width="373" height="478">
+        <span class="sheet-hit" aria-hidden="true"></span>
+      </div>
+
+      <!-- The resume's and the letter's buttons, above both of them. -->
+      <a class="pill pill--resume" href="#" data-link="resume" data-for="resume" download style="--px: 710.5; --py: 181;">
+        Download PDF
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M17.5 12.5v1c0 1.4 0 2.1-.27 2.64a2.5 2.5 0 0 1-1.1 1.09c-.53.27-1.23.27-2.63.27h-7c-1.4 0-2.1 0-2.63-.27a2.5 2.5 0 0 1-1.1-1.1C2.5 15.6 2.5 14.9 2.5 13.5v-1m11.67-4.17L10 12.5m0 0L5.83 8.33M10 12.5v-10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="pill pill--inquiry" type="button" data-opens="inquiry" data-for="envelope" style="--px: 768.6; --py: 505;">
+        Inquiry form
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.83 14.17 14.17 5.83m0 0H5.83m8.34 0v8.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <p class="lore-hint" aria-hidden="true">swipe to leaf through</p>
+    <p class="visually-hidden" id="lore-status" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- Contact / booking -->
+  <section class="contact contact--lore" id="contact" aria-labelledby="contact-title">
+    <h2 class="contact-title" id="contact-title">Tell me what you’re working on</h2>
+    <p class="contact-sub">I’d love to chat and collaborate with you!</p>
+    <div class="booking">
+      <div class="booking-embed"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p class="footer-credit">Designed &amp; coded with <img loading="lazy" src="assets/img/icons/heart.svg" alt="love" width="15" height="13"> by Anya (since you've scrolled this far you can call me Anya)</p>
+  <ul class="footer-links">
+    <li><a href="#" data-link="linkedin">linkedin</a></li>
+    <li><a href="#" data-link="instagram">instagram</a></li>
+    <li><a href="#" data-link="github">github</a></li>
+    <li><a href="#" data-link="email">email</a></li>
+  </ul>
+</footer>
+
+<!-- Shown once someone has played with the stipple for 60+ seconds. -->
+<dialog class="nudge" id="nudge" aria-labelledby="nudge-text">
+  <form method="dialog">
+    <button class="nudge-close" aria-label="Close">&times;</button>
+  </form>
+  <h1 class="nudge-text" id="nudge-text">Seems like you’ve been playing with the design of this page for 60+ seconds now...</h1>
+  <p class="nudge-text">so it should be safe to say it would be worth getting in touch ;)</p>
+  <form class="nudge-form">
+    <label for="nudge-name">name</label>
+    <input id="nudge-name" name="name" autocomplete="name" required>
+    <label for="nudge-email">email</label>
+    <input id="nudge-email" name="email" type="email" autocomplete="email" required>
+    <label for="nudge-message">message</label>
+    <textarea id="nudge-message" name="message" rows="4" required></textarea>
+    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="nudge-send" type="submit">Send</button>
+    <p class="nudge-status" role="status"></p>
+  </form>
+</dialog>
+
+<!-- The letter's "Inquiry form": the same message form, opened from the folder. -->
+<dialog class="nudge" id="inquiry" aria-labelledby="inquiry-text">
+  <form method="dialog">
+    <button class="nudge-close" aria-label="Close">&times;</button>
+  </form>
+  <h1 class="nudge-text" id="inquiry-text">Write to me</h1>
+  <p class="nudge-text">Tell me a little about your project and I’ll get back to you.</p>
+  <form class="nudge-form">
+    <label for="inquiry-name">name</label>
+    <input id="inquiry-name" name="name" autocomplete="name" required>
+    <label for="inquiry-email">email</label>
+    <input id="inquiry-email" name="email" type="email" autocomplete="email" required>
+    <label for="inquiry-message">message</label>
+    <textarea id="inquiry-message" name="message" rows="4" required></textarea>
+    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="nudge-send" type="submit">Send</button>
+    <p class="nudge-status" role="status"></p>
+  </form>
+</dialog>
+
+</body>
+</html>

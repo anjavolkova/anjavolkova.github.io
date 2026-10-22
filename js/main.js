@@ -1,9 +1,11 @@
 import { mountParticles } from "./particles.js";
 import { loadCal } from "./cal-embed.js";
+import { initLore } from "./lore.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
 const LINKS = {
-  lore: "",
+  lore: "lore.html",
+  resume: "",          // the resume PDF, for the lore page's "Download PDF"
   "study-node": "",
   "study-lumia": "",
   "study-smm": "",
@@ -20,7 +22,8 @@ const LINKS = {
 function applyLinks() {
   for (const a of document.querySelectorAll("[data-link]")) {
     let url = LINKS[a.dataset.link];
-    if (!url) continue;
+    // No file yet: don't let "Download PDF" download the page itself.
+    if (!url) { a.removeAttribute("download"); continue; }
     if (a.dataset.link === "email") url = `mailto:${url}`;
     a.href = url;
     if (/^https?:/.test(url)) {
@@ -76,7 +79,9 @@ function initMenu() {
   const photo = document.querySelector(".hero-photo");
   const behind = [document.querySelector("main"), document.querySelector(".site-footer")];
 
+  // Pages without the hero photo (lore) keep the plum button throughout.
   function recolor() {
+    if (!photo) return;
     const r = toggle.getBoundingClientRect();
     toggle.classList.toggle("is-on-light", photo.getBoundingClientRect().bottom < r.top + r.height / 2);
   }
@@ -172,6 +177,7 @@ const PANEL_OUT = 160;
 
 function initTabs() {
   const tablist = document.querySelector(".work-tabs");
+  if (!tablist) return;
   const tabs = [...document.querySelectorAll(".work-tab")];
   const panelFor = (tab) => document.getElementById(tab.getAttribute("aria-controls"));
   const panels = tabs.map(panelFor);
@@ -269,6 +275,7 @@ const REST_DISTANCE = 6;
 
 function initQuests() {
   const collage = document.querySelector(".collage");
+  if (!collage) return;
   const pieces = [...collage.querySelectorAll(".piece")];
   const noteFor = (piece) => document.getElementById(piece.getAttribute("aria-describedby")).closest(".quest");
   let shownNote = collage.querySelector(".quest.is-active");
@@ -330,6 +337,7 @@ const SETTLE_DELAY = 150;
 
 function initQuestCarousel() {
   const section = document.querySelector(".quests");
+  if (!section) return;
   const panel = section.querySelector(".quests-layout");
   const collage = section.querySelector(".collage");
   const notes = [...collage.querySelectorAll(".quest")];
@@ -420,15 +428,15 @@ function initQuestCarousel() {
 
 // After 60+ seconds of playing with the stipple (moving the pointer over a
 // stipple while the shader is running), a message invites the visitor to get
-// in touch. Its form is sent through FormSubmit to CONTACT_EMAIL.
+// in touch. Its form is sent through FormSubmit to CONTACT_EMAIL. The lore
+// page's letter opens the same kind of message from its "Inquiry form".
 const CONTACT_EMAIL = "info@annavolkova.design";
 const PLAY_SECONDS = 60;
 
 function initNudge() {
   const dialog = document.getElementById("nudge");
-  const form = document.getElementById("nudge-form");
-  const status = form.querySelector(".nudge-status");
-  const send = form.querySelector(".nudge-send");
+  if (!dialog) return;
+  initMessage(dialog);
   let played = 0;
   let lastMove = 0;
 
@@ -444,13 +452,29 @@ function initNudge() {
     lastMove = over ? now : 0;
     if (played >= PLAY_SECONDS * 1000) {
       window.removeEventListener("pointermove", onMove);
-      dialog.showModal();
+      if (!document.querySelector("dialog[open]")) dialog.showModal();
     }
   }
   window.addEventListener("pointermove", onMove, { passive: true });
+}
 
-  // The × button, Esc and a click on the dimmed background all close the
-  // message, playing the closing animation first.
+// Buttons with data-opens="<dialog id>" open that message.
+function initMessageButtons() {
+  for (const button of document.querySelectorAll("[data-opens]")) {
+    const dialog = document.getElementById(button.dataset.opens);
+    if (!dialog) continue;
+    initMessage(dialog);
+    button.addEventListener("click", () => dialog.showModal());
+  }
+}
+
+// A message dialog: the × button, Esc and a click on the dimmed background
+// all close it, playing the closing animation first; its form sends.
+function initMessage(dialog) {
+  const form = dialog.querySelector(".nudge-form");
+  const status = form.querySelector(".nudge-status");
+  const send = form.querySelector(".nudge-send");
+
   function close() {
     if (!dialog.open || dialog.classList.contains("is-closing")) return;
     dialog.classList.add("is-closing");
@@ -522,4 +546,6 @@ initQuests();
 initQuestCarousel();
 initBooking();
 initNudge();
+initMessageButtons();
+initLore();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);
