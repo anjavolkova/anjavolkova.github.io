@@ -1179,16 +1179,16 @@ align-self: flex-start;
 .contact--lore { background: none; }
 
 /* Page-load intro (html.intro / html.intro-play, as on the homepage): the
-   stipple fades in, "About me" rises into place as the name does on the
-   homepage, the folder rises into place and the papers are laid in it one by one, from the
-   bottom of the pile up (--deal), each sliding in turned a little
-   (--deal-turn) and settling. A paper's picture and the vellum's frosting
+   stipple fades in, the folder rises into place and, once it's fully there,
+   "About me" rises behind it as the name does on the homepage; the papers
+   are laid in the folder one by one, from the bottom of the pile up
+   (--deal), each sliding in turned a little (--deal-turn) and settling. A paper's picture and the vellum's frosting
    fade in rather than the paper itself: a fading paper would cut the
    frosting off from what's under it. */
 .intro:not(.intro-play) :is(.stipple--lore, .lore-lettering, .lore-folder, .lore-hint) { opacity: 0; }
 .intro-play .stipple--lore { animation: intro-fade 2.8s ease 0.6s backwards; }
-.intro-play .lore-lettering--about { animation: intro-slide 2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards; }
-.intro-play .lore-lettering--me { animation: intro-slide 2s cubic-bezier(0.22, 1, 0.36, 1) 0.9s backwards; }
+.intro-play .lore-lettering--about { animation: intro-slide 2s cubic-bezier(0.22, 1, 0.36, 1) 1.8s backwards; }
+.intro-play .lore-lettering--me { animation: intro-slide 2s cubic-bezier(0.22, 1, 0.36, 1) 2.3s backwards; }
 .intro-play .lore-folder > :is(.folder-base, .folder-label, .folder-arrow) {
   animation: intro-slide 1.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
@@ -1205,7 +1205,7 @@ align-self: flex-start;
 .intro-play .page-lore :is(.nav, .menu-toggle) { animation-duration: 1.6s; animation-delay: 3s; }
 
 @keyframes intro-deal {
-  from { translate: calc(12 * var(--u)) calc(70 * var(--u)); rotate: var(--deal-turn); }
+  from { translate: calc(24 * var(--u)) calc(120 * var(--u)); rotate: var(--deal-turn); }
 }
 
 /* Touch screens: no hover, so the two buttons show once the pile on the
