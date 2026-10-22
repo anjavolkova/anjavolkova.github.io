@@ -528,11 +528,12 @@ function initMessage(dialog) {
 }
 
 // Page-load intro: start it (html.intro-play, see styles.css and the script
-// in <head>) once the hero photo and name artwork are ready, or after 2s.
+// in <head>) once the hero photo and name artwork (or on the lore page, the
+// folder and its papers) are ready, or after 2s.
 function initIntro() {
   const root = document.documentElement;
   if (!root.classList.contains("intro")) return;
-  const images = [...document.querySelectorAll(".hero-photo img, .hero-name img")];
+  const images = [...document.querySelectorAll(".hero-photo img, .hero-name img, .lore img")];
   const ready = Promise.all(images.map((img) => img.decode().catch(() => {})));
   const timeout = new Promise((resolve) => setTimeout(resolve, 2000));
   Promise.race([ready, timeout]).then(() => requestAnimationFrame(() => root.classList.add("intro-play")));
