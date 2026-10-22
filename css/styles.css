@@ -1091,9 +1091,8 @@ align-self: flex-start;
 .lore-folder.is-dragging,
 .lore-folder.is-dragging .sheet-hit { cursor: grabbing; }
 .sheet-lift {
-  box-shadow: 0 calc(28 * var(--u)) calc(56 * var(--u)) rgba(39, 26, 33, 0.32);
-  opacity: calc(var(--lift, 0) * 0.9);
-  translate: 0 calc(var(--lift, 0) * 20 * var(--u));
+  box-shadow: 0 calc(8 * var(--u)) calc(22 * var(--u)) rgba(39, 26, 33, 0.28);
+  opacity: var(--lift, 0);
 }
 /* Tracing paper: what's under it shows through, blurred (Figma's
    background blur, 5.7). */
@@ -1102,7 +1101,8 @@ align-self: flex-start;
   backdrop-filter: blur(calc(2.85 * var(--u)));
 }
 
-/* Buttons and the caption, shown over a paper while it's hovered. */
+/* The buttons and the caption, shown over a paper while it's hovered: they
+   fade in, rising a little into place (--rise is where they settle). */
 .pill {
   position: absolute;
   left: calc(var(--px) * var(--u));
@@ -1129,30 +1129,44 @@ align-self: flex-start;
   color: #513f49;
   text-decoration: none;
   white-space: nowrap;
-  translate: -50% calc(-50% + 6px);
+  translate: -50% calc(var(--rise, -50%) + 6px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s linear 0.25s;
+  transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s linear 0.35s;
 }
 .pill svg { flex: none; }
+/* The caption: under the photo of the cloister (as it lies on the right),
+   and with a mouse, just above the pointer, like a tooltip (js/lore.js). It
+   never takes the pointer itself. */
 .pill--caption {
+  --px: 666.65;
+  --py: 583.22;
   width: clamp(270px, calc(359 * var(--u)), 359px);
   padding: 12px 22px;
   white-space: normal;
   text-align: center;
   text-wrap: balance;
 }
+.pill--caption.is-following {
+  left: var(--tx);
+  top: var(--ty);
+  --rise: calc(-100% - 18px);
+}
 .lore-folder > .pill { z-index: 200; }
-.sheet.is-top:is(.is-hovered, .is-revealed) .pill,
 .lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
 .lore-folder:has([data-sheet="envelope"].is-top:is(.is-hovered, .is-revealed)) .pill--inquiry,
 .pill:focus-visible {
+  pointer-events: auto;
+}
+.lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
+.lore-folder:has([data-sheet="envelope"].is-top:is(.is-hovered, .is-revealed)) .pill--inquiry,
+.lore-folder:has([data-sheet="cathedral"].is-top.is-hovered) .pill--caption,
+.pill:focus-visible {
   opacity: 1;
   visibility: visible;
-  translate: -50% -50%;
-  pointer-events: auto;
-  transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s;
+  translate: -50% var(--rise, -50%);
+  transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s;
 }
 .pill:is(a, button) { cursor: pointer; }
 .pill:is(a, button):hover { background: rgba(252, 250, 248, 0.92); }
@@ -1164,16 +1178,16 @@ align-self: flex-start;
    stipple to blend here, so no background of its own either. */
 .contact--lore { background: none; }
 
-/* Touch screens: no hover, so the caption shows while its photo is on
-   top, and the two buttons once the pile on the right is gone. */
+/* Touch screens: no hover, so the caption shows while its photo is on top
+   of the pile on the right, and the two buttons once that pile is gone. */
 @media (hover: none) {
-  .sheet.is-top .pill--caption,
-  .lore-folder[data-left="6"] > .pill {
+  .lore-folder[data-left="6"] > .pill:is(a, button) { pointer-events: auto; }
+  .lore-folder[data-left="3"] > .pill--caption,
+  .lore-folder[data-left="6"] > .pill:is(a, button) {
     opacity: 1;
     visibility: visible;
-    translate: -50% -50%;
-    pointer-events: auto;
-    transition: opacity 0.2s ease, translate 0.25s ease, visibility 0s;
+    translate: -50% var(--rise, -50%);
+    transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s;
   }
 }
 
@@ -1635,10 +1649,16 @@ align-self: flex-start;
   }
   .footer-links li + li::before { position: absolute; left: -5.5px; top: calc(50% - 1.5px); }
 
-  /* Lore: the "About me" lettering over the stipple, in a frame 390 wide,
-     and under it the folder, close up on its right-hand side (530 of its
-     units across the screen). Papers turned over go off past the left edge. */
-  .lore { aspect-ratio: 390 / 800; }
+  /* Lore: one screen. The "About me" lettering over the stipple, in a frame
+     390 wide, and over them the folder, close up on its right-hand side (530
+     of its units across the screen, fewer if the screen is short): all of it
+     and the hint under it in view, clear of the menu button. Papers turned
+     over go off past the left edge. */
+  .lore {
+    aspect-ratio: auto;
+    height: 100vh;
+    height: 100svh;
+  }
   .lore > * { --u: calc(100cqw / 390); }
   .stipple--lore {
     left: calc(-150 * var(--u));
@@ -1646,18 +1666,19 @@ align-self: flex-start;
     width: calc(690 * var(--u));
     height: calc(335 * var(--u));
   }
-  .lore-lettering--about { left: calc(12 * var(--u)); top: calc(76 * var(--u)); width: calc(326 * var(--u)); }
-  .lore-lettering--me { left: calc(165.5 * var(--u)); top: calc(151.3 * var(--u)); width: calc(230 * var(--u)); }
+  .lore-lettering--about { left: calc(12 * var(--u)); top: calc(48 * var(--u)); width: calc(326 * var(--u)); }
+  .lore-lettering--me { left: calc(165.5 * var(--u)); top: calc(123.3 * var(--u)); width: calc(230 * var(--u)); }
+  /* 662 units from the top of the photo to the folder's bottom edge. */
   .lore-folder {
-    --u: calc(100cqw / 530);
-    left: calc(-424 * var(--u));
-    top: calc(270 / 390 * 100cqw);
+    --u: min(100cqw / 530, (100svh - 108px) / 662);
+    left: calc(100cqw - 954 * var(--u));
+    top: calc(100% - 48px - 622 * var(--u));
   }
   .lore-hint {
     display: block;
     left: 0;
     right: 0;
-    top: calc(756 * var(--u));
+    bottom: 16px;
     font-family: var(--font-mono);
     font-size: 14px;
     letter-spacing: -0.05em;
