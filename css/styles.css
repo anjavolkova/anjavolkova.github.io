@@ -1087,7 +1087,8 @@ align-self: flex-start;
   transform-origin: 0 0;
   rotate: var(--cr, 0deg);
 }
-.sheet.is-top .sheet-hit { pointer-events: auto; cursor: grab; }
+.sheet-hit { pointer-events: auto; }
+.sheet.is-top .sheet-hit { cursor: grab; }
 .lore-folder.is-dragging,
 .lore-folder.is-dragging .sheet-hit { cursor: grabbing; }
 .sheet-lift {
@@ -1136,10 +1137,9 @@ align-self: flex-start;
   transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s linear 0.35s;
 }
 .pill svg { flex: none; }
-/* The caption: a tooltip just above the pointer (js/lore.js), shown with a
-   mouse only. It waits for the pointer to linger on the photo of the
-   cloister before it fades in, and stays a moment after the pointer leaves.
-   It never takes the pointer itself. */
+/* The caption: a tooltip just above the pointer, shown with a mouse only,
+   while the pointer rests on the photo of the cloister (js/lore.js). It
+   never takes the pointer itself. */
 .pill--caption {
   left: var(--tx, 0);
   top: var(--ty, 0);
@@ -1149,7 +1149,6 @@ align-self: flex-start;
   white-space: normal;
   text-align: center;
   text-wrap: balance;
-  transition: opacity 0.35s ease 0.3s, translate 0.35s ease 0.3s, visibility 0s linear 0.65s;
 }
 .lore-folder > .pill { z-index: 200; }
 .lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
@@ -1159,15 +1158,12 @@ align-self: flex-start;
 }
 .lore-folder:has([data-sheet="resume"].is-top:is(.is-hovered, .is-revealed)) .pill--resume,
 .lore-folder:has([data-sheet="envelope"].is-top:is(.is-hovered, .is-revealed)) .pill--inquiry,
-.lore-folder:has([data-sheet="cathedral"].is-top.is-hovered) .pill--caption,
+.pill--caption.is-shown,
 .pill:focus-visible {
   opacity: 1;
   visibility: visible;
   translate: -50% var(--rise, -50%);
   transition: opacity 0.35s ease, translate 0.35s ease, background-color 0.25s ease, visibility 0s;
-}
-.lore-folder:has([data-sheet="cathedral"].is-top.is-hovered) .pill--caption {
-  transition-delay: 0.5s, 0.5s, 0s, 0.5s;
 }
 .pill:is(a, button) { cursor: pointer; }
 .pill:is(a, button):hover { background: rgba(252, 250, 248, 0.92); }
