@@ -171,8 +171,8 @@ function hideMissingImages() {
 // (.is-entering); see styles.css. Hovering or focusing a tab starts loading
 // its panel's images, so they're ready when it opens.
 //
-// On desktop, while the page rests on the showcase, scrolling steps through
-// the projects before the page moves on: see stepOnScroll() below.
+// On desktop, scrolling stops on the showcase and steps through the projects
+// before the page moves on: see stepOnScroll() below.
 //
 // On phones the projects are a feed instead: all of them one after another,
 // each under its name bar (the tab buttons, which do nothing there).
@@ -270,48 +270,69 @@ function initTabs() {
   PHONE.addEventListener("change", setMode);
 }
 
-// With the showcase resting at its scroll stop (whole, at the top of the
-// window), a swipe or a turn of the wheel opens the next project, or the
-// previous one going up, instead of moving the page. Past the last project
-// (or the first, going up) the page scrolls on as usual. One gesture moves
-// one project: wheel events in quick succession are one gesture, and so is a
-// trackpad's momentum dying away, while a fresh swipe on top of it is a new
-// one. A gesture that started the page scrolling is left alone.
+// The showcase's scroll stop (whole, at the top of the window) is a hard
+// stop for wheels and trackpads. A swipe or a turn of the wheel heading for
+// it (down from above, or up from just below) glides the page onto it, not
+// past it. Resting on it, one opens the next project, or the previous one
+// going up, instead of moving the page; past the last project (or the
+// first, going up) the page scrolls on as usual.
+//
+// Browsers only let a gesture's first wheel event decide whether the page
+// scrolls, so what a gesture does is settled then, and the rest of it,
+// momentum and all, follows. Wheel events in quick succession are one
+// gesture, and so is a trackpad's momentum dying away, while a fresh swipe
+// on top of it is a new one.
 function stepOnScroll(work, tabs, select) {
   let gesture = null;
   let last = 0;
   let lastStep = -Infinity;
 
-  const atStop = () => {
-    const box = work.getBoundingClientRect();
+  // How far the showcase is from its stop, in px (more than 0 while the page
+  // is above it), or null where there's no hard stop: narrower windows, and
+  // windows too short to show the whole showcase.
+  const fromStop = () => {
     const stop = parseFloat(getComputedStyle(work).scrollMarginTop) || 0;
-    return Math.abs(box.top - stop) <= 4 && box.bottom <= window.innerHeight + 1;
+    if (!DESKTOP.matches || work.offsetHeight + stop > window.innerHeight + 1) return null;
+    return work.getBoundingClientRect().top - stop;
   };
+
+  // A new gesture: held (the page doesn't scroll for it) if it steps to a
+  // project or carries the page onto the stop.
+  function begin(e, dy) {
+    const off = e.cancelable && !e.ctrlKey && dy !== 0 ? fromStop() : null;
+    if (off === null) return false;
+    if (Math.abs(off) <= 4) {
+      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+      const next = tabs[i + Math.sign(dy)];
+      if (!next) return false;
+      if (e.timeStamp - lastStep >= STEP_GAP) {
+        lastStep = e.timeStamp;
+        select(next);
+        next.scrollIntoView({ block: "nearest", inline: "nearest" });
+      }
+      return true;
+    }
+    // Going up, only from the stop just below (the side quests), where the
+    // showcase's bottom edge is just out of sight.
+    const heading = dy > 0 ? off > 0 : off < 0 && work.getBoundingClientRect().bottom > -window.innerHeight / 4;
+    if (heading) window.scrollTo({ top: window.scrollY + off });
+    return heading;
+  }
 
   window.addEventListener("wheel", (e) => {
     const dy = e.deltaY * [1, 16, window.innerHeight][e.deltaMode];
     const size = Math.abs(dy);
-    const fresh = !gesture
-      || e.timeStamp - last > GESTURE_GAP
-      || (size > 10 && size > 1.5 * Math.max(...gesture.recent) && e.timeStamp - gesture.start > 300);
+    // A new gesture can't start on an event the browser won't let us cancel:
+    // that's the rest of a gesture the page is already scrolling for. A swipe
+    // on top of a dying momentum shows as a jump well above what's left of it.
+    const recent = gesture ? Math.max(...gesture.recent) : 0;
+    const fresh = !gesture || (e.cancelable && (e.timeStamp - last > GESTURE_GAP
+      || (size > 10 && size > 2 * recent && recent < gesture.peak / 3)));
     last = e.timeStamp;
-
-    if (fresh) {
-      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
-      const next = tabs[i + Math.sign(dy)];
-      const held = Boolean(next) && dy !== 0 && e.cancelable && !e.ctrlKey
-        && DESKTOP.matches && atStop();
-      gesture = { held, next, start: e.timeStamp, recent: [], stepped: e.timeStamp - lastStep < STEP_GAP };
-    }
+    if (fresh) gesture = { held: begin(e, dy), recent: [], peak: 0 };
     gesture.recent = [...gesture.recent.slice(-2), size];
-    if (!gesture.held) return;
-
-    e.preventDefault();
-    if (gesture.stepped) return;
-    gesture.stepped = true;
-    lastStep = e.timeStamp;
-    select(gesture.next);
-    gesture.next.scrollIntoView({ block: "nearest", inline: "nearest" });
+    gesture.peak = Math.max(gesture.peak, size);
+    if (gesture.held && e.cancelable) e.preventDefault();
   }, { passive: false });
 }
 
