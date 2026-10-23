@@ -74,15 +74,53 @@
        sits on the botanical drawing; those without one yet show just that. -->
   <section class="work" id="work" aria-label="Selected work">
     <div class="work-tabs" role="tablist" aria-label="Projects">
-      <button class="work-tab" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="true">Node Management UI</button>
+      <button class="work-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="true">Private file-sharing app</button>
+      <button class="work-tab" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="false" tabindex="-1">Node Management UI</button>
       <button class="work-tab" role="tab" id="tab-network" aria-controls="panel-network" aria-selected="false" tabindex="-1">Network Design System</button>
       <button class="work-tab" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="false" tabindex="-1">Home Network App</button>
       <button class="work-tab" role="tab" id="tab-smm" aria-controls="panel-smm" aria-selected="false" tabindex="-1">SMM Design</button>
-      <button class="work-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="false" tabindex="-1">Private file-sharing app</button>
     </div>
 
+    <!-- Private file-sharing app -->
+    <article class="work-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" tabindex="0">
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--panel grain--faint" src="assets/img/work/grain-faint.webp" alt="" width="758" height="536">
+          <div class="shot shot--files">
+            <span class="phone-shadow" aria-hidden="true"></span>
+            <span class="phone-side tilt" aria-hidden="true"></span>
+            <div class="phone-front tilt">
+              <img loading="lazy" src="assets/img/work/onmychat-phone.webp" alt="The On My Chat site on a phone: “Meet your locally run, private AI assistant”, with a box to ask it something." width="544" height="1131">
+              <span class="phone-glare" aria-hidden="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Designing a file-sharing tool that keeps your data private</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 engineer, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2024–2025</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Bineon</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>Most file tools, and most AI assistants, send your files to a data center. On My Disk doesn’t — files and the assistant both live on your device. The design problem was making that believable: privacy is invisible by default, so the interface had to show people where their data was at every point.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-files">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
     <!-- Node Management UI -->
-    <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0">
+    <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0" hidden>
       <div class="work-visual">
         <div class="stage">
           <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
@@ -176,7 +214,7 @@
       <div class="work-visual">
         <div class="stage">
           <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
-          <div class="shot shot--post">
+          <div class="shot shot--post tilt">
             <img loading="lazy" src="assets/img/work/smm-post.webp" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
           </div>
           <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain-smm.webp" alt="" width="758" height="536">
@@ -204,38 +242,6 @@
       </div>
     </article>
 
-    <!-- Private file-sharing app -->
-    <article class="work-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" tabindex="0" hidden>
-      <div class="work-visual">
-        <div class="stage">
-          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
-          <img loading="lazy" class="grain grain--panel grain--faint" src="assets/img/work/grain-faint.webp" alt="" width="758" height="536">
-          <div class="shot shot--files">
-            <img loading="lazy" src="assets/img/work/onmychat-phone.webp" alt="The On My Chat site on a phone: “Meet your locally run, private AI assistant”, with a box to ask it something." width="544" height="1131">
-          </div>
-        </div>
-      </div>
-      <div class="work-info">
-        <div class="work-body">
-          <h2 class="work-title">Designing a file-sharing tool that keeps your data private</h2>
-          <div class="work-meta-wrap">
-            <dl class="work-meta">
-              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
-              <div class="meta-row"><dt>team</dt><dd>1 engineer, 1 designer</dd></div>
-              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
-              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2024–2025</dd></div>
-              <div class="meta-row meta-row--half"><dt>client</dt><dd>Bineon</dd></div>
-            </dl>
-          </div>
-          <div class="work-desc">
-            <p>Most file tools, and most AI assistants, send your files to a data center. On My Disk doesn’t — files and the assistant both live on your device. The design problem was making that believable: privacy is invisible by default, so the interface had to show people where their data was at every point.</p>
-          </div>
-        </div>
-        <div class="work-footer">
-          <a class="cta" href="#" data-link="study-files">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
-        </div>
-      </div>
-    </article>
   </section>
 
   <!-- 3. Side quests -->

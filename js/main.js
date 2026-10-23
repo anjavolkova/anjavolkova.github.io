@@ -265,8 +265,9 @@ function initTabs() {
 
 // Over a project's picture area, its picture leans towards the pointer in 3D
 // (the side nearest the pointer comes forward), easing after the pointer,
-// and settles flat again once it leaves.
-const TILT_MAX = 2.5;      // degrees, with the pointer at the edge of the area
+// and settles flat again once it leaves. This sets how far it leans, from
+// -1 to 1 each way (--lean-x, --lean-y) and 0 to 1 in all (--lean); the CSS
+// turns that into the tilt, the phone's edge, its glare and its shadow.
 const TILT_EASE = 0.16;    // seconds: how quickly the picture catches up
 
 function initWorkTilt() {
@@ -285,8 +286,9 @@ function initWorkTilt() {
       for (const key in now) now[key] += (target[key] - now[key]) * k;
       const done = Object.keys(now).every((key) => Math.abs(target[key] - now[key]) < 0.001);
       if (done) Object.assign(now, target);
-      shot.style.setProperty("--tilt-x", `${now.x.toFixed(3)}deg`);
-      shot.style.setProperty("--tilt-y", `${now.y.toFixed(3)}deg`);
+      visual.style.setProperty("--lean-x", now.x.toFixed(4));
+      visual.style.setProperty("--lean-y", now.y.toFixed(4));
+      visual.style.setProperty("--lean", Math.min(1, Math.hypot(now.x, now.y)).toFixed(4));
       raf = done ? null : requestAnimationFrame(step);
     }
     const kick = () => {
@@ -303,8 +305,8 @@ function initWorkTilt() {
       let dy = (e.clientY - (pic.top + pic.height / 2)) / (area.height / 2);
       const d = Math.hypot(dx, dy);
       if (d > 1) { dx /= d; dy /= d; }
-      target.x = dy * TILT_MAX;
-      target.y = -dx * TILT_MAX;
+      target.x = dx;
+      target.y = dy;
       kick();
     });
     visual.addEventListener("pointerleave", () => {
