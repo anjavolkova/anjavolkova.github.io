@@ -1742,6 +1742,91 @@ align-self: flex-start;
   }
 }
 
+/* ---------- Test: work first (preview.html) ---------- */
+
+/* On tablets and wider, a strip with the name takes the hero's place, the
+   halftone trees behind it, and the work comes straight after it (Figma:
+   "Desktop - 4"). Phones keep the hero. */
+.banner { display: none; }
+
+@media (min-width: 720px) {
+  .page-work-first .hero { display: none; }
+
+  .banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 136px;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--body);
+    overflow: hidden;
+    color: var(--bg);
+  }
+  .banner-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(32, 22, 25, 0.35);
+  }
+  .banner-text {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .banner-name {
+    font-family: var(--font-serif);
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 56px;
+    letter-spacing: -0.08em;
+    white-space: nowrap;
+    text-box: trim-both cap alphabetic;
+  }
+  .banner-intro {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: -0.05em;
+    text-transform: lowercase;
+  }
+
+  /* The strip's line is the work's top edge. */
+  .page-work-first .work { border-top: 0; }
+
+  /* The menu comes in with the page rather than after the hero's intro. */
+  .intro-play .page-work-first :is(.nav, .menu-toggle) { animation-delay: 0.2s; }
+}
+
+/* Tablets: the menu spans the top, so the name sits under it. */
+@media (min-width: 720px) and (max-width: 1023px) {
+  .banner { height: auto; padding: 114px 32px 28px; }
+}
+
+/* Desktop: the menu sits in the strip, centred in it, and the work's scroll
+   stop is the top of the page, right under the strip. The stop is 24px
+   lower than on the homepage, so a window may cut that much off the
+   showcase's foot and still step through it (js/main.js). */
+@media (min-width: 1024px) {
+  .page-work-first {
+    --stop-work: 136px;
+  }
+  .page-work-first .work { --stop-slack: 24px; }
+  .page-work-first .nav {
+    top: 35px;
+    right: 32px;
+    width: clamp(560px, 50vw, 720px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
