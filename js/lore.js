@@ -394,7 +394,9 @@ export function initLore() {
   // lands, so it stays on the folder.
   //
   // Once the last paper is across, the resume shows its button and scrolling
-  // holds there for RESUME_PAUSE; after that, the page scrolls on.
+  // holds there for RESUME_PAUSE; after that, the page scrolls on. The button
+  // stays while scrolling; once the mouse moves, it's a hover again, there
+  // only while the pointer is on the resume.
   const readSwipe = swipeReader();
   const resume = byName.get("resume");
   let scrolled = null;          // the paper a swipe is moving
@@ -500,6 +502,11 @@ export function initLore() {
       e.preventDefault();
     }
   }, { passive: false });
+
+  window.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || !resume.el.classList.contains("is-revealed")) return;
+    if (paperOf(handle(e.target)) !== resume) resume.el.classList.remove("is-revealed");
+  }, { passive: true });
 
   // Keep pixel sizes in step with the folder's size.
   new ResizeObserver(() => { measure(); for (const p of all) render(p); }).observe(folder);
