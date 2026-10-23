@@ -264,10 +264,9 @@ function initTabs() {
 }
 
 // Over a project's picture area, its picture leans towards the pointer in 3D
-// (the side nearest the pointer comes forward) and comes a touch closer,
-// easing after the pointer, and settles back once it leaves.
-const TILT_MAX = 5;        // degrees, with the pointer at the edge of the area
-const TILT_ZOOM = 1.02;
+// (the side nearest the pointer comes forward), easing after the pointer,
+// and settles flat again once it leaves.
+const TILT_MAX = 2.5;      // degrees, with the pointer at the edge of the area
 const TILT_EASE = 0.16;    // seconds: how quickly the picture catches up
 
 function initWorkTilt() {
@@ -275,7 +274,7 @@ function initWorkTilt() {
   for (const visual of document.querySelectorAll(".work-visual")) {
     const shot = visual.querySelector(".shot");
     if (!shot) continue;
-    const target = { x: 0, y: 0, s: 1 };
+    const target = { x: 0, y: 0 };
     const now = { ...target };
     let raf = null;
     let last = 0;
@@ -288,7 +287,6 @@ function initWorkTilt() {
       if (done) Object.assign(now, target);
       shot.style.setProperty("--tilt-x", `${now.x.toFixed(3)}deg`);
       shot.style.setProperty("--tilt-y", `${now.y.toFixed(3)}deg`);
-      shot.style.setProperty("--tilt-s", now.s.toFixed(4));
       raf = done ? null : requestAnimationFrame(step);
     }
     const kick = () => {
@@ -307,11 +305,10 @@ function initWorkTilt() {
       if (d > 1) { dx /= d; dy /= d; }
       target.x = dy * TILT_MAX;
       target.y = -dx * TILT_MAX;
-      target.s = TILT_ZOOM;
       kick();
     });
     visual.addEventListener("pointerleave", () => {
-      Object.assign(target, { x: 0, y: 0, s: 1 });
+      Object.assign(target, { x: 0, y: 0 });
       kick();
     });
   }

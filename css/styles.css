@@ -409,10 +409,9 @@ img.is-missing { visibility: hidden; }
 .grain--faint { opacity: 0.19; }
 
 /* While the pointer is over the picture area, the picture leans towards it
-   in 3D and comes a touch closer (js/main.js sets --tilt-x, --tilt-y and
-   --tilt-s). */
+   in 3D (js/main.js sets --tilt-x and --tilt-y). */
 .shot {
-  --tilt: perspective(calc(1000 * var(--u))) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-s, 1));
+  --tilt: perspective(calc(1000 * var(--u))) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transform: var(--tilt);
 }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
@@ -429,10 +428,10 @@ img.is-missing { visibility: hidden; }
 }
 
 /* The phone is one picture, frame and all, rounded so its shadow follows
-   the corners. */
+   the corners, centred in the picture area. */
 .shot--files {
-  left: calc(116.5 * var(--u));
-  top: calc(106 * var(--u));
+  left: calc(116 * var(--u));
+  top: calc(74.5 * var(--u));
   width: calc(272 * var(--u));
   height: calc(565 * var(--u));
   border-radius: calc(29 * var(--u));
@@ -1494,7 +1493,7 @@ align-self: flex-start;
   #panel-smm .work-visual { --u: calc(440px / 714); height: 361px; }
   #panel-smm .stage { top: -45px; }
   #panel-files .work-visual { --u: calc(500px / 714); height: 458px; }
-  #panel-files .stage { top: calc(31px - 106 * var(--u)); }
+  #panel-files .stage { top: calc(31px - 74.5 * var(--u)); }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }
