@@ -24,6 +24,8 @@ const REST_MS = 500;        // how long the pointer rests on the cloister photo 
 const REST_SLACK = 4;       // px the pointer can wander and still count as resting
 const SCROLL_DRAG = 1.5;    // px a paper moves per px scrolled
 const SCROLL_IDLE = 120;    // ms without wheel events that lets go of a scrolled paper
+const SCROLL_STRETCH = 24;  // units a scrolled paper can stretch past where it lands
+const RESUME_PAUSE = 1500;  // ms scrolling holds on the resume once the last paper is across
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
@@ -388,10 +390,17 @@ export function initLore() {
   // last one back. The paper follows the swipe (js/swipes.js tells swipes
   // apart); when the swipe lets up it carries on over on the spring, at the
   // speed it was going, unless it was pulled back, and the momentum after it
-  // is absorbed. With nothing left to turn that way, the page scrolls on.
+  // is absorbed. A hard swipe only stretches it a little past where it
+  // lands, so it stays on the folder.
+  //
+  // Once the last paper is across, the resume shows its button and scrolling
+  // holds there for RESUME_PAUSE; after that, the page scrolls on.
   const readSwipe = swipeReader();
+  const resume = byName.get("resume");
   let scrolled = null;          // the paper a swipe is moving
   let absorbing = false;        // the momentum of a swipe already used
+  let holding = false;          // a swipe held whole: one that came during the pause
+  let pauseUntil = -Infinity;
   const atRest = () => window.scrollY <= 2 && folder.getBoundingClientRect().bottom <= window.innerHeight;
 
   function scrollGrab(p) {
@@ -414,8 +423,8 @@ export function initLore() {
     const lo = Math.min(0, p.dx);
     const hi = Math.max(0, p.dx);
     let x = p.drag.x0 - (s.by * SCROLL_DRAG) / unit;
-    if (x < lo) x = lo + (x - lo) * 0.25;
-    if (x > hi) x = hi + (x - hi) * 0.25;
+    if (x < lo) x = lo - SCROLL_STRETCH * Math.tanh((lo - x) / SCROLL_STRETCH);
+    if (x > hi) x = hi + SCROLL_STRETCH * Math.tanh((x - hi) / SCROLL_STRETCH);
     const t = performance.now();
     s.samples.push({ t, x });
     while (s.samples.length > 2 && t - s.samples[0].t > 90) s.samples.shift();
@@ -444,9 +453,19 @@ export function initLore() {
     if (wantLeft !== isLeft(p)) onLeft += wantLeft ? 1 : -1;
     p.target = wantLeft ? p.dx : 0;
     p.dir = wantLeft ? -1 : 1;
+    // No faster than four times the way it has left to go, a second, so it
+    // lands without flying past.
+    p.v = Math.sign(p.v) * Math.min(Math.abs(p.v), 4 * Math.abs(p.target - p.x));
     markTops();
     announce();
     kick();
+    if (wantLeft && onLeft === papers.length) {
+      pauseUntil = performance.now() + RESUME_PAUSE;
+      // Its button shows once the paper is nearly down.
+      setTimeout(() => {
+        if (onLeft === papers.length) resume.el.classList.add("is-revealed");
+      }, 450);
+    }
   }
 
   window.addEventListener("wheel", (e) => {
@@ -458,6 +477,13 @@ export function initLore() {
       else scrollMove(dy);
       return;
     }
+    if (holding && !fresh) {
+      if (e.cancelable) e.preventDefault();
+      if (ends) holding = false;
+      absorbing = true;
+      return;
+    }
+    holding = false;
     if (fresh || starts) absorbing = false;
     if (!e.cancelable || e.ctrlKey || !dy || !atRest()) return;
     const p = dy > 0 ? topRight() : topLeft();
@@ -467,6 +493,9 @@ export function initLore() {
         scrollGrab(p);
         scrollMove(dy);
       }
+    } else if (dy > 0 && performance.now() < pauseUntil) {
+      e.preventDefault();
+      if (starts) holding = true;
     } else if (absorbing && !swiping) {
       e.preventDefault();
     }
