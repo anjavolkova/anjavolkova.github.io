@@ -7,10 +7,10 @@ const LINKS = {
   lore: "lore.html",
   resume: "",          // the resume PDF, for the lore page's "Download PDF"
   "study-node": "",
-  "study-lumia": "",
-  "study-smm": "",
+  "study-network": "",
   "study-home": "",
-  shop: "",
+  "study-smm": "",
+  "study-files": "",
   "lastfm-widget": "https://lastfm-notion-widget.vercel.app/",
   booking: "https://cal.com/anna-volkova-selo8r/30min",
   linkedin: "https://www.linkedin.com/in/iamannavolkova/",
