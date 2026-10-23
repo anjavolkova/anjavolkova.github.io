@@ -1,6 +1,7 @@
 import { mountParticles } from "./particles.js";
 import { loadCal } from "./cal-embed.js";
 import { initLore } from "./lore.js";
+import { swipeReader } from "./swipes.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
 const LINKS = {
@@ -178,7 +179,6 @@ function hideMissingImages() {
 // each under its name bar (the tab buttons, which do nothing there).
 const PANEL_OUT = 160;
 const DESKTOP = window.matchMedia("(min-width: 1024px)");
-const GESTURE_GAP = 200;   // ms without wheel events that ends a gesture
 const STEP_GAP = 450;      // ms: the soonest the next project can follow
 
 function initTabs() {
@@ -277,17 +277,11 @@ function initTabs() {
 // previous one going up, instead of moving the page; past the last project
 // (or the first, going up) the next swipe moves the page on.
 //
-// Swipes are told apart by speed. A swipe starts when the wheel events pick
-// up speed (after a pause, or well above where a trackpad's momentum had
-// died down to) and lasts until they clearly slow down again; the momentum
-// that follows is absorbed. Each swipe moves one project, at most one every
-// STEP_GAP: a swipe that comes sooner waits for its turn.
+// Swipes are told apart by speed (see js/swipes.js); the momentum after one
+// is absorbed. Each swipe moves one project, at most one every STEP_GAP: a
+// swipe that comes sooner waits for its turn.
 function stepOnScroll(work, tabs, select) {
-  let speeds = [];      // how fast the last two wheel events went
-  let last = -Infinity;
-  let swiping = false;
-  let peak = 0;         // fastest so far in this swipe
-  let trough = 0;       // slowest since the last swipe ended
+  const readSwipe = swipeReader();
   let waitUntil = -Infinity;
   let pending = null;
   let gliding = false;
@@ -314,33 +308,7 @@ function stepOnScroll(work, tabs, select) {
   };
 
   window.addEventListener("wheel", (e) => {
-    const dy = e.deltaY * [1, 16, window.innerHeight][e.deltaMode];
-    const since = e.timeStamp - last;
-    if (since > GESTURE_GAP) {
-      speeds = [];
-      swiping = false;
-      trough = 0;
-    }
-    last = e.timeStamp;
-    // Speed in px per 16 ms, so it reads the same whether the events come
-    // 60 or 120 times a second, or two arrive as one.
-    const per16 = since > GESTURE_GAP ? 1 : 16 / Math.min(Math.max(since, 8), 64);
-    speeds = [...speeds.slice(-1), Math.abs(dy) * per16];
-    const speed = speeds.reduce((sum, v) => sum + v, 0) / speeds.length;
-    let starts = false;
-    if (!swiping && speed >= 2 && speed > trough * 1.5 + 1) {
-      swiping = starts = true;
-      peak = speed;
-    } else if (swiping) {
-      peak = Math.max(peak, speed);
-      if (speed < peak * 0.6) {
-        swiping = false;
-        trough = speed;
-      }
-    } else {
-      trough = Math.min(trough, speed);
-    }
-
+    const { dy, starts, swiping } = readSwipe(e);
     const off = e.cancelable && !e.ctrlKey && dy !== 0 ? fromStop() : null;
     if (off === null) return;
 
