@@ -349,8 +349,9 @@ img.is-missing { visibility: hidden; }
 
 /* Until the showcase comes into view, the open project waits, hidden, to
    play its entrance then: the picture first, the text after a pause
-   (--arrive; js/main.js). */
-.work.is-waiting .work-panel :is(.shot, .work-body > *, .work-footer > *) { opacity: 0; }
+   (--arrive; js/main.js). html.work-waiting does the same from the first
+   paint, on a page that opens on the work (preview.html). */
+:is(.work.is-waiting, .work-waiting .work) .work-panel :is(.shot, .work-body > *, .work-footer > *) { opacity: 0; }
 
 @keyframes panel-out { to { opacity: 0; } }
 @keyframes panel-fade { from { opacity: 0; } }

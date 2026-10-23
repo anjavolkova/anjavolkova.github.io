@@ -25,6 +25,15 @@
     document.documentElement.classList.add("intro");
     setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
   }
+
+  // Work first: the first project waits, hidden from the first paint, for its
+  // entrance (on tablets and wider; js/main.js takes over before the page has
+  // loaded and plays it). If the script never runs, it shows once the page
+  // has loaded anyway.
+  if (matchMedia("(min-width: 720px) and (prefers-reduced-motion: no-preference)").matches) {
+    document.documentElement.classList.add("work-waiting");
+    addEventListener("load", function () { document.documentElement.classList.remove("work-waiting"); });
+  }
 </script>
 <script type="module" src="js/main.js"></script>
 </head>
