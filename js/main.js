@@ -263,6 +263,60 @@ function initTabs() {
   PHONE.addEventListener("change", setMode);
 }
 
+// Over a project's picture area, its picture leans towards the pointer in 3D
+// (the side nearest the pointer comes forward) and comes a touch closer,
+// easing after the pointer, and settles back once it leaves.
+const TILT_MAX = 5;        // degrees, with the pointer at the edge of the area
+const TILT_ZOOM = 1.02;
+const TILT_EASE = 0.16;    // seconds: how quickly the picture catches up
+
+function initWorkTilt() {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  for (const visual of document.querySelectorAll(".work-visual")) {
+    const shot = visual.querySelector(".shot");
+    if (!shot) continue;
+    const target = { x: 0, y: 0, s: 1 };
+    const now = { ...target };
+    let raf = null;
+    let last = 0;
+
+    function step(time) {
+      const k = 1 - Math.exp(-Math.min(0.05, (time - last) / 1000) / TILT_EASE);
+      last = time;
+      for (const key in now) now[key] += (target[key] - now[key]) * k;
+      const done = Object.keys(now).every((key) => Math.abs(target[key] - now[key]) < 0.001);
+      if (done) Object.assign(now, target);
+      shot.style.setProperty("--tilt-x", `${now.x.toFixed(3)}deg`);
+      shot.style.setProperty("--tilt-y", `${now.y.toFixed(3)}deg`);
+      shot.style.setProperty("--tilt-s", now.s.toFixed(4));
+      raf = done ? null : requestAnimationFrame(step);
+    }
+    const kick = () => {
+      if (raf == null) { last = performance.now(); raf = requestAnimationFrame(step); }
+    };
+
+    visual.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse" || reducedMotion.matches) return;
+      // Where the pointer is from the picture's centre, as a share of half
+      // the area, no further than its edge in any direction.
+      const area = visual.getBoundingClientRect();
+      const pic = shot.getBoundingClientRect();
+      let dx = (e.clientX - (pic.left + pic.width / 2)) / (area.width / 2);
+      let dy = (e.clientY - (pic.top + pic.height / 2)) / (area.height / 2);
+      const d = Math.hypot(dx, dy);
+      if (d > 1) { dx /= d; dy /= d; }
+      target.x = dy * TILT_MAX;
+      target.y = -dx * TILT_MAX;
+      target.s = TILT_ZOOM;
+      kick();
+    });
+    visual.addEventListener("pointerleave", () => {
+      Object.assign(target, { x: 0, y: 0, s: 1 });
+      kick();
+    });
+  }
+}
+
 // Side quests: resting the pointer on a collage piece (or focusing or
 // tapping it) lifts it, puts it on top of the pile and shows its note.
 // Pieces keep their new place in the pile, so nothing else shuffles. Passing
@@ -545,6 +599,7 @@ initNav();
 initMenu();
 hideMissingImages();
 initTabs();
+initWorkTilt();
 initQuests();
 initQuestCarousel();
 initBooking();

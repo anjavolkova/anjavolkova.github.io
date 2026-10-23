@@ -408,6 +408,13 @@ img.is-missing { visibility: hidden; }
 .grain--home { left: calc(-111 * var(--u)); top: calc(75 * var(--u)); }
 .grain--faint { opacity: 0.19; }
 
+/* While the pointer is over the picture area, the picture leans towards it
+   in 3D and comes a touch closer (js/main.js sets --tilt-x, --tilt-y and
+   --tilt-s). */
+.shot {
+  --tilt: perspective(calc(1000 * var(--u))) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-s, 1));
+  transform: var(--tilt);
+}
 .shot img { width: 100%; height: 100%; object-fit: cover; }
 
 .shot--post {
@@ -418,7 +425,7 @@ img.is-missing { visibility: hidden; }
   border: 1px solid #C5B7BD;
   box-shadow: var(--soft-shadow);
   overflow: hidden;
-  transform: rotate(4.68deg);
+  transform: var(--tilt) rotate(4.68deg);
 }
 
 /* The phone is one picture, frame and all, rounded so its shadow follows
@@ -431,13 +438,6 @@ img.is-missing { visibility: hidden; }
   border-radius: calc(29 * var(--u));
   box-shadow: var(--soft-shadow);
   overflow: hidden;
-}
-
-/* Like the papers on the lore page, a picture rises a little under the
-   pointer. */
-@media (hover: hover) {
-  .shot { transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
-  .shot:hover { translate: 0 calc(-4 * var(--u)); }
 }
 
 /* Project details */
