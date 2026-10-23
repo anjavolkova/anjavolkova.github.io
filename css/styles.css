@@ -347,6 +347,10 @@ img.is-missing { visibility: hidden; }
 .work-panel.is-entering .work-body > :nth-child(3) { animation-delay: 0.12s; }
 .work-panel.is-entering .work-footer > * { animation-delay: 0.18s; }
 
+/* Until the showcase comes into view, the open project waits, hidden, to
+   play its entrance then (js/main.js). */
+.work.is-waiting .work-panel :is(.shot, .work-body > *, .work-footer > *) { opacity: 0; }
+
 @keyframes panel-out { to { opacity: 0; } }
 @keyframes panel-fade { from { opacity: 0; } }
 @keyframes panel-rise { from { opacity: 0; transform: translateY(12px); } }

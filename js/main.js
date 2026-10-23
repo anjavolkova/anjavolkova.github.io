@@ -108,7 +108,9 @@ function initMenu() {
 }
 
 // The Cal.com booking calendar, embedded inline in the contact panel. It
-// loads once the contact section is near the viewport.
+// loads once the page has finished loading and the browser is free, so it's
+// ready by the time anyone scrolls down to it, or straight away if they get
+// near it first.
 const CAL = {
   namespace: "30min",
   link: "anna-volkova-selo8r/30min",
@@ -138,8 +140,12 @@ function padCalFrame(container) {
 
 function initBooking() {
   const container = document.querySelector(".booking-embed");
+  if (!container) return;
+  let started = false;
 
   function embed() {
+    if (started) return;
+    started = true;
     const Cal = loadCal();
     Cal("init", CAL.namespace);
     const cal = Cal.ns[CAL.namespace];
@@ -147,6 +153,11 @@ function initBooking() {
     cal("ui", CAL.ui);
     padCalFrame(container);
   }
+
+  const whenFree = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 200));
+  const soon = () => whenFree(embed, { timeout: 2000 });
+  if (document.readyState === "complete") soon();
+  else window.addEventListener("load", soon, { once: true });
 
   const observer = new IntersectionObserver(([entry]) => {
     if (!entry.isIntersecting) return;
@@ -345,6 +356,37 @@ function stepOnScroll(work, tabs, select) {
     waitUntil = performance.now() + STEP_GAP;
     window.scrollTo({ top: window.scrollY + off });
   }, { passive: false });
+}
+
+// Wider screens: the open project waits, hidden (.is-waiting), until the
+// showcase comes into view, scrolled to or by the menu, then plays the same
+// entrance as switching to it, the title rising first. Once the showcase is
+// out of sight again, it waits for the next time. Not on phones (the feed),
+// nor with reduced motion.
+function initWorkArrival() {
+  const work = document.querySelector(".work");
+  if (!work) return;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const wait = () => {
+    if (!PHONE.matches && !reducedMotion.matches) work.classList.add("is-waiting");
+  };
+  const play = () => {
+    if (!work.classList.contains("is-waiting")) return;
+    work.classList.remove("is-waiting");
+    const panel = work.querySelector(".work-panel:not([hidden])");
+    if (!panel || panel.classList.contains("is-leaving")) return;
+    panel.classList.remove("is-entering");
+    void panel.offsetWidth;   // restart the entrance
+    panel.classList.add("is-entering");
+  };
+
+  // In view: its top in the upper 45% of the window, nearly at its stop (or,
+  // coming back up, its bottom edge in).
+  new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); },
+    { rootMargin: "0px 0px -55% 0px" }).observe(work);
+  new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) wait(); }).observe(work);
+  PHONE.addEventListener("change", () => work.classList.remove("is-waiting"));
 }
 
 // Over a project's picture area, its picture leans towards the pointer in 3D
@@ -682,6 +724,7 @@ initNav();
 initMenu();
 hideMissingImages();
 initTabs();
+initWorkArrival();
 initWorkTilt();
 initQuests();
 initQuestCarousel();
