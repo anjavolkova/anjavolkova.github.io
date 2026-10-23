@@ -299,10 +299,13 @@ function stepOnScroll(work, tabs, select) {
 
   // How far the showcase is from its stop, in px (more than 0 while the page
   // is above it), or null where there's no hard stop: narrower windows, and
-  // windows too short to show the whole showcase.
+  // windows too short to show the whole showcase (bar --stop-slack px of its
+  // foot, where a page allows it).
   const fromStop = () => {
-    const stop = parseFloat(getComputedStyle(work).scrollMarginTop) || 0;
-    if (!DESKTOP.matches || work.offsetHeight + stop > window.innerHeight + 1) return null;
+    const style = getComputedStyle(work);
+    const stop = parseFloat(style.scrollMarginTop) || 0;
+    const slack = parseFloat(style.getPropertyValue("--stop-slack")) || 0;
+    if (!DESKTOP.matches || work.offsetHeight + stop > window.innerHeight + 1 + slack) return null;
     return work.getBoundingClientRect().top - stop;
   };
 
@@ -387,9 +390,14 @@ function initWorkArrival() {
   };
 
   // In view: its top in the upper 45% of the window, nearly at its stop (or,
-  // coming back up, its bottom edge in).
-  new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); },
-    { rootMargin: "0px 0px -55% 0px" }).observe(work);
+  // coming back up, its bottom edge in). Already there as the page opens (a
+  // page that starts with the work, or a link to it), it plays then.
+  let opening = true;
+  new IntersectionObserver(([entry]) => {
+    if (opening && entry.isIntersecting) wait();
+    opening = false;
+    if (entry.isIntersecting) play();
+  }, { rootMargin: "0px 0px -55% 0px" }).observe(work);
   new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) wait(); }).observe(work);
   PHONE.addEventListener("change", () => work.classList.remove("is-waiting"));
 }
