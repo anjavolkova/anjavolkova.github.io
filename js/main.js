@@ -272,20 +272,25 @@ function initTabs() {
 
 // The showcase's scroll stop (whole, at the top of the window) is a hard
 // stop for wheels and trackpads. A swipe or a turn of the wheel heading for
-// it (down from above, or up from just below) glides the page onto it, not
-// past it. Resting on it, one opens the next project, or the previous one
-// going up, instead of moving the page; past the last project (or the
-// first, going up) the page scrolls on as usual.
+// it (down from above, or up from the stop just below) glides the page onto
+// it, not past it. Resting on it, each swipe opens the next project, or the
+// previous one going up, instead of moving the page; past the last project
+// (or the first, going up) the next swipe moves the page on.
 //
-// Browsers only let a gesture's first wheel event decide whether the page
-// scrolls, so what a gesture does is settled then, and the rest of it,
-// momentum and all, follows. Wheel events in quick succession are one
-// gesture, and so is a trackpad's momentum dying away, while a fresh swipe
-// on top of it is a new one.
+// Swipes are told apart by speed. A swipe starts when the wheel events pick
+// up speed (after a pause, or well above where a trackpad's momentum had
+// died down to) and lasts until they clearly slow down again; the momentum
+// that follows is absorbed. Each swipe moves one project, at most one every
+// STEP_GAP: a swipe that comes sooner waits for its turn.
 function stepOnScroll(work, tabs, select) {
-  let gesture = null;
-  let last = 0;
-  let lastStep = -Infinity;
+  let speeds = [];      // how fast the last two wheel events went
+  let last = -Infinity;
+  let swiping = false;
+  let peak = 0;         // fastest so far in this swipe
+  let trough = 0;       // slowest since the last swipe ended
+  let waitUntil = -Infinity;
+  let pending = null;
+  let gliding = false;
 
   // How far the showcase is from its stop, in px (more than 0 while the page
   // is above it), or null where there's no hard stop: narrower windows, and
@@ -296,43 +301,81 @@ function stepOnScroll(work, tabs, select) {
     return work.getBoundingClientRect().top - stop;
   };
 
-  // A new gesture: held (the page doesn't scroll for it) if it steps to a
-  // project or carries the page onto the stop.
-  function begin(e, dy) {
-    const off = e.cancelable && !e.ctrlKey && dy !== 0 ? fromStop() : null;
-    if (off === null) return false;
-    if (Math.abs(off) <= 4) {
-      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
-      const next = tabs[i + Math.sign(dy)];
-      if (!next) return false;
-      if (e.timeStamp - lastStep >= STEP_GAP) {
-        lastStep = e.timeStamp;
-        select(next);
-        next.scrollIntoView({ block: "nearest", inline: "nearest" });
-      }
-      return true;
-    }
-    // Going up, only from the stop just below (the side quests), where the
-    // showcase's bottom edge is just out of sight.
-    const heading = dy > 0 ? off > 0 : off < 0 && work.getBoundingClientRect().bottom > -window.innerHeight / 4;
-    if (heading) window.scrollTo({ top: window.scrollY + off });
-    return heading;
-  }
+  // Opens the next project in that direction (1 or -1), if the page is still
+  // on the stop and there is one.
+  const step = (dir) => {
+    const off = fromStop();
+    const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+    const next = tabs[i + dir];
+    if (off === null || Math.abs(off) > 4 || !next) return;
+    waitUntil = performance.now() + STEP_GAP;
+    select(next);
+    next.scrollIntoView({ block: "nearest", inline: "nearest" });
+  };
 
   window.addEventListener("wheel", (e) => {
     const dy = e.deltaY * [1, 16, window.innerHeight][e.deltaMode];
-    const size = Math.abs(dy);
-    // A new gesture can't start on an event the browser won't let us cancel:
-    // that's the rest of a gesture the page is already scrolling for. A swipe
-    // on top of a dying momentum shows as a jump well above what's left of it.
-    const recent = gesture ? Math.max(...gesture.recent) : 0;
-    const fresh = !gesture || (e.cancelable && (e.timeStamp - last > GESTURE_GAP
-      || (size > 10 && size > 2 * recent && recent < gesture.peak / 3)));
+    const since = e.timeStamp - last;
+    if (since > GESTURE_GAP) {
+      speeds = [];
+      swiping = false;
+      trough = 0;
+    }
     last = e.timeStamp;
-    if (fresh) gesture = { held: begin(e, dy), recent: [], peak: 0 };
-    gesture.recent = [...gesture.recent.slice(-2), size];
-    gesture.peak = Math.max(gesture.peak, size);
-    if (gesture.held && e.cancelable) e.preventDefault();
+    // Speed in px per 16 ms, so it reads the same whether the events come
+    // 60 or 120 times a second, or two arrive as one.
+    const per16 = since > GESTURE_GAP ? 1 : 16 / Math.min(Math.max(since, 8), 64);
+    speeds = [...speeds.slice(-1), Math.abs(dy) * per16];
+    const speed = speeds.reduce((sum, v) => sum + v, 0) / speeds.length;
+    let starts = false;
+    if (!swiping && speed >= 2 && speed > trough * 1.5 + 1) {
+      swiping = starts = true;
+      peak = speed;
+    } else if (swiping) {
+      peak = Math.max(peak, speed);
+      if (speed < peak * 0.6) {
+        swiping = false;
+        trough = speed;
+      }
+    } else {
+      trough = Math.min(trough, speed);
+    }
+
+    const off = e.cancelable && !e.ctrlKey && dy !== 0 ? fromStop() : null;
+    if (off === null) return;
+
+    if (Math.abs(off) <= 4) {
+      gliding = false;
+      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+      if (!tabs[i + Math.sign(dy)]) {
+        // Past the last (or first) project: a swipe moves the page on, but
+        // not before the pause after a step, nor on momentum.
+        if (!swiping || e.timeStamp < waitUntil) e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      if (!starts) return;
+      const dir = Math.sign(dy);
+      const wait = waitUntil - performance.now();
+      clearTimeout(pending);
+      if (wait <= 0) step(dir);
+      else pending = setTimeout(() => step(dir), wait);
+      return;
+    }
+
+    // Going up, only from the stop just below (the side quests), where the
+    // showcase's bottom edge is just out of sight.
+    const heading = dy > 0 ? off > 0 : off < 0 && work.getBoundingClientRect().bottom > -window.innerHeight / 4;
+    if (!heading) {
+      gliding = false;
+      return;
+    }
+    e.preventDefault();
+    if (gliding) return;
+    gliding = true;
+    clearTimeout(pending);
+    waitUntil = performance.now() + STEP_GAP;
+    window.scrollTo({ top: window.scrollY + off });
   }, { passive: false });
 }
 
