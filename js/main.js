@@ -266,8 +266,8 @@ function initTabs() {
 // Over a project's picture area, its picture leans towards the pointer in 3D
 // (the side nearest the pointer comes forward) and comes a touch closer,
 // easing after the pointer, and settles back once it leaves.
-const TILT_MAX = 5;        // degrees, with the pointer at the edge of the area
-const TILT_ZOOM = 1.02;
+const TILT_MAX = 2.5;      // degrees, with the pointer at the edge of the area
+const TILT_ZOOM = 1.01;
 const TILT_EASE = 0.16;    // seconds: how quickly the picture catches up
 
 function initWorkTilt() {
