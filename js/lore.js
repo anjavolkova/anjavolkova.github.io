@@ -1,8 +1,9 @@
 // Lore: a folder of papers (lore.html). The loose papers start in a pile on
 // the right; the top one moves over to the left-hand side when it's dragged
-// or swiped across, flicked, tapped, or with the → key (or a sideways
-// trackpad swipe), and ← brings the last one back. The resume and the letter
-// stay at the back of the right-hand side, with their buttons.
+// or swiped across, flicked, tapped, scrolled down, or with the → key (or a
+// sideways trackpad swipe), and ← (or scrolling up) brings the last one back.
+// The resume and the letter stay at the back of the right-hand side, with
+// their buttons.
 //
 // Each paper keeps its place and rotation from the Figma layouts and only
 // slides across. Sent by a key or a tap, it eases over in TURN_MS; let go of
@@ -10,6 +11,8 @@
 // speed it was flicked. On the way over it stays flat on the folder, like a
 // sheet being leafed across: it turns a little as it goes and its shadow
 // deepens, attached to it.
+
+import { swipeReader } from "./swipes.js";
 
 const FOLDER_WIDTH = 948;   // the folder in Figma, in design units
 const TURN_MS = 1000;       // a full turn, sent by a key or a tap
@@ -19,6 +22,8 @@ const HOVER_STIFFNESS = 320;
 const ENGAGE = 8;           // px of sideways movement before a drag takes hold
 const REST_MS = 500;        // how long the pointer rests on the cloister photo before its caption shows
 const REST_SLACK = 4;       // px the pointer can wander and still count as resting
+const SCROLL_DRAG = 1.5;    // px a paper moves per px scrolled
+const SCROLL_IDLE = 120;    // ms without wheel events that lets go of a scrolled paper
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
@@ -251,6 +256,7 @@ export function initLore() {
   let gesture = null;
   folder.addEventListener("pointerdown", (e) => {
     if (e.button !== 0 || e.target.closest(".pill")) return;
+    if (scrolled) scrollRelease();
     const p = byEl.get(e.target.closest(".sheet.is-top")?.closest(".sheet"));
     gesture = { id: e.pointerId, x0: e.clientX, y0: e.clientY, type: e.pointerType, paper: p ?? null, engaged: false, samples: [] };
   });
@@ -363,7 +369,7 @@ export function initLore() {
   let wheel = 0;
   let wheelLock = 0;
   folder.addEventListener("wheel", (e) => {
-    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    if (scrolled || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
     e.preventDefault();
     const now = performance.now();
     if (now < wheelLock) return;
@@ -373,6 +379,96 @@ export function initLore() {
       else prev();
       wheel = 0;
       wheelLock = now + 450;
+    }
+  }, { passive: false });
+
+  // Scrolling up and down (a trackpad or a mouse wheel) leafs through too,
+  // the way a drag does, while the page is at the top with the whole folder
+  // in sight: down takes the top paper on the right across, up brings the
+  // last one back. The paper follows the swipe (js/swipes.js tells swipes
+  // apart); when the swipe lets up it carries on over on the spring, at the
+  // speed it was going, unless it was pulled back, and the momentum after it
+  // is absorbed. With nothing left to turn that way, the page scrolls on.
+  const readSwipe = swipeReader();
+  let scrolled = null;          // the paper a swipe is moving
+  let absorbing = false;        // the momentum of a swipe already used
+  const atRest = () => window.scrollY <= 2 && folder.getBoundingClientRect().bottom <= window.innerHeight;
+
+  function scrollGrab(p) {
+    const fromRight = p === topRight();
+    onLeft += fromRight ? 1 : -1;
+    p.turn = null;
+    p.drag = { x0: p.x };
+    p.flight = ++flights;
+    p.target = fromRight ? p.dx : 0;
+    p.dir = fromRight ? -1 : 1;
+    markTops();
+    p.el.classList.add("is-top");
+    scrolled = { p, fromRight, by: 0, samples: [], timer: null };
+  }
+
+  function scrollMove(dy) {
+    const s = scrolled;
+    const p = s.p;
+    s.by += dy;
+    const lo = Math.min(0, p.dx);
+    const hi = Math.max(0, p.dx);
+    let x = p.drag.x0 - (s.by * SCROLL_DRAG) / unit;
+    if (x < lo) x = lo + (x - lo) * 0.25;
+    if (x > hi) x = hi + (x - hi) * 0.25;
+    const t = performance.now();
+    s.samples.push({ t, x });
+    while (s.samples.length > 2 && t - s.samples[0].t > 90) s.samples.shift();
+    const first = s.samples[0];
+    p.v = t > first.t ? ((x - first.x) / (t - first.t)) * 1000 : 0;
+    p.x = x;
+    clearTimeout(s.timer);
+    s.timer = setTimeout(scrollRelease, SCROLL_IDLE);
+    kick();
+  }
+
+  function scrollRelease() {
+    const s = scrolled;
+    if (!s) return;
+    scrolled = null;
+    absorbing = true;
+    clearTimeout(s.timer);
+    const p = s.p;
+    p.drag = null;
+    // Over unless, with the speed it's going at, it ends up back where it
+    // started (or further).
+    const start = s.fromRight ? 0 : p.dx;
+    const projected = p.x + p.v * 0.18;
+    const goes = (projected - start) * Math.sign(p.dx) * (s.fromRight ? 1 : -1) > 0;
+    const wantLeft = s.fromRight === goes;
+    if (wantLeft !== isLeft(p)) onLeft += wantLeft ? 1 : -1;
+    p.target = wantLeft ? p.dx : 0;
+    p.dir = wantLeft ? -1 : 1;
+    markTops();
+    announce();
+    kick();
+  }
+
+  window.addEventListener("wheel", (e) => {
+    const { dy, fresh, starts, ends, swiping } = readSwipe(e);
+    if (gesture?.engaged) return;
+    if (scrolled) {
+      if (e.cancelable) e.preventDefault();
+      if (ends) scrollRelease();
+      else scrollMove(dy);
+      return;
+    }
+    if (fresh || starts) absorbing = false;
+    if (!e.cancelable || e.ctrlKey || !dy || !atRest()) return;
+    const p = dy > 0 ? topRight() : topLeft();
+    if (p) {
+      e.preventDefault();
+      if (starts) {
+        scrollGrab(p);
+        scrollMove(dy);
+      }
+    } else if (absorbing && !swiping) {
+      e.preventDefault();
     }
   }, { passive: false });
 
