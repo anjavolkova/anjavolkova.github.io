@@ -370,6 +370,7 @@ function stepOnScroll(work, tabs, select) {
 const ARRIVE_DELAY = 600;   // ms before the text, the picture's fade (500 ms) and a beat
 
 function initWorkArrival() {
+  const root = document.documentElement;
   const work = document.querySelector(".work");
   if (!work) return;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -389,15 +390,18 @@ function initWorkArrival() {
     setTimeout(() => panel.style.removeProperty("--arrive"), ARRIVE_DELAY + 800);
   };
 
+  // A page that opens on the work (preview.html) hid it from the first paint
+  // (html.work-waiting); it waits here from now on, and plays as the page
+  // opens.
+  if (root.classList.contains("work-waiting")) {
+    wait();
+    root.classList.remove("work-waiting");
+  }
+
   // In view: its top in the upper 45% of the window, nearly at its stop (or,
-  // coming back up, its bottom edge in). Already there as the page opens (a
-  // page that starts with the work, or a link to it), it plays then.
-  let opening = true;
-  new IntersectionObserver(([entry]) => {
-    if (opening && entry.isIntersecting) wait();
-    opening = false;
-    if (entry.isIntersecting) play();
-  }, { rootMargin: "0px 0px -55% 0px" }).observe(work);
+  // coming back up, its bottom edge in).
+  new IntersectionObserver(([entry]) => { if (entry.isIntersecting) play(); },
+    { rootMargin: "0px 0px -55% 0px" }).observe(work);
   new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) wait(); }).observe(work);
   PHONE.addEventListener("change", () => work.classList.remove("is-waiting"));
 }
