@@ -70,39 +70,39 @@
     <p class="hero-intro">Designing and building, driven by curiosity &amp; fun<br>(and also data)</p>
   </section>
 
-  <!-- 2. Selected work: one showcase, five tabs -->
+  <!-- 2. Selected work: one showcase, five tabs. Each project's picture
+       sits on the botanical drawing; those without one yet show just that. -->
   <section class="work" id="work" aria-label="Selected work">
     <div class="work-tabs" role="tablist" aria-label="Projects">
       <button class="work-tab" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="true">Node Management UI</button>
-      <button class="work-tab" role="tab" id="tab-lumia" aria-controls="panel-lumia" aria-selected="false" tabindex="-1">Lumia Design System</button>
-      <button class="work-tab" role="tab" id="tab-smm" aria-controls="panel-smm" aria-selected="false" tabindex="-1">SMM Design</button>
+      <button class="work-tab" role="tab" id="tab-network" aria-controls="panel-network" aria-selected="false" tabindex="-1">Network Design System</button>
       <button class="work-tab" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="false" tabindex="-1">Home Network App</button>
-      <button class="work-tab" role="tab" id="tab-shop" aria-controls="panel-shop" aria-selected="false" tabindex="-1">Stationery Brand</button>
+      <button class="work-tab" role="tab" id="tab-smm" aria-controls="panel-smm" aria-selected="false" tabindex="-1">SMM Design</button>
+      <button class="work-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="false" tabindex="-1">Private file-sharing app</button>
     </div>
 
     <!-- Node Management UI -->
     <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0">
       <div class="work-visual">
         <div class="stage">
-          <img loading="lazy" class="shot shot--panel" src="assets/img/work/node-management.webp" alt="Lumia alarm history screen: a table of network alarms with source, timestamp, status and description." width="829" height="799">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
           <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
         <div class="work-body">
-          <h2 class="work-title">Node Management UI</h2>
+          <h2 class="work-title">Designing the tools that keep the internet running</h2>
           <div class="work-meta-wrap">
             <dl class="work-meta">
               <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
               <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
               <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
               <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
-              <div class="meta-row meta-row--half"><dt>client</dt><dd>Kontron</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
             </dl>
           </div>
           <div class="work-desc">
-            <p>A node management system is the software layer that lets someone see and control every device on a network — routers, modems, gateways — from one dashboard.</p>
-            <p>I redesigned Kontron’s product Lumia for the first time in 15+ years, focusing on turning a complex interface into a faster, more intuitive workflow.</p>
+            <p>Network operators rely on specialised software to monitor network infrastructure, diagnose faults, and keep services online. I redesigned a legacy network management system, making it easier to understand what’s happening across thousands of devices and resolve problems faster.</p>
           </div>
         </div>
         <div class="work-footer">
@@ -111,33 +111,62 @@
       </div>
     </article>
 
-    <!-- Lumia Design System -->
-    <article class="work-panel" role="tabpanel" id="panel-lumia" aria-labelledby="tab-lumia" tabindex="0" hidden>
+    <!-- Network Design System -->
+    <article class="work-panel" role="tabpanel" id="panel-network" aria-labelledby="tab-network" tabindex="0" hidden>
       <div class="work-visual">
         <div class="stage">
-          <img loading="lazy" class="shot shot--panel" src="assets/img/work/lumia-design-system.webp" alt="Lumia design system overview: colour tokens, typography, components and spacing tokens." width="829" height="799">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
           <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
         </div>
       </div>
       <div class="work-info">
         <div class="work-body">
-          <h2 class="work-title">Lumia Design System</h2>
+          <h2 class="work-title">Building a design system for network management</h2>
           <div class="work-meta-wrap">
             <dl class="work-meta">
               <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
-              <div class="meta-row"><dt>team</dt><dd>1 PM, 1 designer</dd></div>
-              <div class="meta-row"><dt>skills</dt><dd>Systems design</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Systems Design</dd></div>
               <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
-              <div class="meta-row meta-row--half"><dt>client</dt><dd>Kontron</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
             </dl>
           </div>
           <div class="work-desc">
-            <p>When I came on as the sole designer, I built a design system from zero — one that prioritises scanability, fast error detection, and information density.</p>
-            <p>Every component is built to surface what matters in a highly technical environment where finding a fault on a network of thousands of devices can't wait on ambiguous UI.</p>
+            <p>Network operators should be able to work without wasting time navigating the interface. I built a design system around that — standardising the interface across the product so dense technical data is easier to scan, faults easier to spot, and critical information easier to act on.</p>
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-lumia">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-network">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Home Network App -->
+    <article class="work-panel" role="tabpanel" id="panel-home" aria-labelledby="tab-home" tabindex="0" hidden>
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--home" src="assets/img/work/grain.webp" alt="" width="758" height="536">
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Designing a simpler way to manage your home network</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>I designed a consumer app for managing your home network — connected devices, setting parental controls, blocking unwanted access, adjusting Wi-Fi settings, and checking network health — all from one place.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-home">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>
@@ -146,6 +175,7 @@
     <article class="work-panel" role="tabpanel" id="panel-smm" aria-labelledby="tab-smm" tabindex="0" hidden>
       <div class="work-visual">
         <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
           <div class="shot shot--post">
             <img loading="lazy" src="assets/img/work/smm-post.webp" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
           </div>
@@ -154,7 +184,7 @@
       </div>
       <div class="work-info">
         <div class="work-body">
-          <h2 class="work-title">Social Media Design</h2>
+          <h2 class="work-title">Creating visuals for local beauty businesses</h2>
           <div class="work-meta-wrap">
             <dl class="work-meta">
               <div class="meta-row"><dt>role</dt><dd>Graphic designer</dd></div>
@@ -165,8 +195,7 @@
             </dl>
           </div>
           <div class="work-desc">
-            <p>I worked closely with a talented social media specialist and a skilled photographer to develop engaging social media posts tailored for our clients in the beauty industry.</p>
-            <p>Together, we crafted visually stunning content that resonates with audiences and showcases the unique offerings of each brand.</p>
+            <p>I worked closely with a talented social media specialist and a skilled photographer to develop engaging social media posts tailored for our clients in the beauty industry. Together, we crafted visually stunning content that resonates with audiences.</p>
           </div>
         </div>
         <div class="work-footer">
@@ -175,72 +204,35 @@
       </div>
     </article>
 
-    <!-- Home Network App
-         The metadata and description below repeat Node Management UI in the
-         design and still need confirming. -->
-    <article class="work-panel" role="tabpanel" id="panel-home" aria-labelledby="tab-home" tabindex="0" hidden>
+    <!-- Private file-sharing app -->
+    <article class="work-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" tabindex="0" hidden>
       <div class="work-visual">
         <div class="stage">
-          <div class="shot shot--phone">
-            <img loading="lazy" src="assets/img/work/home-network-app.webp" alt="Home network app on a phone: network overview with routers, mesh points and connected devices." width="282" height="614">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--panel grain--faint" src="assets/img/work/grain-faint.webp" alt="" width="758" height="536">
+          <div class="shot shot--files">
+            <img loading="lazy" src="assets/img/work/onmychat-phone.webp" alt="The On My Chat site on a phone: “Meet your locally run, private AI assistant”, with a box to ask it something." width="544" height="1131">
           </div>
-          <img loading="lazy" class="grain grain--phone" src="assets/img/work/grain.webp" alt="" width="758" height="536">
-          <img loading="lazy" class="shot shot--phone-glare" src="assets/img/work/home-network-app.webp" alt="" width="282" height="614">
-          <span class="phone-island" aria-hidden="true"></span>
         </div>
       </div>
       <div class="work-info">
         <div class="work-body">
-          <h2 class="work-title">Home Network App</h2>
+          <h2 class="work-title">Designing a file-sharing tool that keeps your data private</h2>
           <div class="work-meta-wrap">
             <dl class="work-meta">
               <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
-              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 engineer, 1 designer</dd></div>
               <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
-              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
-              <div class="meta-row meta-row--half"><dt>client</dt><dd>Kontron</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2024–2025</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Bineon</dd></div>
             </dl>
           </div>
           <div class="work-desc">
-            <p>A node management system is the software layer that lets someone see and control every device on a network — routers, modems, gateways — from one dashboard.</p>
-            <p>I redesigned Kontron’s product Lumia for the first time in 15+ years, focusing on turning a complex interface into a faster, more intuitive workflow.</p>
+            <p>Most file tools, and most AI assistants, send your files to a data center. On My Disk doesn’t — files and the assistant both live on your device. The design problem was making that believable: privacy is invisible by default, so the interface had to show people where their data was at every point.</p>
           </div>
         </div>
         <div class="work-footer">
-          <a class="cta" href="#" data-link="study-home">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
-        </div>
-      </div>
-    </article>
-
-    <!-- Stationery Brand -->
-    <article class="work-panel" role="tabpanel" id="panel-shop" aria-labelledby="tab-shop" tabindex="0" hidden>
-      <div class="work-visual">
-        <div class="stage">
-          <div class="shot shot--sheet">
-            <img loading="lazy" src="assets/img/work/heartseas-goals.webp" alt="Heartseas “2027 goals” notepad page with ten numbered lines and checkboxes over a floral illustration." width="374" height="529">
-          </div>
-          <img loading="lazy" class="grain grain--panel grain--faint" src="assets/img/work/grain-heartseas.webp" alt="" width="758" height="536">
-        </div>
-      </div>
-      <div class="work-info">
-        <div class="work-body">
-          <h2 class="work-title">Stationery Brand</h2>
-          <div class="work-meta-wrap">
-            <dl class="work-meta">
-              <div class="meta-row"><dt>role</dt><dd>Founder</dd></div>
-              <div class="meta-row"><dt>team</dt><dd>Me :)</dd></div>
-              <div class="meta-row"><dt>skills</dt><dd>Print design</dd></div>
-              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2026</dd></div>
-              <div class="meta-row meta-row--half"><dt>name</dt><dd>Heartseas</dd></div>
-            </dl>
-          </div>
-          <div class="work-desc">
-            <p>I created the brand Heartseas for fellow readers and journalers, offering practical benefit through personalised products — more enjoyable to use and easier to commit to.</p>
-            <p>My aim with this project is to create thoughtful, beautifully designed things that solve problems, improve everyday experiences, and bring people joy.</p>
-          </div>
-        </div>
-        <div class="work-footer">
-          <a class="cta cta--strong" href="#" data-link="shop">Go to shop <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+          <a class="cta" href="#" data-link="study-files">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
         </div>
       </div>
     </article>

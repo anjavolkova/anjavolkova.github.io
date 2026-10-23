@@ -373,11 +373,26 @@ img.is-missing { visibility: hidden; }
 }
 .stage > * { position: absolute; }
 
-.shot--panel {
-  left: calc(-62.1 * var(--u));
-  top: calc(105.5 * var(--u));
-  width: calc(830.2 * var(--u));
-  height: calc(800.8 * var(--u));
+/* The botanical drawing every project sits on: faint (12%), darkening the
+   panel, turned a little and cropped to a square. */
+.botanical {
+  left: calc(-78.84 * var(--u));
+  top: calc(-5.35 * var(--u));
+  width: calc(752.13 * var(--u));
+  height: calc(752.13 * var(--u));
+  overflow: hidden;
+  rotate: -3.88deg;
+  opacity: 0.12;
+  mix-blend-mode: darken;
+  pointer-events: none;
+}
+.botanical img {
+  position: absolute;
+  left: 0;
+  top: -0.04%;
+  width: 106.03%;
+  height: 112.77%;
+  max-width: none;
 }
 
 /* Grain textures are landscape files turned to portrait, multiplied in. */
@@ -389,57 +404,39 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .grain--panel { left: calc(-126 * var(--u)); top: calc(88 * var(--u)); }
-.grain--phone { left: calc(-111 * var(--u)); top: calc(75 * var(--u)); }
+.grain--home { left: calc(-111 * var(--u)); top: calc(75 * var(--u)); }
 .grain--faint { opacity: 0.19; }
 
-.shot--phone,
-.shot--phone-glare {
-  left: calc(109 * var(--u));
-  top: calc(55 * var(--u));
-  width: calc(282 * var(--u));
-  height: calc(614 * var(--u));
-  box-shadow: var(--soft-shadow);
-}
-.shot--phone {
-  border: calc(8 * var(--u)) solid #000;
-  border-radius: calc(47 * var(--u));
-  overflow: hidden;
-}
-.shot--phone img { width: 100%; height: 100%; object-fit: cover; }
-/* Rounded like the phone, so its shadow follows the corners too. */
-.shot--phone-glare { object-fit: cover; opacity: 0.9; border-radius: calc(47 * var(--u)); }
-
-.phone-island {
-  left: calc(250 * var(--u));
-  top: calc(65 * var(--u));
-  width: calc(99 * var(--u));
-  height: calc(25 * var(--u));
-  transform: translateX(-50%);
-  border-radius: calc(44 * var(--u));
-  background: #010101;
-}
-
-.shot--post,
-.shot--sheet {
-  border: 1px solid #C5B7BD;
-  box-shadow: var(--soft-shadow);
-  overflow: hidden;
-}
-.shot--post img,
-.shot--sheet img { width: 100%; height: 100%; object-fit: cover; }
+.shot img { width: 100%; height: 100%; object-fit: cover; }
 
 .shot--post {
   left: calc(72.03 * var(--u));
   top: calc(142.37 * var(--u));
   width: calc(365.64 * var(--u));
   height: calc(457.05 * var(--u));
+  border: 1px solid #C5B7BD;
+  box-shadow: var(--soft-shadow);
+  overflow: hidden;
   transform: rotate(4.68deg);
 }
-.shot--sheet {
-  left: calc(65 * var(--u));
-  top: calc(109 * var(--u));
-  width: calc(374 * var(--u));
-  height: calc(529 * var(--u));
+
+/* The phone is one picture, frame and all, rounded so its shadow follows
+   the corners. */
+.shot--files {
+  left: calc(116.5 * var(--u));
+  top: calc(106 * var(--u));
+  width: calc(272 * var(--u));
+  height: calc(565 * var(--u));
+  border-radius: calc(29 * var(--u));
+  box-shadow: var(--soft-shadow);
+  overflow: hidden;
+}
+
+/* Like the papers on the lore page, a picture rises a little under the
+   pointer. */
+@media (hover: hover) {
+  .shot { transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .shot:hover { translate: 0 calc(-4 * var(--u)); }
 }
 
 /* Project details */
@@ -462,7 +459,7 @@ img.is-missing { visibility: hidden; }
   font-family: var(--font-serif);
   font-size: 64px;
   font-weight: 400;
-  line-height: 1;
+  line-height: 0.875;
   letter-spacing: -0.09em;
   color: var(--ink);
   text-box: trim-both cap alphabetic;
@@ -497,14 +494,13 @@ img.is-missing { visibility: hidden; }
   letter-spacing: -0.05em;
 }
 .meta-row dd {
-  font-family: var(--font-serif);
-  font-size: 18px;
-  letter-spacing: -0.02em;
+  font-size: 16px;
+  letter-spacing: -0.04em;
 }
 
 .work-desc {
   font-size: 16px;
-  line-height: 1.25;
+  line-height: 1.75;
   letter-spacing: -0.02em;
   color: var(--body);
 }
@@ -1457,14 +1453,14 @@ align-self: flex-start;
   .work-tabs { display: contents; }
   #tab-node { order: 1; }
   #panel-node { order: 2; }
-  #tab-lumia { order: 3; }
-  #panel-lumia { order: 4; }
-  #tab-smm { order: 5; }
-  #panel-smm { order: 6; }
-  #tab-home { order: 7; }
-  #panel-home { order: 8; }
-  #tab-shop { order: 9; }
-  #panel-shop { order: 10; }
+  #tab-network { order: 3; }
+  #panel-network { order: 4; }
+  #tab-home { order: 5; }
+  #panel-home { order: 6; }
+  #tab-smm { order: 7; }
+  #panel-smm { order: 8; }
+  #tab-files { order: 9; }
+  #panel-files { order: 10; }
 
   .work-tab {
     flex: none;
@@ -1488,31 +1484,16 @@ align-self: flex-start;
 
   .work-title { order: 1; font-size: 48px; line-height: 1.15; text-box: none; }
 
-  /* Pictures, centred, their shadows left uncut, no grain: the composed
-     stages keep their own box... */
-  .work-visual { order: 2; height: 440px; border-bottom: 0; overflow: visible; }
-  /* ...and the two app screenshots are sized and placed by their cards, full
-     width, with the shadow around the card spilling out. */
-  #panel-node { --crop: 962 / 683; --crop-x: -14.657%; --crop-y: -3.66%; --crop-w: 129.314%; }
-  #panel-lumia { --crop: 890 / 646; --crop-x: -19.775%; --crop-y: -6.192%; --crop-w: 139.775%; }
-  .work-visual:has(.shot--panel) { height: auto; container-type: normal; }
-  .work-visual:has(.shot--panel) .stage {
-    position: relative;
-    left: 0;
-    width: 100%;
-    height: auto;
-    aspect-ratio: var(--crop);
-  }
-  .shot--panel { left: var(--crop-x); top: var(--crop-y); width: var(--crop-w); height: auto; }
-  .work-visual .grain { display: none; }
-  /* The social post and the notepad, at the same size, in boxes cropped to
-     them, with the room the home app's phone has above and below. */
-  #panel-smm .work-visual,
-  #panel-shop .work-visual { --u: calc(440px / 714); }
-  #panel-smm .work-visual { height: 361px; }
+  /* Pictures, centred, their shadows left uncut, without the grain or the
+     botanical drawing; projects with no picture yet go without. The social
+     post and the phone sit in boxes cropped to them. */
+  .work-visual { order: 2; border-bottom: 0; overflow: visible; }
+  .work-visual:not(:has(.shot)),
+  .work-visual :is(.grain, .botanical) { display: none; }
+  #panel-smm .work-visual { --u: calc(440px / 714); height: 361px; }
   #panel-smm .stage { top: -45px; }
-  #panel-shop .work-visual { height: 388px; }
-  #panel-shop .stage { top: -33px; }
+  #panel-files .work-visual { --u: calc(500px / 714); height: 458px; }
+  #panel-files .stage { top: calc(31px - 106 * var(--u)); }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }
