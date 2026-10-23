@@ -409,10 +409,9 @@ img.is-missing { visibility: hidden; }
 .grain--faint { opacity: 0.19; }
 
 /* While the pointer is over the picture area, the picture leans towards it
-   in 3D and comes a touch closer (js/main.js sets --tilt-x, --tilt-y and
-   --tilt-s). */
+   in 3D (js/main.js sets --tilt-x and --tilt-y). */
 .shot {
-  --tilt: perspective(calc(1000 * var(--u))) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-s, 1));
+  --tilt: perspective(calc(1000 * var(--u))) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transform: var(--tilt);
 }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
