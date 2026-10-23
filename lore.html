@@ -52,8 +52,10 @@
   <!-- Lore: a folder of papers. The top paper on the right moves over to the
        left when you swipe, drag or press → (← brings it back). See
        js/lore.js. Positions are Figma's, in units of the 1440px frame;
-       --deal is the order the papers are laid in the folder as the page
-       loads, and --deal-turn the turn each starts with. -->
+       --deal is when each paper arrives as the page loads (the pile all at
+       once, then the vellum and the photo of me, so they're a surprise),
+       --deal-turn the turn it starts with, and --deal-under marks the
+       papers under the top of the pile. -->
   <section class="lore" id="lore" aria-labelledby="lore-title">
     <h1 class="visually-hidden" id="lore-title">About me</h1>
 
@@ -71,12 +73,12 @@
       <img class="folder-arrow" src="assets/img/lore/arrow.webp" alt="" width="105" height="18">
 
       <!-- At the back of the right-hand side, never moved: the resume and the letter. -->
-      <div class="sheet sheet--fixed" data-sheet="resume" style="--x: 473; --y: 9; --w: 475; --h: 730; --cx: 48; --cy: 9; --cw: 379; --ch: 552; --deal: 0; --deal-turn: 4deg;">
+      <div class="sheet sheet--fixed" data-sheet="resume" style="--x: 473; --y: 9; --w: 475; --h: 730; --cx: 48; --cy: 9; --cw: 379; --ch: 552; --deal: 0; --deal-turn: 0deg; --deal-under: 1;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/resume-1x.webp" srcset="assets/img/lore/resume-1x.webp 1x, assets/img/lore/resume.webp 2x" alt="My resume, in a document wallet." width="475" height="730">
         <span class="sheet-hit" aria-hidden="true"></span>
       </div>
-      <div class="sheet sheet--fixed" data-sheet="envelope" style="--x: 616.63; --y: 195.39; --w: 321; --h: 394.5; --cx: 0; --cy: 13.6; --cw: 304; --ch: 381; --cr: -2.57deg; --deal: 1; --deal-turn: -5deg;">
+      <div class="sheet sheet--fixed" data-sheet="envelope" style="--x: 616.63; --y: 195.39; --w: 321; --h: 394.5; --cx: 0; --cy: 13.6; --cw: 304; --ch: 381; --cr: -2.57deg; --deal: 0; --deal-turn: 0deg; --deal-under: 1;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/envelope-1x.webp" srcset="assets/img/lore/envelope-1x.webp 1x, assets/img/lore/envelope.webp 2x" alt="A letter sealed with wax, “write to me” on the front." width="321" height="395">
         <span class="sheet-hit" aria-hidden="true"></span>
@@ -84,7 +86,7 @@
 
       <!-- The papers that move, top of the pile last. --left is where each
            one lies once it's over on the left-hand side. -->
-      <div class="sheet" data-sheet="things" data-label="Things I love, things I hate" style="--x: 463; --y: 3; --w: 478; --h: 694; --left: -17; --cx: 38; --cy: 7; --cw: 402; --ch: 555; --deal: 2; --deal-turn: 3deg;">
+      <div class="sheet" data-sheet="things" data-label="Things I love, things I hate" style="--x: 463; --y: 3; --w: 478; --h: 694; --left: -17; --cx: 38; --cy: 7; --cw: 402; --ch: 555; --deal: 0; --deal-turn: 0deg; --deal-under: 1;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/things-1x.webp" srcset="assets/img/lore/things-1x.webp 1x, assets/img/lore/things.webp 2x" alt="" width="478" height="694">
         <span class="sheet-hit" aria-hidden="true"></span>
@@ -95,17 +97,17 @@
           <ul><li>Matcha</li><li>Any sport that involves me throwing or catching something</li><li>Rebasing Git</li><li>Pen tool (people who can use it are wizards)</li></ul>
         </div>
       </div>
-      <div class="sheet" data-sheet="receipt" data-label="My most played songs last month" style="--x: 613.83; --y: -37.32; --w: 354.2; --h: 687.5; --left: 5.83; --cx: 111.52; --cy: 7.7; --cw: 202.4; --ch: 511.5; --cr: 7.83deg; --deal: 3; --deal-turn: -4deg;">
+      <div class="sheet" data-sheet="receipt" data-label="My most played songs last month" style="--x: 613.83; --y: -37.32; --w: 354.2; --h: 687.5; --left: 5.83; --cx: 111.52; --cy: 7.7; --cw: 202.4; --ch: 511.5; --cr: 7.83deg; --deal: 0; --deal-turn: 0deg; --deal-under: 1;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/receipt-1x.webp" srcset="assets/img/lore/receipt-1x.webp 1x, assets/img/lore/receipt.webp 2x" alt="A Receiptify receipt of my most played songs last month." width="322" height="625">
         <span class="sheet-hit" aria-hidden="true"></span>
       </div>
-      <div class="sheet" data-sheet="cathedral" data-label="A photo of a cloister" style="--x: 465.9; --y: 255.22; --w: 428; --h: 412; --left: 105.9; --cx: 21; --cy: 7; --cw: 359.5; --ch: 287.78; --deal: 4; --deal-turn: 5deg;">
+      <div class="sheet" data-sheet="cathedral" data-label="A photo of a cloister" style="--x: 465.9; --y: 255.22; --w: 428; --h: 412; --left: 105.9; --cx: 21; --cy: 7; --cw: 359.5; --ch: 287.78; --deal: 0; --deal-turn: 0deg; --deal-under: 1;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/cathedral-1x.webp" srcset="assets/img/lore/cathedral-1x.webp 1x, assets/img/lore/cathedral.webp 2x" alt="A photo of a Gothic cloister garden. I’ve lived in Utrecht, NL, Antwerp, BE &amp; Yekaterinburg, RU." width="428" height="412">
         <span class="sheet-hit" aria-hidden="true"></span>
       </div>
-      <div class="sheet" data-sheet="about" data-label="About the designer" style="--x: 465; --y: 18; --w: 478; --h: 694; --left: -6; --cx: 38; --cy: 7; --cw: 402; --ch: 555; --deal: 5; --deal-turn: -3deg;">
+      <div class="sheet" data-sheet="about" data-label="About the designer" style="--x: 465; --y: 18; --w: 478; --h: 694; --left: -6; --cx: 38; --cy: 7; --cw: 402; --ch: 555; --deal: 0; --deal-turn: 0deg;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/about-1x.webp" srcset="assets/img/lore/about-1x.webp 1x, assets/img/lore/about.webp 2x" alt="" width="478" height="694">
         <span class="sheet-hit" aria-hidden="true"></span>
@@ -116,14 +118,14 @@
           <p>I enjoy problem solving, learning new things and bringing my ideas to life - so I’ve tried my hand at many areas of design. But what I love the most is having fun with the visuals!</p>
         </div>
       </div>
-      <div class="sheet sheet--vellum" data-sheet="vellum" data-label="Anna Volkova" style="--x: 591.74; --y: 88; --w: 394; --h: 612; --left: 103.74; --cx: 48; --cy: 9; --cw: 298; --ch: 434; --deal: 6; --deal-turn: 4deg;">
+      <div class="sheet sheet--vellum" data-sheet="vellum" data-label="Anna Volkova" style="--x: 591.74; --y: 88; --w: 394; --h: 612; --left: 103.74; --cx: 48; --cy: 9; --cw: 298; --ch: 434; --deal: 1; --deal-turn: 4deg;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <span class="sheet-frost" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/vellum-1x.webp" srcset="assets/img/lore/vellum-1x.webp 1x, assets/img/lore/vellum.webp 2x" alt="" width="394" height="612">
         <span class="sheet-hit" aria-hidden="true"></span>
         <p class="visually-hidden">Anna Volkova is a designer working across interface, systems, and visual design to create products that are rigorous underneath, intuitive in use, and alive with personality.</p>
       </div>
-      <div class="sheet" data-sheet="photo" data-label="A photo of me" style="--x: 408; --y: -33; --w: 372.5; --h: 477.5; --left: -16; --cx: 81.52; --cy: 7; --cw: 248.57; --ch: 310.52; --cr: 11.24deg; --deal: 7; --deal-turn: -6deg;">
+      <div class="sheet" data-sheet="photo" data-label="A photo of me" style="--x: 408; --y: -33; --w: 372.5; --h: 477.5; --left: -16; --cx: 81.52; --cy: 7; --cw: 248.57; --ch: 310.52; --cr: 11.24deg; --deal: 2; --deal-turn: -6deg;">
         <span class="sheet-lift" aria-hidden="true"></span>
         <img class="sheet-img" src="assets/img/lore/photo-1x.webp" srcset="assets/img/lore/photo-1x.webp 1x, assets/img/lore/photo.webp 2x" alt="A photo of me, paper-clipped to the folder." width="373" height="478">
         <span class="sheet-hit" aria-hidden="true"></span>
