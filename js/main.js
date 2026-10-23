@@ -359,11 +359,12 @@ function stepOnScroll(work, tabs, select) {
 }
 
 // Wider screens: the open project waits, hidden (.is-waiting), until the
-// showcase comes into view, scrolled to or by the menu, then, after a moment
-// (ARRIVE_DELAY) to settle, plays the same entrance as switching to it, the
-// title rising first. Once the showcase is out of sight again, it waits for
-// the next time. Not on phones (the feed), nor with reduced motion.
-const ARRIVE_DELAY = 350;   // ms
+// showcase comes into view, scrolled to or by the menu, then plays the same
+// entrance as switching to it, except that the text waits for the picture:
+// it fades in first, and after a pause (ARRIVE_DELAY) the text rises, title
+// first. Once the showcase is out of sight again, it waits for the next
+// time. Not on phones (the feed), nor with reduced motion.
+const ARRIVE_DELAY = 600;   // ms before the text, the picture's fade (500 ms) and a beat
 
 function initWorkArrival() {
   const work = document.querySelector(".work");
