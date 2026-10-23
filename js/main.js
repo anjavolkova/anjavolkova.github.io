@@ -171,9 +171,15 @@ function hideMissingImages() {
 // (.is-entering); see styles.css. Hovering or focusing a tab starts loading
 // its panel's images, so they're ready when it opens.
 //
+// On desktop, while the page rests on the showcase, scrolling steps through
+// the projects before the page moves on: see stepOnScroll() below.
+//
 // On phones the projects are a feed instead: all of them one after another,
 // each under its name bar (the tab buttons, which do nothing there).
 const PANEL_OUT = 160;
+const DESKTOP = window.matchMedia("(min-width: 1024px)");
+const GESTURE_GAP = 200;   // ms without wheel events that ends a gesture
+const STEP_GAP = 450;      // ms: the soonest the next project can follow
 
 function initTabs() {
   const tablist = document.querySelector(".work-tabs");
@@ -259,8 +265,54 @@ function initTabs() {
     });
   }
 
+  stepOnScroll(tablist.closest(".work"), tabs, select);
   setMode();
   PHONE.addEventListener("change", setMode);
+}
+
+// With the showcase resting at its scroll stop (whole, at the top of the
+// window), a swipe or a turn of the wheel opens the next project, or the
+// previous one going up, instead of moving the page. Past the last project
+// (or the first, going up) the page scrolls on as usual. One gesture moves
+// one project: wheel events in quick succession are one gesture, and so is a
+// trackpad's momentum dying away, while a fresh swipe on top of it is a new
+// one. A gesture that started the page scrolling is left alone.
+function stepOnScroll(work, tabs, select) {
+  let gesture = null;
+  let last = 0;
+  let lastStep = -Infinity;
+
+  const atStop = () => {
+    const box = work.getBoundingClientRect();
+    const stop = parseFloat(getComputedStyle(work).scrollMarginTop) || 0;
+    return Math.abs(box.top - stop) <= 4 && box.bottom <= window.innerHeight + 1;
+  };
+
+  window.addEventListener("wheel", (e) => {
+    const dy = e.deltaY * [1, 16, window.innerHeight][e.deltaMode];
+    const size = Math.abs(dy);
+    const fresh = !gesture
+      || e.timeStamp - last > GESTURE_GAP
+      || (size > 10 && size > 1.5 * Math.max(...gesture.recent) && e.timeStamp - gesture.start > 300);
+    last = e.timeStamp;
+
+    if (fresh) {
+      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+      const next = tabs[i + Math.sign(dy)];
+      const held = Boolean(next) && dy !== 0 && e.cancelable && !e.ctrlKey
+        && DESKTOP.matches && atStop();
+      gesture = { held, next, start: e.timeStamp, recent: [], stepped: e.timeStamp - lastStep < STEP_GAP };
+    }
+    gesture.recent = [...gesture.recent.slice(-2), size];
+    if (!gesture.held) return;
+
+    e.preventDefault();
+    if (gesture.stepped) return;
+    gesture.stepped = true;
+    lastStep = e.timeStamp;
+    select(gesture.next);
+    gesture.next.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, { passive: false });
 }
 
 // Over a project's picture area, its picture leans towards the pointer in 3D
