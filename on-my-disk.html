@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- Not indexed while the visuals are still placeholders. -->
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#F6F4F5" />
+<meta name="description" content="On My Disk: making privacy visible in a local-first file manager. A case study by Anna Volkova, product &amp; visual designer." />
+<title>On My Disk — making privacy visible — Anna Volkova</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<script>
+  // Text rises out of a blur as it scrolls into view (js/study.js), so it
+  // starts hidden; not with reduced motion. If the script never runs, it all
+  // shows once the page has loaded.
+  if (matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    document.documentElement.classList.add("reveal-on");
+    addEventListener("load", function () {
+      if (!document.documentElement.classList.contains("reveal-ready")) document.documentElement.classList.remove("reveal-on");
+    });
+  }
+</script>
+<script type="module" src="js/main.js"></script>
+</head>
+<body class="page-study">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <!-- Phones: the links open from this button as a full-screen menu. -->
+  <button class="menu-toggle is-on-light" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+    <svg class="menu-icon menu-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="menu-icon menu-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a class="nav-brand" href="index.html" aria-label="Home"><img src="assets/img/brand-mark.png" alt="" width="36" height="39"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#work" aria-current="page">Work</a></li>
+      <li><a href="index.html#side-quests">Side quests</a></li>
+      <li><a href="#" data-link="lore">Lore</a></li>
+    </ul>
+    <span class="nav-rule" aria-hidden="true"></span>
+    <a class="nav-cta" href="index.html#contact">Let’s chat</a>
+  </nav>
+</header>
+
+<!-- Case study: On My Disk (text from Notion). Each visual is a placeholder
+     for now: swap the .study-slot's note for an image, keep the figcaption.
+     .reveal marks what rises into view (js/study.js); data-section marks
+     the stops of the section pill at the bottom. -->
+<main id="main" class="study">
+  <article>
+
+    <header class="study-hero">
+      <div class="study-hero-text">
+        <a class="study-back reveal" href="index.html#work">
+          <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20">
+          All work
+        </a>
+        <h1 class="study-title reveal">Making privacy visible in a <span class="study-nowrap">local-first</span> file manager</h1>
+        <dl class="work-meta study-meta reveal">
+          <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+          <div class="meta-row"><dt>team</dt><dd>1 engineer, 1 designer</dd></div>
+          <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+          <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2024–2025</dd></div>
+          <div class="meta-row meta-row--half"><dt>client</dt><dd>Bineon</dd></div>
+        </dl>
+      </div>
+      <figure class="study-visual study-visual--hero">
+        <div class="study-slot">
+          <div class="study-botanical" aria-hidden="true"><img src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <p class="study-slot-note"><span>visual</span>On My Disk’s dashboard: files, their privacy status and the AI search</p>
+        </div>
+      </figure>
+    </header>
+
+    <section class="study-part" aria-labelledby="overview">
+      <h2 class="study-rule reveal" id="overview" data-section>overview</h2>
+      <div class="study-flow">
+        <p class="study-lead reveal">Most file tools, and most AI assistants, send your files to a data center. On My Disk doesn’t — the files and the assistant both live on your device. <mark>The design problem was making that believable:</mark> privacy is invisible by default, so the interface had to show people where their data was at every point.</p>
+
+        <div class="study-note">
+          <p class="study-note-label reveal">impact</p>
+          <dl class="study-figures reveal">
+            <div class="study-figure study-figure--after">
+              <dt>after the redesign</dt>
+              <dd><span class="study-figure-num">0</span> of 26</dd>
+            </div>
+            <div class="study-figure">
+              <dt>initial study</dt>
+              <dd><span class="study-figure-num">2</span> of 3</dd>
+            </div>
+            <p class="study-figures-key">participants who described their files as being stored on a remote server</p>
+          </dl>
+          <p class="study-text reveal">Made file privacy and storage more understandable, with usability testing showing promising results — <strong>0 of 26</strong> participants described their files as being stored on a remote server in an open-ended question, compared with 2 of 3 in the initial study.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-part" aria-labelledby="problem">
+      <h2 class="study-rule reveal" id="problem" data-section>the problem</h2>
+      <div class="study-flow">
+        <p class="study-statement reveal">When testing a previous version of the UI with three participants, <mark>every participant but one assumed their files were sitting on someone else’s server.</mark></p>
+
+        <figure class="study-visual">
+          <div class="study-slot" style="--ratio: 16 / 9">
+            <p class="study-slot-note"><span>visual</span>The previous version of the UI, as tested in the first study</p>
+          </div>
+        </figure>
+
+        <div class="study-note">
+          <p class="study-note-label reveal">the challenge</p>
+          <p class="study-challenge reveal">Make file storage, privacy status, and access permissions understandable at a glance, without compromising the simplicity of the interface.</p>
+        </div>
+
+        <div class="study-note">
+          <p class="study-note-label reveal">my role</p>
+          <p class="study-text reveal">I was the sole product designer, responsible for end-to-end UX and UI design. Working alongside one engineer, I led the research, from defining research questions and recruiting participants to moderating sessions and analyzing findings. I developed the design system, prototyped key interactions, and delivered the final visual design.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="study-part" aria-labelledby="decisions">
+      <h2 class="study-rule reveal" id="decisions" data-section>key decisions</h2>
+      <div class="study-flow">
+
+        <div class="study-note">
+          <p class="study-note-label reveal">key decision 01</p>
+          <h3 class="study-heading reveal">Visual indicators for file privacy</h3>
+          <p class="study-text reveal">Users were confused about where their files were located and who had access to them. I made the distinction between public and private files <mark>visible at a glance</mark> through status indicators with color and visual cues.</p>
+        </div>
+        <figure class="study-visual">
+          <div class="study-slot" style="--ratio: 16 / 9">
+            <p class="study-slot-note"><span>visual</span>Public and private files in the file list, with their status indicators</p>
+          </div>
+        </figure>
+
+        <div class="study-note">
+          <p class="study-note-label reveal">key decision 02</p>
+          <h3 class="study-heading reveal">Control through transparent onboarding and settings</h3>
+          <dl class="study-figures study-figures--single reveal">
+            <div class="study-figure">
+              <dt>survey</dt>
+              <dd><span class="study-figure-num">15</span> of 27</dd>
+            </div>
+            <p class="study-figures-key">named control over their data as their most important factor when considering AI search</p>
+          </dl>
+          <p class="study-text reveal">In a research survey of 27 participants, <mark>15 named control over their data as their most important factor</mark> when considering AI search, making it the most common pick. This is why the onboarding asks users to pick an AI model, choose whether to run it locally, or opt out of AI features entirely. Of course, they can later change their decision in the settings.</p>
+        </div>
+        <div class="study-pair">
+          <figure class="study-visual">
+            <div class="study-slot" style="--ratio: 4 / 5">
+              <p class="study-slot-note"><span>visual</span>Onboarding: picking an AI model, running it locally, or opting out</p>
+            </div>
+          </figure>
+          <figure class="study-visual">
+            <div class="study-slot" style="--ratio: 4 / 5">
+              <p class="study-slot-note"><span>visual</span>Settings, where the choice can be changed later</p>
+            </div>
+          </figure>
+        </div>
+
+        <div class="study-note">
+          <p class="study-note-label reveal">key decision 03</p>
+          <h3 class="study-heading reveal">Natural-language search and filtering, at no cost to privacy</h3>
+          <p class="study-text reveal">In the same survey, when asked what makes files hard to find, participants most often named memory reliance and confusion about directory structure. This is why I placed natural language search and recent files as the prominent sections of the dashboard, and added clear copy explaining that users can search with LLM <mark>without sending their files to a server for processing.</mark></p>
+        </div>
+        <figure class="study-visual">
+          <div class="study-slot" style="--ratio: 16 / 9">
+            <p class="study-slot-note"><span>visual</span>The dashboard’s natural-language search and recent files, with the copy on local processing</p>
+          </div>
+        </figure>
+
+      </div>
+    </section>
+
+    <section class="study-part" aria-labelledby="outcome">
+      <h2 class="study-rule reveal" id="outcome" data-section>outcome</h2>
+      <div class="study-flow">
+        <p class="study-statement reveal">A second round tested the redesign with 26 new participants.</p>
+
+        <ul class="study-findings">
+          <li class="reveal">
+            <p class="study-finding-num"><span class="study-figure-num">0</span> of 26</p>
+            <p class="study-text">In an open-ended question, no participant described the file as being on a remote server. The question allowed a folder-path answer, yet five correctly identified the USB drive as its storage location. In the initial study, two out of three participants believed their files were uploaded online, suggesting an improvement, though the small initial sample limits the comparison.</p>
+          </li>
+          <li class="reveal">
+            <p class="study-finding-num"><span class="study-figure-num">16</span> of 26</p>
+            <p class="study-text">16 of 26 correctly identified a private file as private.</p>
+          </li>
+          <li class="reveal">
+            <p class="study-finding-num"><span class="study-figure-num">21</span> of 26</p>
+            <p class="study-text">21 of 26 set custom privacy settings when sharing a link, and all 21 made them less permissive than the default. This points to a preference for greater control over who can access shared files and for how long.</p>
+          </li>
+          <li class="reveal">
+            <p class="study-finding-num"><span class="study-figure-num">22</span> of 26</p>
+            <p class="study-text">22 of 26 shared a file through the three-dot menu rather than the link icon button, which is far more visually prominent. <mark>The affordance I designed to be obvious was not the one people reached for.</mark></p>
+          </li>
+        </ul>
+
+        <figure class="study-visual">
+          <div class="study-slot" style="--ratio: 16 / 9">
+            <p class="study-slot-note"><span>visual</span>Sharing a file: the link icon, the three-dot menu and the custom privacy settings</p>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="study-part" aria-labelledby="next">
+      <h2 class="study-rule reveal" id="next" data-section>next steps</h2>
+      <div class="study-flow">
+        <ol class="study-steps">
+          <li class="reveal">
+            <h3 class="study-step-head">Close the comprehension gap.</h3>
+            <p class="study-text">Ten participants still misread a private file, indicating there is more work to do in communicating privacy.</p>
+          </li>
+          <li class="reveal">
+            <h3 class="study-step-head">Improve visual cues.</h3>
+            <p class="study-text">Most people chose to go through a longer route to share their file, rather than through a prominent ‘Link’ icon. The icon’s meaning, placement, and visibility should be investigated, with alternative designs and positions tested.</p>
+          </li>
+          <li class="reveal">
+            <h3 class="study-step-head">Use closed-ended questions to measure comprehension.</h3>
+            <p class="study-text">Add structured questions to test whether users understand where their files are stored and who can access them, making the results easier to compare across participants.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <nav class="study-end" aria-label="After the case study">
+      <a class="cta" href="index.html#work"><img class="arrow arrow--back" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20">All work</a>
+      <a class="cta" href="index.html#contact">Let’s chat <img class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+    </nav>
+
+  </article>
+
+  <!-- Where you are in the case study, with a step up or down to the
+       previous or next section; the rule fills as you read. -->
+  <nav class="study-sections" aria-label="Case study sections">
+    <button class="study-sections-step" type="button" data-step="-1" aria-label="Previous section">
+      <img src="assets/img/icons/arrow-left.svg" alt="" width="18" height="18">
+    </button>
+    <p class="study-sections-label"><span>overview</span></p>
+    <span class="study-sections-rule" aria-hidden="true"><span class="study-sections-fill"></span></span>
+    <button class="study-sections-step" type="button" data-step="1" aria-label="Next section">
+      <img src="assets/img/icons/arrow-left.svg" alt="" width="18" height="18">
+    </button>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <p class="footer-credit">Designed &amp; coded with <img loading="lazy" src="assets/img/icons/heart.svg" alt="love" width="15" height="13"> by Anya (since you've scrolled this far you can call me Anya)</p>
+  <ul class="footer-links">
+    <li><a href="#" data-link="linkedin">linkedin</a></li>
+    <li><a href="#" data-link="instagram">instagram</a></li>
+    <li><a href="#" data-link="github">github</a></li>
+    <li><a href="#" data-link="email">email</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
