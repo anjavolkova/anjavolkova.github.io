@@ -2185,10 +2185,12 @@ html:has(.page-study) { scroll-snap-type: none; }
    page under it has the footer), and its scrolling stays in the panel. */
 .in-panel { overscroll-behavior: contain; }
 .in-panel .study { --study-pad: 24px; }
-@media (min-width: 560px) { .in-panel .study { --study-pad: 40px; } }
-@media (min-width: 720px) { .in-panel .study { --study-pad: 56px; } }
+.in-panel .study-hero { padding-top: 24px; }
+.in-panel .study-visual--hero { padding: 0 var(--study-pad); }
+/* The panel's × sits in the left margin (24px in, 48px wide). */
+@media (min-width: 560px) { .in-panel .study { --study-pad: 96px; } }
 .in-panel .site-footer { display: none; }
-.in-panel .contact { padding-bottom: 48px; }
+.in-panel .contact { padding-inline: var(--study-pad); padding-bottom: 48px; }
 
 /* ---------- Test: work first (preview.html) ---------- */
 
@@ -2260,19 +2262,21 @@ html:has(.page-study) { scroll-snap-type: none; }
 }
 
 /* Desktop: the menu sits in the strip, centred in it, and the work's scroll
-   stop is the top of the page, right under the strip. The strip is 136px
-   tall where the window has room, and slimmer (down to 96px, the name
-   with it) where it doesn't, so the whole showcase (667px), "Full study"
-   and all, shows under it with 24px to spare. */
+   stop is the top of the page, right under the strip. The work fills the
+   window from there down (never shorter than 600px), so its foot, "Full
+   study", sits on the window's bottom edge. Its picture grows with it
+   where the showcase gets taller than wide, cropped at the sides. */
 @media (min-width: 1024px) {
   .page-work-first {
-    --strip: clamp(96px, calc(100vh - 667px - 24px), 136px);
-    --stop-work: var(--strip);
+    --stop-work: 136px;
   }
-  .page-work-first .banner { height: var(--strip); }
-  .page-work-first .banner-name { font-size: calc(var(--strip) * 64 / 136); line-height: 0.875; }
+  .page-work-first .work-panel {
+    min-height: max(calc(600px - var(--tab-h)), calc(100vh - var(--stop-work) - var(--tab-h) - 1px));
+  }
+  .page-work-first .work-visual { --u: max(calc(100cqw / 504), calc(100cqh / 714)); }
+  .page-work-first .stage { left: calc(50% - 252 * var(--u)); }
   .page-work-first .nav {
-    top: calc((var(--strip) - 66px) / 2);
+    top: 35px;
     right: 32px;
     width: clamp(560px, 50vw, 720px);
   }
@@ -2280,8 +2284,8 @@ html:has(.page-study) { scroll-snap-type: none; }
 
 /* The On My Disk case study in a panel from the right, over the page, from
    the project's "Full study" (js/panel.js). The page dims and blurs as for
-   the message; the panel slides in, and out the same way back. Phones:
-   the whole screen. */
+   the message; the panel slides in, and out the same way back. Phones: the
+   whole screen. */
 .study-panel {
   inset: 0 0 0 auto;
   width: clamp(600px, 54vw, 820px);
@@ -2314,11 +2318,14 @@ html:has(.page-study) { scroll-snap-type: none; }
   border: 0;
   background: var(--bg);
 }
-/* The ×: a pill like the study's own, at the panel's top corner. */
+/* The ×: a pill like the study's own, at the panel's top corner, in the
+   study's wide left margin there, so it never covers the writing. Phones,
+   where there's no room for that margin, close it with the study's ← (or
+   going back). */
 .study-panel-close {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 24px;
+  left: 24px;
   z-index: 1;
   display: grid;
   place-items: center;
@@ -2347,7 +2354,9 @@ html:has(.page-study) { scroll-snap-type: none; }
 }
 @media (max-width: 719px) {
   .study-panel { width: 100%; box-shadow: none; }
-  .study-panel-close { top: 12px; left: auto; right: 12px; width: 44px; height: 44px; }
+}
+@media (max-width: 559px) {
+  .study-panel-close { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
