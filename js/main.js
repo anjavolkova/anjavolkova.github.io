@@ -80,6 +80,7 @@ function initMenu() {
   const nav = document.getElementById("site-nav");
   const photo = document.querySelector(".hero-photo");
   const behind = [document.querySelector("main"), document.querySelector(".site-footer")];
+  if (!toggle || !nav) return;   // a page without the menu (the case study)
 
   // Pages without the hero photo (lore) keep the plum button throughout.
   function recolor() {

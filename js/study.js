@@ -1,7 +1,8 @@
 // Case study pages (on-my-disk.html). Text rises out of a blur as it scrolls
-// into view, a little apart when several come in together, and a pill at the
-// bottom says which section you're in, with a step up or down to the
-// previous or next one and a rule that fills as you read.
+// into view, a little apart when several come in together. In place of the
+// menu, pills at the bottom go back to the work, say which section you're
+// in (with a rule that fills as you read), and step up or down to the
+// previous or next one.
 const REVEAL_STAGGER = 80;   // ms between things that come into view together
 const SECTION_GAP = 40;      // px left above a section after a step
 
@@ -9,7 +10,7 @@ export function initStudy() {
   const study = document.querySelector(".study");
   if (!study) return;
   revealOnScroll(study);
-  sectionPill(study);
+  sectionPills(study);
 }
 
 // The page hid the text from the first paint (html.reveal-on, not with
@@ -29,32 +30,34 @@ function revealOnScroll(study) {
 }
 
 // You're in the last section whose rule has passed the top third of the
-// window; the pill shows from the first one on, until the links at the end
-// come up.
-function sectionPill(study) {
-  const pill = study.querySelector(".study-sections");
+// window (before the first, the opening: the label it starts with). The
+// pills show until the list of the other case studies is halfway up the
+// window; that's the end of the read.
+function sectionPills(study) {
+  const pills = study.querySelector(".study-controls");
   const rules = [...study.querySelectorAll("[data-section]")];
-  if (!pill || !rules.length) return;
-  const label = pill.querySelector(".study-sections-label");
-  const [up, down] = pill.querySelectorAll(".study-sections-step");
-  const end = study.querySelector(".study-end");
+  if (!pills || !rules.length) return;
+  const label = pills.querySelector(".study-sections-label");
+  const opening = label.textContent.trim();
+  const [up, down] = pills.querySelectorAll(".study-sections-step");
+  const end = study.querySelector(".study-more-list");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let current = -1;
+  let current = null;
 
   const update = () => {
     const line = window.innerHeight / 3;
     const index = rules.findLastIndex((rule) => rule.getBoundingClientRect().top < line);
-    // Read to the end: the links at the end are coming up.
     const endTop = end ? end.getBoundingClientRect().top + window.scrollY : document.documentElement.scrollHeight;
-    const read = window.scrollY / Math.max(1, endTop - window.innerHeight);
-    pill.style.setProperty("--read", Math.min(1, Math.max(0, read)).toFixed(4));
-    pill.classList.toggle("is-shown", index >= 0 && read < 1);
+    const read = window.scrollY / Math.max(1, endTop - window.innerHeight / 2);
+    pills.style.setProperty("--read", Math.min(1, Math.max(0, read)).toFixed(4));
+    pills.classList.toggle("is-shown", read < 1);
     if (index === current) return;
+    const first = current === null;
     current = index;
+    up.disabled = index < 0;
     down.disabled = index >= rules.length - 1;
-    if (index < 0) return;
-    label.querySelector("span").textContent = rules[index].textContent.trim();
-    if (reducedMotion.matches) return;
+    label.querySelector("span").textContent = index < 0 ? opening : rules[index].textContent.trim();
+    if (first || reducedMotion.matches) return;
     label.classList.remove("is-new");
     void label.offsetWidth;   // restart the swap
     label.classList.add("is-new");

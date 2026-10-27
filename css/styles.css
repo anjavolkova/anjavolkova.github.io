@@ -1745,15 +1745,12 @@ align-self: flex-start;
 
 /* ---------- 7. Case study (on-my-disk.html) ---------- */
 
-/* A long read in the site's language, laid out like an editorial page: a
-   split opening (the title and project details beside the cover, which runs
-   off the edge), ruled section breaks with a mono label, notes in an offset
-   column (mono label, serif heading, Inter text), centred serif statements
-   and wide visuals between them. The numbers that matter sit in ruled cells
-   like the project details, and a highlighter marks the key lines. Visuals
-   are placeholders for now (.study-slot). Text rises out of a blur as it
-   comes into view, and a pill at the bottom says where you are
-   (js/study.js). */
+/* A long read, after billguo.me/work/ncs: the title and cover, then each
+   section under a soft rule, with its notes in a column of their own on
+   the right (their labels on the left), statements centred and pictures
+   wide. The pictures are placeholders for now (.study-slot). Text rises
+   out of a blur as it comes into view, and pills at the bottom, in place of
+   the menu, go back to the work and from section to section (js/study.js). */
 
 /* A long page: no scroll stops (they hold the homepage's sections). */
 html:has(.page-study) { scroll-snap-type: none; }
@@ -1781,54 +1778,64 @@ html:has(.page-study) { scroll-snap-type: none; }
 }
 .reveal-on .reveal:not(.is-in) { opacity: 0; translate: 0 12px; filter: blur(12px); }
 
-/* Opening: the title and details at the foot of the left column, the cover
-   filling the right one and running off the edge. */
+/* The type, from the homepage's: the serif for the title, headings and
+   statements, Inter at 16px for reading, and the mono for labels. */
+.study-title,
+.study-statement,
+.study-heading,
+.study-step-head,
+.study-more-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.09em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.study-lede,
+.study-challenge {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 2.4vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.study-text {
+  max-width: 600px;
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: -0.02em;
+  color: var(--body);
+  text-wrap: pretty;
+}
+.study-label,
+.study-details dt,
+.study-figure dt,
+.study-more-name {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.05em;
+  color: var(--body);
+}
+
+/* Opening: the title at the foot of the left column, clear of the pills,
+   and the cover filling the right one and running off the edge. */
 .study-hero {
   display: grid;
   grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
   gap: 56px;
-  min-height: max(100svh, 760px);
-  padding-top: 136px;
+  min-height: max(100svh, 640px);
+  padding-top: 32px;
 }
-.study-hero-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 32px;
-  padding: 0 0 48px var(--study-pad);
-}
-.study-back {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 6px;
-  margin-bottom: auto;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: -0.05em;
-  color: var(--body);
-  text-decoration: none;
-}
-.study-back .arrow { width: 18px; height: 18px; transition: transform 0.2s ease; }
-.study-back:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-.study-back:hover .arrow { transform: translateX(-3px); }
 .study-title {
-  font-family: var(--font-serif);
-  font-size: clamp(48px, 5.8vw, 92px);
-  font-weight: 400;
+  align-self: end;
+  padding: 0 0 120px var(--study-pad);
+  font-size: clamp(56px, 5.6vw, 88px);
   line-height: 0.875;
-  letter-spacing: -0.09em;
-  color: var(--ink);
-  text-wrap: balance;
-  text-box: trim-both cap alphabetic;
 }
 .study-nowrap { white-space: nowrap; }
-.study-meta { max-width: 520px; }
-.study-visual--hero .study-slot {
-  height: 100%;
-  aspect-ratio: auto;
-  border-right: 0;
-}
+.study-visual--hero .study-slot { height: 100%; aspect-ratio: auto; }
 
 /* Visuals: placeholders until the images are in. */
 .study-visual { margin: 0; }
@@ -1838,7 +1845,6 @@ html:has(.page-study) { scroll-snap-type: none; }
   place-items: center;
   aspect-ratio: var(--ratio, 16 / 9);
   overflow: hidden;
-  border: 1px solid var(--line);
   background: var(--panel);
 }
 .study-slot-note {
@@ -1875,114 +1881,74 @@ html:has(.page-study) { scroll-snap-type: none; }
   gap: 24px;
 }
 
-/* Section breaks: a rule with the section's name in the middle. */
+/* A section's name on a soft rule with a dot at each end. */
 .study-rule {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 20px;
-  padding: 128px var(--study-pad) 80px;
+  gap: 24px;
+  padding: 160px var(--study-pad) 112px;
   font-family: var(--font-mono);
   font-size: 14px;
   font-weight: 400;
+  line-height: 1;
   letter-spacing: -0.05em;
   color: var(--body);
+  white-space: nowrap;
 }
 .study-rule::before,
 .study-rule::after {
   content: "";
-  height: 1px;
-  background: var(--line);
+  height: 5px;
+  background:
+    radial-gradient(circle, var(--line-pale) 1.5px, transparent 2px) 0 50% / 5px 5px no-repeat,
+    linear-gradient(var(--line-pale), var(--line-pale)) 0 50% / 100% 1px no-repeat;
 }
+.study-rule::after { background-position: 100% 50%, 0 50%; }
 
-/* Inside a section: twelve columns. Notes sit in an offset column,
-   statements centred, visuals wide, findings and steps across. */
-.study-flow {
+/* The 12 columns everything lines up on. */
+.study-overview,
+.study-flow,
+.study-more-link {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
-  row-gap: 96px;
-  padding: 0 var(--study-pad);
 }
-.study-flow > * { grid-column: 2 / 12; }
-.study-flow > :is(.study-note, .study-lead) { grid-column: 5 / 11; }
-.study-flow > .study-statement { grid-column: 3 / 11; text-align: center; }
-.study-flow > :is(.study-findings, .study-steps) { grid-column: 1 / -1; }
-.study-flow > .study-visual + .study-note,
-.study-flow > .study-pair + .study-note { margin-top: 32px; }
+.study-overview,
+.study-flow { padding: 0 var(--study-pad); }
 
-.study-note {
+/* Overview: the details down the left, the story on the right. */
+.study-details {
+  grid-column: 2 / 6;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
 }
-.study-note-label {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: -0.05em;
+.study-details dt { margin-bottom: 6px; }
+.study-details dd {
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.04em;
+  color: var(--body);
 }
-.study-text {
-  font-size: 18px;
-  line-height: 1.7;
-  letter-spacing: -0.02em;
-}
-.study-lead {
-  font-size: clamp(20px, 1.85vw, 26px);
-  font-weight: 500;
-  line-height: 1.42;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-}
-.study-statement {
-  font-family: var(--font-serif);
-  font-size: clamp(32px, 3.5vw, 52px);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--ink);
-  text-wrap: balance;
-}
-.study-heading {
-  font-family: var(--font-serif);
-  font-size: clamp(32px, 3vw, 46px);
-  font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.07em;
-  color: var(--ink);
-}
-.study-challenge {
-  padding: 28px 32px 34px;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  font-family: var(--font-serif);
-  font-size: clamp(26px, 2.5vw, 38px);
-  line-height: 1.02;
-  letter-spacing: -0.06em;
-  color: var(--ink);
-}
+.study-intro { grid-column: 7 / 12; }
+.study-lede { text-indent: 3em; }
+.study-impact { margin-top: 88px; }
+.study-label { margin-bottom: 20px; }
 
-/* The numbers that matter: serif figures in ruled cells. */
+/* Figures: the number large in the serif, what it counts under it. The
+   one from before the redesign is fainter. */
 .study-figures {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 250px));
-  width: fit-content;
-  border: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 72px;
+  margin-bottom: 32px;
+  padding-top: 20px;   /* the numbers' ink rises above their line */
 }
-.study-figures--single { grid-template-columns: minmax(0, 250px); }
 .study-figure {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 28px;
-  min-height: 156px;
-  padding: 10px 12px 14px;
-}
-.study-figure + .study-figure { border-left: 1px solid var(--line); }
-.study-figure--after { background: var(--panel); }
-.study-figure dt {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: -0.05em;
+  flex-direction: column-reverse;
+  gap: 16px;
 }
 .study-figure dd,
 .study-finding-num {
@@ -1992,123 +1958,161 @@ html:has(.page-study) { scroll-snap-type: none; }
   letter-spacing: -0.06em;
   color: var(--ink);
 }
+.study-figure--then dd { color: var(--line); }
 .study-figure-num {
   font-size: 104px;
-  line-height: 0.75;
+  line-height: 0.8;
   letter-spacing: -0.08em;
 }
-.study-figures-key {
+
+/* The rest: notes in the right-hand column with their labels to the left,
+   statements centred, pictures wide. */
+.study-flow { row-gap: 120px; }
+.study-flow > * { grid-column: 2 / 12; }
+.study-flow > .study-statement { grid-column: 3 / 11; }
+.study-flow > .study-note {
   grid-column: 1 / -1;
-  max-width: 500px;
-  padding: 10px 12px;
-  border-top: 1px solid var(--line);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.35;
-  letter-spacing: -0.05em;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: start;
+}
+.study-note > * { grid-column: 7 / 12; }
+.study-note > .study-label { grid-column: 2 / 6; margin: 0; padding-top: 0.4em; }
+.study-note > .study-heading { margin-bottom: 24px; }
+.study-flow > .study-visual + .study-note,
+.study-flow > .study-pair + .study-note { margin-top: 32px; }
+
+.study-statement {
+  font-size: clamp(40px, 3.9vw, 56px);
+  line-height: 1;
+  text-align: center;
+}
+.study-heading {
+  font-size: clamp(36px, 3.2vw, 46px);
+  line-height: 0.95;
 }
 
-/* Outcome: the findings in a ruled grid, each led by its figure. */
+/* Outcome: the findings two by two, each led by its figure. */
 .study-findings {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  border: 1px solid var(--line);
+  gap: 88px 72px;
 }
 .study-findings li {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  min-height: 300px;
-  padding: 44px 28px 32px;   /* the figure's ink rises above its line */
+  gap: 28px;
 }
-.study-findings li:nth-child(odd) { border-right: 1px solid var(--line); }
-.study-findings li:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-.study-findings .study-text { max-width: 560px; }
-.study-finding-num .study-figure-num { font-size: 128px; }
+.study-finding-num .study-figure-num { font-size: 120px; }
 
-/* Next steps: three ruled cells, numbered. */
+/* Next steps: three, numbered. */
 .study-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px;
   margin: 0;
   padding: 0;
   list-style: none;
   counter-reset: step;
-  border: 1px solid var(--line);
 }
 .study-steps li {
   counter-increment: step;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 20px 24px 32px;
+  gap: 16px;
 }
-.study-steps li + li { border-left: 1px solid var(--line); }
 .study-steps li::before {
   content: counter(step, decimal-leading-zero);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   font-family: var(--font-mono);
   font-size: 14px;
   letter-spacing: -0.05em;
 }
 .study-step-head {
-  font-family: var(--font-serif);
-  font-size: clamp(26px, 2.3vw, 34px);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--ink);
+  font-size: clamp(30px, 2.5vw, 36px);
+  line-height: 0.95;
 }
-.study-steps .study-text { font-size: 16px; line-height: 1.7; }
 
-/* After the read: back to the work, or a chat. */
-.study-end {
-  display: flex;
-  justify-content: space-between;
-  height: 51px;
-  margin-top: 128px;
-  padding: 0 8px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+/* After the read: the other case studies, then a chat. */
+.study-more-list { padding: 0 var(--study-pad); }
+.study-more-link {
+  align-items: baseline;
+  padding: 26px 0;
+  color: inherit;
+  text-decoration: none;
 }
-.study-end .arrow--back { transform: none; }
-.study-end .cta:hover .arrow--back { transform: translateX(-3px); }
+.study-more-name { grid-column: 2 / 6; }
+.study-more-title {
+  grid-column: 7 / 11;
+  font-size: clamp(32px, 2.9vw, 42px);
+  line-height: 0.95;
+  transition: color 0.2s ease;
+}
+.study-more-link .cta { grid-column: 11 / 13; justify-self: end; height: auto; padding: 0; }
+.study-more-link:hover .study-more-title { color: var(--accent); }
+.study-more-link:hover .cta { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.study-more-link:hover .cta .arrow { transform: rotate(180deg) translateX(-3px); }
+.study-rule--chat { padding-bottom: 0; }
 
-/* Where you are: a pill like the menu, at the bottom, once the reading
-   starts. The rule fills as you read. */
-.study-sections {
+/* The pills at the bottom, like the lore page's: back to the work, where
+   you are (the rule fills as you read), and a step up or down. Shown until
+   the other case studies come up. */
+.study-controls {
   position: fixed;
   left: 50%;
   bottom: 24px;
   z-index: 40;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  width: min(440px, calc(100vw - 32px));
+  gap: 8px;
+  width: min(480px, calc(100vw - 32px));
   height: 52px;
-  padding: 0 8px;
-  border: 1px solid var(--body);
-  border-radius: 40px;
-  background: rgba(246, 244, 245, 0.7);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  font-family: var(--font-mono);
-  font-size: 15px;
-  letter-spacing: -0.05em;
-  color: var(--body);
   opacity: 0;
   visibility: hidden;
   translate: -50% 12px;
   transition: opacity 0.4s ease, translate 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.4s;
 }
-.study-sections.is-shown {
+.study-controls.is-shown {
   opacity: 1;
   visibility: visible;
   translate: -50% 0;
   transition: opacity 0.4s ease, translate 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
 }
-.study-sections-step {
+.study-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid #f5f1ed;
+  border-radius: 40px;
+  background: rgba(248, 244, 240, 0.94);   /* over text, not a photo */
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow:
+    0 1px 1.5px rgba(152, 129, 129, 0.08),
+    0 6px 3px rgba(152, 129, 129, 0.07),
+    0 13px 4px rgba(152, 129, 129, 0.04),
+    0 23px 4.5px rgba(152, 129, 129, 0.01);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--body);
+}
+.study-control--back {
   flex: none;
+  justify-content: center;
+  width: 52px;
+  transition: background-color 0.25s ease;
+}
+.study-control--back:hover { background: rgba(252, 250, 248, 0.92); }
+.study-control--back img { width: 18px; height: 18px; transition: transform 0.2s ease; }
+.study-control--back:hover img { transform: translateX(-2px); }
+.study-control--where {
+  flex: 1;
+  min-width: 0;
+  gap: 16px;
+  padding: 0 22px;
+}
+.study-control--steps { flex: none; gap: 2px; padding: 0 7px; }
+.study-sections-step {
   display: grid;
   place-items: center;
   width: 36px;
@@ -2120,13 +2124,14 @@ html:has(.page-study) { scroll-snap-type: none; }
   cursor: pointer;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
-.study-sections-step:hover { background: rgba(233, 226, 229, 0.9); }
+.study-sections-step:hover { background: rgba(233, 226, 229, 0.7); }
 .study-sections-step:disabled { opacity: 0.3; cursor: default; background: transparent; }
 .study-sections-step img { width: 18px; height: 18px; rotate: 90deg; }
 .study-sections-step[data-step="1"] img { rotate: -90deg; }
+.study-control:focus-visible,
+.study-sections-step:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
 .study-sections-label {
   flex: none;
-  min-width: 8.2em;
   white-space: nowrap;
 }
 .study-sections-label.is-new span { display: inline-block; animation: study-label-in 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -2147,41 +2152,64 @@ html:has(.page-study) { scroll-snap-type: none; }
 @keyframes study-label-in { from { opacity: 0; translate: 0 6px; filter: blur(4px); } }
 
 @media (max-width: 1023px) {
-  .study-hero { grid-template-columns: minmax(0, 1fr); gap: 40px; min-height: 0; padding-top: 128px; }
-  .study-hero-text { gap: 28px; padding: 0 var(--study-pad); }
-  .study-back { margin-bottom: 8px; }
-  .study-visual--hero .study-slot { height: auto; aspect-ratio: 4 / 3; border-width: 1px 0; }
-  .study-flow > * { grid-column: 1 / -1; }
-  .study-flow > :is(.study-note, .study-lead) { grid-column: 2 / 12; }
+  .study-hero { grid-template-columns: minmax(0, 1fr); gap: 48px; min-height: 0; padding-top: 96px; }
+  .study-title { padding: 0 var(--study-pad); }
+  .study-visual--hero .study-slot { height: auto; aspect-ratio: 4 / 3; }
+  .study-details { grid-column: 1 / 5; }
+  .study-intro { grid-column: 6 / 13; }
+  .study-flow > *,
   .study-flow > .study-statement { grid-column: 1 / -1; }
-  .study-steps { grid-template-columns: minmax(0, 1fr); }
-  .study-steps li + li { border-left: 0; border-top: 1px solid var(--line); }
-  .study-steps li::before { margin-bottom: 12px; }
+  .study-note > * { grid-column: 6 / 13; }
+  .study-note > .study-label { grid-column: 1 / 5; }
+  .study-more-name { grid-column: 1 / 5; }
+  .study-more-title { grid-column: 6 / 11; }
 }
 
 @media (max-width: 719px) {
   .study { --study-pad: 16px; }
-  .study-hero { padding-top: 96px; }
-  .study-rule { padding: 80px var(--study-pad) 48px; }
-  .study-flow { row-gap: 64px; }
-  .study-flow > :is(.study-note, .study-lead, .study-statement) { grid-column: 1 / -1; }
+  .study-hero { gap: 40px; padding-top: 72px; }
+  .study-title { font-size: 48px; }
+  .study-rule { padding: 96px var(--study-pad) 56px; gap: 16px; }
+  .study-overview,
+  .study-flow,
+  .study-more-link { grid-template-columns: minmax(0, 1fr); }
+  .study-details {
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
+    margin-bottom: 56px;
+  }
+  .study-intro { grid-column: 1; }
+  .study-lede,
+  .study-challenge { font-size: 26px; }
+  .study-impact { margin-top: 64px; }
+  .study-figures { gap: 24px 48px; }
+  .study-figure-num { font-size: 88px; }
+  .study-flow { row-gap: 72px; }
+  .study-flow > .study-note { grid-template-columns: minmax(0, 1fr); }
+  .study-note > *,
+  .study-note > .study-label { grid-column: 1; }
+  .study-note > .study-label { margin-bottom: 16px; padding-top: 0; }
   .study-flow > .study-visual + .study-note,
   .study-flow > .study-pair + .study-note { margin-top: 0; }
-  .study-text { font-size: 16px; line-height: 1.75; }
-  .study-challenge { padding: 22px 20px 26px; }
+  .study-statement { font-size: 36px; }
+  .study-heading { font-size: 34px; }
   .study-pair { gap: 12px; }
-  .study-figures { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .study-figures--single { grid-template-columns: minmax(0, 1fr); }
-  .study-figure { min-height: 128px; }
-  .study-figure-num { font-size: 80px; }
-  .study-findings { grid-template-columns: minmax(0, 1fr); }
-  .study-findings li { min-height: 0; gap: 20px; padding: 32px 16px 24px; border-right: 0 !important; }
-  .study-findings li + li { border-top: 1px solid var(--line); }
-  .study-findings li:nth-child(-n+2) { border-bottom: 0; }
-  .study-finding-num .study-figure-num { font-size: 88px; }
-  .study-steps li { padding: 20px 16px 28px; }
-  .study-end { margin-top: 96px; }
-  .study-sections { display: none; }
+  .study-findings { grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .study-finding-num .study-figure-num { font-size: 96px; }
+  .study-steps { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+  .study-steps li::before { margin-bottom: 4px; }
+  .study-more-link { gap: 10px; padding: 22px 0; }
+  .study-more-name,
+  .study-more-title,
+  .study-more-link .cta { grid-column: 1; justify-self: start; }
+  .study-more-title { font-size: 32px; }
+  .study-rule--chat { padding-bottom: 0; }
+  .study-controls { bottom: 16px; height: 48px; }
+  .study-control--back { width: 48px; }
+  .study-control--where { padding: 0 16px; gap: 12px; }
+  .study-control--steps { padding: 0 5px; }
 }
 
 /* ---------- Test: work first (preview.html) ---------- */
