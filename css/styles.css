@@ -1792,7 +1792,8 @@ html:has(.page-study) { scroll-snap-type: none; }
   text-wrap: balance;
 }
 .study-lede,
-.study-challenge {
+.study-challenge,
+.study-finding {
   font-family: var(--font-serif);
   font-size: clamp(28px, 2.4vw, 34px);
   line-height: 1.15;
@@ -1810,7 +1811,6 @@ html:has(.page-study) { scroll-snap-type: none; }
 }
 .study-label,
 .study-details dt,
-.study-figure dt,
 .study-more-name {
   font-family: var(--font-mono);
   font-size: 14px;
@@ -1936,35 +1936,6 @@ html:has(.page-study) { scroll-snap-type: none; }
 .study-impact { margin-top: 88px; }
 .study-label { margin-bottom: 20px; }
 
-/* Figures: the number large in the serif, what it counts under it. The
-   one from before the redesign is fainter. */
-.study-figures {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px 72px;
-  margin-bottom: 32px;
-  padding-top: 20px;   /* the numbers' ink rises above their line */
-}
-.study-figure {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 16px;
-}
-.study-figure dd,
-.study-finding-num {
-  font-family: var(--font-serif);
-  font-size: 28px;
-  line-height: 1;
-  letter-spacing: -0.06em;
-  color: var(--ink);
-}
-.study-figure--then dd { color: var(--line); }
-.study-figure-num {
-  font-size: 104px;
-  line-height: 0.8;
-  letter-spacing: -0.08em;
-}
-
 /* The rest: notes in the right-hand column with their labels to the left,
    statements centred, pictures wide. */
 .study-flow { row-gap: 120px; }
@@ -1992,7 +1963,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   line-height: 0.95;
 }
 
-/* Outcome: the findings two by two, each led by its figure. */
+/* Outcome: the findings two by two, each led by what it found. */
 .study-findings {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2001,9 +1972,9 @@ html:has(.page-study) { scroll-snap-type: none; }
 .study-findings li {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
 }
-.study-finding-num .study-figure-num { font-size: 120px; }
+.study-finding { max-width: 560px; font-size: clamp(26px, 2.1vw, 30px); }
 
 /* Next steps: three, numbered. */
 .study-steps {
@@ -2184,8 +2155,6 @@ html:has(.page-study) { scroll-snap-type: none; }
   .study-lede,
   .study-challenge { font-size: 26px; }
   .study-impact { margin-top: 64px; }
-  .study-figures { gap: 24px 48px; }
-  .study-figure-num { font-size: 88px; }
   .study-flow { row-gap: 72px; }
   .study-flow > .study-note { grid-template-columns: minmax(0, 1fr); }
   .study-note > *,
@@ -2197,7 +2166,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   .study-heading { font-size: 34px; }
   .study-pair { gap: 12px; }
   .study-findings { grid-template-columns: minmax(0, 1fr); gap: 56px; }
-  .study-finding-num .study-figure-num { font-size: 96px; }
+  .study-finding { font-size: 24px; }
   .study-steps { grid-template-columns: minmax(0, 1fr); gap: 48px; }
   .study-steps li::before { margin-bottom: 4px; }
   .study-more-link { gap: 10px; padding: 22px 0; }
