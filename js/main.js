@@ -7,7 +7,7 @@ import { swipeReader } from "./swipes.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
 const LINKS = {
-  lore: "lore.html",
+  lore: "lore",
   resume: "",          // the resume PDF, for the lore page's "Download PDF"
   "study-node": "",
   "study-network": "",
@@ -302,13 +302,10 @@ function stepOnScroll(work, tabs, select) {
 
   // How far the showcase is from its stop, in px (more than 0 while the page
   // is above it), or null where there's no hard stop: narrower windows, and
-  // windows too short to show the whole showcase (bar --stop-slack px of its
-  // foot, where a page allows it).
+  // windows too short to show the whole showcase.
   const fromStop = () => {
-    const style = getComputedStyle(work);
-    const stop = parseFloat(style.scrollMarginTop) || 0;
-    const slack = parseFloat(style.getPropertyValue("--stop-slack")) || 0;
-    if (!DESKTOP.matches || work.offsetHeight + stop > window.innerHeight + 1 + slack) return null;
+    const stop = parseFloat(getComputedStyle(work).scrollMarginTop) || 0;
+    if (!DESKTOP.matches || work.offsetHeight + stop > window.innerHeight + 1) return null;
     return work.getBoundingClientRect().top - stop;
   };
 
