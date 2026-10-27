@@ -202,7 +202,7 @@ nav.actions {
   main.feed {
     flex: 1; min-height: 0; width: 100%;
     grid-template-columns: 1.1fr 1.1fr .95fr .8fr;
-    grid-template-rows: minmax(0, .8fr) minmax(0, .8fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr) auto;  /* bottom row fits the story; top rows take the rest */
     grid-template-areas:
       "title title photo palette"
       "title title photo palette"
@@ -217,8 +217,9 @@ nav.actions {
       "story story photo week";
   }
   main.feed > .card { min-height: 0; overflow: hidden; }
-  main.feed > .story-card { overflow: auto; overscroll-behavior: contain; }
   .painting-card, .photo-card { aspect-ratio: auto; }
+  /* images fill their tile without setting the row's height */
+  .painting-card img, .photo-card img { position: absolute; inset: 0; }
   .title-card { padding: 20px 28px; }
   .prompt-title { font-size: clamp(32px, min(4vw, 6.5vh), 58px); }
   .story-card { padding: 24px 32px; }
@@ -229,12 +230,6 @@ nav.actions {
   .week-card { gap: 8px; padding: 16px 18px; }
   .week-strip i { max-width: 26px; border-radius: 7px; }
   .stats b { font-size: 28px; }
-}
-@media (min-width: 980px) and (max-height: 820px) {
-  .alt-line { display: none; }
-  .story-card { padding: 18px 30px; }
-  .story-card h2 { font-size: 20px; margin-bottom: 6px; }
-  .story-text { font-size: 15px; line-height: 1.55; }
 }
 @media (min-width: 1280px) {
   .kbd-hint {
