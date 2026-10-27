@@ -1,0 +1,924 @@
+<!doctype html>
+<html lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<title>inspo.ai</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:wght@400;500&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one prompt at a time. Phone: stacked cards over the prompt's own
+   palette gradient, floating action bar. Desktop: title + visuals side by side. */
+:root {
+  --ink: #120b8f;          /* logo, icons, primary buttons */
+  --ink-soft: #3d36a8;
+  --lavender: #cbc3f7;     /* profile + onboarding panels */
+  --lavender-soft: #ece8fd;
+  --paper: #ffffff;
+  --line: #121117;         /* card outlines */
+  --text: #1b1a22;
+  --title: #3f3d45;        /* prompt title grey */
+  --muted: #625f73;
+  --scrim: rgba(40, 36, 52, .42);
+  --p0: #e9e4f7; --p1: #f5eef2; --p2: #e7eef6; --p3: #d9d4ec;  /* current prompt palette */
+  --serif: "Gelasio", Georgia, "Times New Roman", serif;
+  --sans: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --r-card: 18px;
+  --r-btn: 10px;
+  --bar-h: 92px;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- stage ---------- */
+.stage {
+  min-height: 100%;
+  background:
+    linear-gradient(160deg, var(--p0) 0%, color-mix(in srgb, var(--p0) 40%, var(--p1)) 38%, var(--p1) 62%, var(--p2) 100%);
+  transition: background .6s ease;
+  padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px) + 24px);
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--paper);
+}
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--paper);
+  border-bottom: 2px solid var(--line);
+  border-radius: 0 0 var(--r-card) var(--r-card);
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 10px;
+}
+.top-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.logo { font-family: var(--serif); font-weight: 400; font-size: 34px; color: var(--ink); letter-spacing: -.01em; margin: 0; line-height: 1.1; }
+.logo span { letter-spacing: .04em; }
+.avatar {
+  width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--ink);
+  background: var(--lavender); color: var(--ink); font-weight: 700; font-size: 17px;
+  display: grid; place-items: center; padding: 0; overflow: hidden;
+}
+
+main.feed {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 0;
+  display: grid; gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "title title" "photo palette" "story story" "similar similar" "week week";
+}
+.card { background: var(--paper); border: 2px solid var(--line); border-radius: var(--r-card); min-width: 0; }
+
+.title-card { grid-area: title; display: grid; place-items: center; padding: 28px 22px; min-height: 260px; position: relative; }
+.prompt-title {
+  font-family: var(--serif); font-weight: 400; color: var(--title);
+  font-size: clamp(36px, 10vw, 58px); line-height: 1.12; text-align: center;
+  text-wrap: balance; margin: 0; overflow-wrap: anywhere;
+}
+.liked-flag {
+  position: absolute; top: 12px; right: 14px; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); background: var(--lavender-soft); border-radius: 999px; padding: 4px 10px;
+}
+
+.photo-card { grid-area: photo; position: relative; overflow: hidden; aspect-ratio: 3 / 4.6; max-width: 100%; background: var(--p3); }
+.photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-card .nophoto { position: absolute; inset: 0; display: grid; place-items: center; padding: 18px; text-align: center; font-size: 13px; color: var(--title);
+  background: linear-gradient(160deg, var(--p0), var(--p2)); }
+.pexels {
+  position: absolute; left: 10px; top: 10px; background: rgba(255,255,255,.88); color: var(--ink);
+  font-size: 11px; font-weight: 700; letter-spacing: .04em; text-decoration: none;
+  border-radius: 8px; padding: 5px 8px;
+}
+.pexels:hover { background: var(--paper); }
+
+.painting-card { grid-area: painting; position: relative; overflow: hidden; aspect-ratio: 1; max-width: 100%; background: var(--p3); margin: 0; }
+.painting-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.painting-card figcaption {
+  position: absolute; left: 10px; top: 10px; background: rgba(255,255,255,.88); color: var(--ink);
+  font-size: 11px; font-weight: 700; letter-spacing: .04em; border-radius: 8px; padding: 5px 8px;
+}
+main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "similar similar" "week week"; }
+.palette-card { grid-area: palette; padding: 16px; display: grid; align-content: space-evenly; gap: 12px; }
+.swatch { display: flex; align-items: center; gap: 14px; background: none; border: 0; padding: 0; text-align: left; border-radius: var(--r-btn); }
+.swatch i { width: clamp(52px, 13vw, 76px); aspect-ratio: 1; border-radius: var(--r-btn); flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.swatch b { font-weight: 700; font-size: clamp(14px, 3.6vw, 18px); letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.swatch small { display: block; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.story-card { grid-area: story; padding: 24px 22px 26px; }
+
+.tile-label { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.similar-card { grid-area: similar; padding: 20px 20px 16px; display: flex; flex-direction: column; }
+.similar-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.similar-list button {
+  width: 100%; background: none; border: 0; border-top: 1px solid var(--lavender-soft); padding: 10px 2px;
+  display: flex; align-items: center; gap: 12px; text-align: left; font-family: var(--serif); font-size: 18px; color: var(--title); line-height: 1.25;
+}
+.similar-list li:first-child button { border-top: 0; }
+.similar-list button:hover { color: var(--ink); }
+.similar-list .dots { display: flex; flex: none; }
+.similar-list .dots i { width: 12px; height: 12px; border-radius: 50%; margin-left: -4px; border: 1.5px solid var(--paper); }
+.similar-list .dots i:first-child { margin-left: 0; }
+.similar-list span { min-width: 0; overflow-wrap: break-word; }
+.similar-note { margin: auto 0 0; padding-top: 10px; font-size: 12px; color: var(--muted); }
+
+.week-card { grid-area: week; padding: 20px; background: var(--lavender); display: flex; flex-direction: column; gap: 14px; text-align: left; font: inherit; color: var(--text); cursor: pointer; }
+.week-card:hover { background: #c1b8f4; }
+.week-strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+.week-strip > span { display: grid; gap: 6px; justify-items: center; font-size: 11px; font-weight: 600; color: var(--ink); }
+.week-strip i { width: 100%; max-width: 34px; aspect-ratio: 1; border-radius: 9px; background: rgba(255,255,255,.6); display: grid; place-items: center; color: transparent; }
+.week-strip i.hit { background: var(--ink); color: #fff; }
+.week-strip i.now { box-shadow: inset 0 0 0 2px var(--ink); }
+.week-strip i svg { width: 16px; height: 16px; }
+.stats { display: flex; gap: 22px; margin-top: auto; }
+.stats > span { display: grid; }
+.stats b { font-family: var(--serif); font-weight: 400; font-size: 34px; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.stats span { font-size: 12px; color: var(--ink); font-weight: 500; }
+.story-card h2 { margin: 0 0 14px; font-size: 26px; font-weight: 700; }
+.story-text { font-size: 16px; line-height: 1.65; max-width: 62ch; white-space: pre-wrap; margin: 0; }
+.alt-line { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+
+.btn {
+  background: var(--ink); color: #fff; border: 0; border-radius: var(--r-btn);
+  padding: 12px 22px; font-weight: 600; font-size: 16px; display: inline-flex; align-items: center; gap: 8px;
+}
+.btn:hover { background: var(--ink-soft); }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+.btn.ghost:hover { background: var(--lavender-soft); }
+.btn:disabled { opacity: .55; cursor: default; }
+
+/* ---------- action bar ---------- */
+nav.actions {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+  padding-left: max(12px, env(safe-area-inset-left, 0px));
+  padding-right: max(12px, env(safe-area-inset-right, 0px));
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-top: 10px;
+  display: flex; justify-content: center; align-items: center; gap: clamp(10px, 4vw, 22px);
+  pointer-events: none;
+}
+.act {
+  pointer-events: auto;
+  width: 64px; height: 64px; border-radius: 50%; border: 0; background: var(--paper); color: var(--ink);
+  display: grid; place-items: center; box-shadow: 0 6px 18px rgba(20, 16, 60, .18);
+  transition: transform .15s ease, background .2s ease;
+}
+.act svg { width: 32px; height: 32px; }
+.act.big { width: 86px; height: 86px; }
+.act.big svg { width: 44px; height: 44px; }
+.act:hover { transform: translateY(-2px); }
+.act:active { transform: scale(.94); }
+.act[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.act.done-btn .box { width: 30px; height: 30px; border-radius: 6px; background: var(--lavender-soft); display: grid; place-items: center; color: #b7aef0; }
+.act.done-btn[aria-pressed="true"] { background: var(--paper); }
+.act.done-btn[aria-pressed="true"] .box { background: var(--ink); color: #fff; }
+.spin svg { animation: spin .6s ease; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.fade-in { animation: fade .45s ease both; }
+@keyframes fade { from { opacity: .25; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .spin svg { animation: none; }
+  .stage { transition: none; }
+}
+
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px) + 18px);
+  background: var(--text); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; font-weight: 500;
+  z-index: 30; max-width: calc(100% - 32px); text-align: center;
+}
+
+/* ---------- desktop ---------- */
+@media (min-width: 640px) {
+  main.feed { grid-template-areas: "title title" "photo palette" "story story" "similar week"; }
+  main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "similar week"; }
+}
+@media (min-width: 980px) {
+  main.feed {
+    grid-template-columns: 1.1fr 1.1fr .95fr .8fr;
+    grid-template-rows: minmax(200px, auto) minmax(200px, auto) auto;
+    grid-template-areas:
+      "title title photo palette"
+      "title title photo palette"
+      "story story similar week";
+    padding-top: 26px;
+  }
+  main.feed.has-painting {
+    grid-template-rows: minmax(200px, auto) minmax(200px, auto) auto auto;
+    grid-template-areas:
+      "title title painting palette"
+      "title title painting palette"
+      "story story photo similar"
+      "story story photo week";
+  }
+  .painting-card { aspect-ratio: auto; min-height: 0; }
+  .title-card { min-height: 0; }
+  .photo-card { aspect-ratio: auto; }
+  .story-card { padding: 28px 32px 30px; }
+  .palette-card { padding: 14px; }
+  .swatch i { width: clamp(44px, 4.6vw, 72px); }
+  .swatch b { font-size: clamp(13px, 1.25vw, 17px); }
+  .kbd-hint { display: block; }
+}
+.kbd-hint { display: none; text-align: center; font-size: 12px; color: var(--title); margin: 18px 0 0; }
+.kbd-hint kbd { font-family: var(--sans); font-weight: 700; background: rgba(255,255,255,.7); border-radius: 5px; padding: 1px 6px; }
+
+/* ---------- overlays ---------- */
+.overlay { position: fixed; inset: 0; z-index: 20; background: var(--scrim); display: grid; place-items: center;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px; }
+.modal {
+  background: var(--paper); border: 2px solid var(--line); border-radius: var(--r-card);
+  width: min(420px, 100%); padding: 22px 24px 26px; text-align: center; position: relative;
+  max-height: calc(100dvh - 32px); overflow: auto;
+}
+.modal h2 { font-weight: 500; font-size: 28px; margin: 10px 0 12px; }
+.modal p { font-size: 16px; line-height: 1.55; margin: 0 0 22px; }
+.modal .step { position: absolute; top: 14px; right: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.modal .skip { position: absolute; top: 12px; left: 14px; background: none; border: 0; font-size: 13px; color: var(--muted); padding: 4px; }
+.illo {
+  margin: 22px auto 4px; width: 100%; max-width: 330px; aspect-ratio: 330 / 200;
+  background: var(--lavender); border: 1.5px solid var(--line); border-radius: 16px; display: grid; place-items: center; position: relative; overflow: hidden;
+}
+.illo .circle { width: 104px; height: 104px; border-radius: 50%; background: var(--paper); border: 1.5px solid var(--line); display: grid; place-items: center; color: var(--line); }
+.illo .circle svg { width: 58px; height: 58px; }
+.illo-prompt { display: grid; grid-template-columns: 1fr 52px; gap: 10px; width: 88%; height: 84%; }
+.illo-prompt .t { background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; font-style: italic; font-size: 15px; display: grid; place-items: center; padding: 4px 10px; height: 52px; align-self: start; }
+.illo-prompt .ph { grid-column: 1; border: 1.5px solid var(--line); border-radius: 14px 14px 0 0; border-bottom: 0; overflow: hidden; background: var(--p2); }
+.illo-prompt .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.illo-prompt .pal { grid-column: 2; grid-row: 1 / 3; background: var(--paper); border: 1.5px solid var(--line); border-radius: 14px; display: grid; gap: 6px; padding: 7px; }
+.illo-prompt .pal i { border-radius: 50%; border: 1px solid var(--line); }
+.illo-prompt > div:first-child { display: grid; grid-template-rows: 52px 1fr; gap: 10px; }
+
+/* ---------- profile / detail sheets ---------- */
+.sheet {
+  position: fixed; inset: 0; z-index: 15; background: var(--lavender); overflow: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-top: calc(16px + env(safe-area-inset-top, 0px)); padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+}
+.sheet-inner { max-width: 760px; margin: 0 auto; display: grid; gap: 22px; }
+.sheet-close { justify-self: end; width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--paper); color: var(--ink); display: grid; place-items: center; }
+.sheet-close svg { width: 26px; height: 26px; }
+.me { display: grid; justify-items: center; gap: 10px; margin-top: -30px; }
+.me .big-avatar { width: 118px; height: 118px; border-radius: 50%; background: var(--paper); color: var(--ink); display: grid; place-items: center; font-family: var(--serif); font-size: 52px; border: 2px solid var(--ink); }
+.me h2 { margin: 0; color: var(--ink); font-weight: 500; font-size: 26px; text-align: center; }
+.label { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); margin: 0 0 10px; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.row-actions .btn.ghost { background: var(--paper); }
+
+.cal { background: var(--paper); border-radius: 14px; padding: 16px; box-shadow: 0 2px 10px rgba(18, 11, 143, .08); }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cal-head b { font-size: 16px; }
+.cal-nav { width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--lavender-soft); color: var(--ink); display: grid; place-items: center; }
+.cal-nav svg { width: 18px; height: 18px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 4px 0; font-variant-numeric: tabular-nums; }
+.cal-grid .dow { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .04em; padding-bottom: 6px; }
+.cal-grid .d { font-size: 15px; padding: 7px 0; border-radius: 10px; position: relative; color: var(--text); }
+.cal-grid .d.out { color: #b9b6c6; }
+.cal-grid .d.today { box-shadow: inset 0 0 0 1.5px var(--lavender); }
+.cal-grid .d.hit { color: var(--ink); font-weight: 700; }
+.cal-grid .d.hit::after { content: ""; position: absolute; left: 50%; bottom: 2px; width: 5px; height: 5px; margin-left: -2.5px; border-radius: 50%; background: var(--ink); }
+.cal-foot { margin: 12px 0 0; font-size: 13px; color: var(--muted); text-align: center; }
+
+.liked-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.liked-item { background: var(--paper); border: 2px solid var(--line); border-radius: 14px; padding: 0; text-align: left; overflow: hidden; display: grid; min-width: 0; }
+.liked-item .strip { display: flex; height: 16px; }
+.liked-item .strip i { flex: 1; }
+.liked-item span { font-family: var(--serif); font-size: 20px; padding: 12px 14px 14px; color: var(--title); line-height: 1.2; overflow-wrap: anywhere; }
+.liked-item small { display: block; font-family: var(--sans); font-size: 11px; color: var(--ink); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-top: 6px; }
+.empty { background: rgba(255,255,255,.55); border-radius: 14px; padding: 18px; font-size: 15px; line-height: 1.5; }
+
+.about { background: rgba(255,255,255,.6); border-radius: 14px; padding: 18px 20px; font-size: 14px; line-height: 1.6; }
+.about p { margin: 0 0 8px; }
+.about a { color: var(--ink); font-weight: 600; }
+.about dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; }
+.about dt { font-weight: 700; }
+.about dd { margin: 0; min-width: 0; }
+
+/* detail sheet (a saved prompt) */
+.detail { background: var(--paper); }
+.detail .sheet-close { background: var(--lavender-soft); }
+.detail h2.dt { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 8vw, 50px); color: var(--title); margin: 0; line-height: 1.12; text-wrap: balance; overflow-wrap: anywhere; }
+.detail .tools { display: grid; gap: 12px; justify-items: start; }
+.check { display: inline-flex; align-items: center; gap: 10px; background: none; border: 0; padding: 4px 0; font-size: 15px; color: var(--muted); }
+.check .box { width: 22px; height: 22px; border-radius: 5px; border: 1.5px solid #b7aef0; display: grid; place-items: center; color: transparent; background: var(--lavender-soft); }
+.check[aria-pressed="true"] .box { background: var(--ink); border-color: var(--ink); color: #fff; }
+.check svg { width: 16px; height: 16px; }
+.detail hr { border: 0; border-top: 2px solid var(--lavender); width: 120px; margin: 4px 0; }
+.detail .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.detail .swatches div { display: grid; gap: 6px; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.detail .swatches i { aspect-ratio: 3 / 4; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.detail .ph { border-radius: 14px; overflow: hidden; border: 2px solid var(--line); max-width: 420px; }
+.detail .ph img { display: block; width: 100%; }
+
+/* export sheet */
+.export-preview { width: 100%; max-width: 300px; border-radius: 12px; border: 2px solid var(--line); display: block; margin: 0 auto 18px; }
+</style>
+
+<div class="stage" id="stage">
+  <header class="top">
+    <div class="top-inner">
+      <h1 class="logo">inspo<span>.</span>ai</h1>
+      <button class="avatar" id="avatarBtn" aria-label="Open your profile"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></button>
+    </div>
+  </header>
+
+  <main class="feed" id="feed" aria-live="polite">
+    <section class="card title-card">
+      <span class="liked-flag" id="likedFlag" hidden>Liked</span>
+      <h2 class="prompt-title" id="title">Loading prompts…</h2>
+    </section>
+    <figure class="card painting-card" id="paintingCard" hidden>
+      <img id="painting" alt="">
+      <figcaption>VQGAN+CLIP</figcaption>
+    </figure>
+    <figure class="card photo-card" id="photoCard" style="margin:0">
+      <img id="photo" alt="" hidden>
+      <div class="nophoto" id="nophoto">Loading photo…</div>
+      <a class="pexels" id="pexelsLink" href="https://www.pexels.com" target="_blank" rel="noopener" hidden>Pexels</a>
+    </figure>
+    <section class="card palette-card" id="palette" aria-label="Color palette"></section>
+    <section class="card story-card" id="storyCard">
+      <h2>Story plot:</h2>
+      <p class="alt-line" id="altLine"></p>
+      <p class="story-text" id="storyText"></p>
+    </section>
+    <section class="card similar-card" aria-labelledby="simLabel">
+      <h3 class="tile-label" id="simLabel">More like this</h3>
+      <ul class="similar-list" id="similar"></ul>
+      <p class="similar-note">Nearest matches by title, palette and photo.</p>
+    </section>
+    <button class="card week-card" id="weekCard" aria-label="Open your daily tracker">
+      <span class="tile-label" style="margin:0">This week</span>
+      <span class="week-strip" id="weekStrip"></span>
+      <span class="stats"><span><b id="statDone">0</b><span>done this month</span></span><span><b id="statLiked">0</b><span>liked</span></span></span>
+    </button>
+  </main>
+  <p class="kbd-hint"><kbd>←</kbd> dislike · <kbd>space</kbd> new prompt · <kbd>→</kbd> like · <kbd>D</kbd> mark as done</p>
+</div>
+
+<nav class="actions" aria-label="Prompt actions">
+  <button class="act" id="exportBtn" aria-label="Export this prompt" title="Export">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>
+  </button>
+  <button class="act" id="dislikeBtn" aria-label="Dislike: show fewer prompts like this" title="Dislike">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>
+  </button>
+  <button class="act big" id="refreshBtn" aria-label="Get a new prompt" title="New prompt">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+  </button>
+  <button class="act" id="likeBtn" aria-label="Like: save it and show more like this" title="Like" aria-pressed="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>
+  </button>
+  <button class="act done-btn" id="doneBtn" aria-label="Mark as completed today" title="Mark as completed" aria-pressed="false">
+    <span class="box"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+  </button>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<!-- onboarding -->
+<div class="overlay" id="onboard" hidden>
+  <div class="modal" id="onboardModal" role="dialog" aria-modal="true" aria-labelledby="obTitle"></div>
+</div>
+
+<!-- profile -->
+<div class="sheet" id="profile" hidden role="dialog" aria-modal="true" aria-label="Your profile">
+  <div class="sheet-inner">
+    <button class="sheet-close" id="profileClose" aria-label="Back to prompts" title="Back to prompts">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>
+    </button>
+    <div class="me">
+      <div class="big-avatar" id="bigAvatar"><svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+      <h2 id="meName">You</h2>
+    </div>
+    <div class="row-actions">
+      <button class="btn ghost" id="resetBtn">Reset algorithm</button>
+      <button class="btn ghost" id="tourBtn">Replay the tour</button>
+    </div>
+    <section>
+      <h3 class="label">Daily tracker:</h3>
+      <div class="cal" id="cal"></div>
+    </section>
+    <section>
+      <h3 class="label">Liked prompts:</h3>
+      <div id="likedWrap"></div>
+    </section>
+    <section class="about">
+      <h3 class="label">Where the prompts come from</h3>
+      <dl>
+        <dt>Titles</dt><dd>GPT-2 trained on artwork titles from The Met and Spotify song titles</dd>
+        <dt>Palettes</dt><dd>GPT-3, from each title</dd>
+        <dt>Photos</dt><dd>Pexels search on each title, free to use</dd>
+        <dt>Picks</dt><dd>Content-based recommender over title, palette and photo description</dd>
+        <dt>Stories</dt><dd>One short plot per prompt, written by Claude</dd>
+      </dl>
+      <p style="margin-top:12px"><span id="countLine"></span> <a href="https://github.com/anjavolkova/GA" target="_blank" rel="noopener">Code on GitHub</a></p>
+    </section>
+  </div>
+</div>
+
+<!-- saved prompt detail -->
+<div class="sheet detail" id="detail" hidden role="dialog" aria-modal="true" aria-label="Saved prompt">
+  <div class="sheet-inner" id="detailInner"></div>
+</div>
+
+<!-- export -->
+<div class="overlay" id="exportSheet" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="exTitle">
+    <h2 id="exTitle">Export</h2>
+    <canvas id="postcard" width="1080" height="1350" class="export-preview" aria-label="Postcard preview"></canvas>
+    <div class="row-actions">
+      <button class="btn" id="saveCard" hidden>Save postcard</button>
+      <button class="btn ghost" id="copyPrompt">Copy prompt</button>
+      <button class="btn ghost" id="exportClose">Close</button>
+    </div>
+    <textarea id="copyFallback" readonly hidden style="width:100%;margin-top:14px;height:120px;font:13px var(--sans)"></textarea>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const ICON = {
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    left: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+    right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
+    refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>',
+    up: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>',
+    down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>',
+    export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m17 8-5-5-5 5"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/></svg>',
+    tick: '<span style="width:46px;height:46px;border-radius:9px;background:var(--lavender);display:grid;place-items:center;color:#fff"><svg viewBox="0 0 24 24" style="width:30px;height:30px" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>',
+    arrow: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>',
+  };
+
+  // ---------- local convenience storage ----------
+  const local = {
+    get(k, d) { try { const v = localStorage.getItem("inspo:" + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("inspo:" + k, JSON.stringify(v)); } catch {} },
+  };
+
+  // ---------- state ----------
+  let prompts = [], byId = new Map(), photoIndex = {};
+  const packs = new Map();
+  const S = {
+    current: null,
+    queue: local.get("queue", []),
+    seen: new Set(local.get("seen", [])),
+    liked: [],            // [id], newest first
+    disliked: [],         // [id]
+    done: {},             // {"YYYY-MM-DD": [id]}
+    stories: {},          // {id: text}, one written plot per prompt
+  };
+
+  // ---------- persistence: per-person db when on claude.ai, else this browser ----------
+  let store = null;       // {ref, storyCol}
+  let writeChain = Promise.resolve();
+  // Stored as flat lists of numbers and strings so any store keeps them as-is;
+  // done is saved as "YYYY-MM-DD|id" entries and rebuilt into a map on load.
+  function saved() {
+    const done = [];
+    for (const [k, list] of Object.entries(S.done)) for (const id of list) done.push(k + "|" + id);
+    return { liked: S.liked, disliked: S.disliked, done };
+  }
+  function idList(v) {
+    const arr = Array.isArray(v) ? v : v && typeof v === "object" ? Object.values(v) : [];
+    return [...new Set(arr.map((x) => Number(x && typeof x === "object" ? x.id : x)).filter(Number.isFinite))];
+  }
+  function doneMap(v) {
+    const out = {};
+    const add = (k, id) => { id = Number(id); if (/^\d{4}-\d{2}-\d{2}$/.test(k) && Number.isFinite(id)) (out[k] = out[k] || []).includes(id) || out[k].push(id); };
+    if (Array.isArray(v)) for (const e of v) { const [k, id] = String(e).split("|"); add(k, id); }
+    else if (v && typeof v === "object") for (const [k, ids] of Object.entries(v)) for (const id of idList(ids)) add(k, id);
+    return out;
+  }
+  function restore(d) {
+    S.liked = idList(d && d.liked); S.disliked = idList(d && d.disliked); S.done = doneMap(d && d.done);
+  }
+  function persist() {
+    local.set("state", saved());
+    if (!store) return;
+    const data = saved();
+    writeChain = writeChain.then(() => store.ref.set(data)).catch(() => {});
+  }
+  function loadLocal() {
+    const st = local.get("state", null);
+    if (st) restore(st);
+  }
+
+  // ---------- helpers ----------
+  const today = () => dayKey(new Date());
+  function dayKey(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  const isLiked = (id) => S.liked.includes(id);
+  const doneToday = (id) => (S.done[today()] || []).includes(id);
+  const pal = (p) => { const c = p.c.slice(0, 4); while (c.length < 4) c.push(c[c.length - 1] || "#E9E4F7"); return c; };
+  let toastTimer;
+  function toast(msg) { const t = $("toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => (t.hidden = true), 2200); }
+  function luminance(hex) { const n = parseInt(hex.slice(1), 16); const r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255; return 0.2126 * r + 0.7152 * g + 0.0722 * b; }
+
+  async function photoFor(p) {
+    if (!p.p) return null;
+    const pack = photoIndex[p.p];
+    if (pack == null) return null;
+    if (typeof pack === "string") return pack;  // a plain image file
+    if (!packs.has(pack)) packs.set(pack, fetch("data/photos-" + pack + ".json").then((r) => r.json()).catch(() => ({})));
+    return (await packs.get(pack))[p.p] || null;
+  }
+
+  // ---------- recommender (neighbours precomputed from the notebook's recommender) ----------
+  function nextId() {
+    const blocked = new Set(S.disliked);
+    while (S.queue.length) {
+      const id = S.queue.shift();
+      if (!S.seen.has(id) && !blocked.has(id) && byId.has(id)) return id;
+    }
+    let pool = prompts.filter((p) => !S.seen.has(p.id) && !blocked.has(p.id));
+    if (!pool.length) { S.seen.clear(); pool = prompts.filter((p) => !blocked.has(p.id)); }
+    return pool[Math.floor(Math.random() * pool.length)].id;
+  }
+  function saveQueue() { local.set("queue", S.queue.slice(0, 60)); local.set("seen", [...S.seen].slice(-900)); local.set("current", S.current && S.current.id); }
+
+  function advance() {
+    const id = nextId();
+    show(byId.get(id));
+    // warm the next photo pack
+    if (S.queue[0] != null && byId.has(S.queue[0])) photoFor(byId.get(S.queue[0]));
+  }
+
+  // ---------- render main ----------
+  async function show(p, { animate = true } = {}) {
+    S.current = p; S.seen.add(p.id); saveQueue();
+    const c = pal(p);
+    const st = $("stage").style;
+    st.setProperty("--p0", c[0]); st.setProperty("--p1", c[1]); st.setProperty("--p2", c[2]); st.setProperty("--p3", c[3]);
+
+    const title = $("title");
+    title.textContent = p.t;
+    const len = p.t.length;
+    title.style.fontSize = len > 34 ? "clamp(30px, 7.5vw, 46px)" : "";
+    if (animate) { for (const el of [title, $("palette"), $("photoCard")]) { el.classList.remove("fade-in"); void el.offsetWidth; el.classList.add("fade-in"); } }
+
+    $("palette").innerHTML = c.map((h) => `<button class="swatch" data-hex="${h}" aria-label="Copy ${h}"><i style="background:${h}"></i><b>${h}</b></button>`).join("");
+
+    const img = $("photo"), np = $("nophoto"), link = $("pexelsLink");
+    img.hidden = true; np.hidden = false; np.textContent = p.p ? "Loading photo…" : "No photo was found for this title.";
+    link.hidden = !p.u; if (p.u) { link.href = p.u; link.setAttribute("aria-label", "Photo on Pexels: " + (p.a || p.t)); }
+    const src = await photoFor(p);
+    if (S.current !== p) return;
+    if (src) { img.src = src; img.alt = p.a || ""; img.hidden = false; np.hidden = true; }
+    else if (p.p) np.textContent = "This photo is no longer on Pexels.";
+
+    $("altLine").textContent = p.a ? "Photo: " + p.a : "";
+    renderSimilar(p);
+    const pc = $("paintingCard");
+    pc.hidden = !p.g; $("feed").classList.toggle("has-painting", !!p.g);
+    if (p.g) { $("painting").src = p.g; $("painting").alt = "AI painting generated from the title " + p.t; }
+    renderStory(p);
+    renderButtons();
+  }
+
+  function renderSimilar(p) {
+    $("similar").innerHTML = p.up.slice(0, 4).map((id) => byId.get(id)).filter(Boolean).map((q) =>
+      `<li><button data-id="${q.id}"><span class="dots">${pal(q).map((h) => `<i style="background:${h}"></i>`).join("")}</span><span>${esc(q.t)}</span></button></li>`).join("");
+  }
+  function renderWeek() {
+    const now = new Date(), mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    const names = ["M", "T", "W", "T", "F", "S", "S"];
+    $("weekStrip").innerHTML = names.map((n, i) => {
+      const d = new Date(mon); d.setDate(mon.getDate() + i); const k = dayKey(d);
+      const hit = (S.done[k] || []).length > 0;
+      return `<span>${n}<i class="${hit ? "hit" : ""}${k === today() ? " now" : ""}">${ICON.check}</i></span>`;
+    }).join("");
+    const ym = today().slice(0, 7);
+    $("statDone").textContent = Object.entries(S.done).filter(([k]) => k.startsWith(ym)).reduce((a, [, v]) => a + v.length, 0);
+    $("statLiked").textContent = S.liked.length;
+  }
+  $("similar").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-id]"); if (!b) return;
+    const q = byId.get(+b.dataset.id); if (!q) return;
+    S.queue = S.queue.filter((x) => x !== q.id); S.seen.delete(q.id);
+    show(q); window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  });
+  $("weekCard").onclick = () => openProfile();
+
+  function renderButtons() {
+    const p = S.current; if (!p) return;
+    renderWeek();
+    $("likeBtn").setAttribute("aria-pressed", String(isLiked(p.id)));
+    $("doneBtn").setAttribute("aria-pressed", String(doneToday(p.id)));
+    $("likedFlag").hidden = !isLiked(p.id);
+  }
+
+  // ---------- story plots (one per prompt, from data/stories.json) ----------
+  function renderStory(p) {
+    $("storyText").textContent = S.stories[p.id] || "";
+  }
+
+  // ---------- actions ----------
+  function like() {
+    const p = S.current; if (!p) return;
+    if (isLiked(p.id)) { // second tap removes it, stays on the prompt
+      S.liked = S.liked.filter((x) => x !== p.id); persist(); renderButtons(); toast("Removed from liked prompts"); return;
+    }
+    S.liked.unshift(p.id);
+    S.disliked = S.disliked.filter((d) => d !== p.id);
+    S.queue = [...p.up, ...S.queue.filter((x) => !p.up.includes(x))];
+    persist(); toast("Saved to your profile. More like this coming up.");
+    pulse("likeBtn"); advance();
+  }
+  function dislike() {
+    const p = S.current; if (!p) return;
+    if (!S.disliked.includes(p.id)) S.disliked.push(p.id);
+    S.liked = S.liked.filter((x) => x !== p.id);
+    const near = new Set(p.up);
+    S.queue = [...p.down, ...S.queue.filter((x) => !near.has(x) && !p.down.includes(x))];
+    persist(); toast("You'll see fewer prompts like this.");
+    pulse("dislikeBtn"); advance();
+  }
+  function refresh() { pulse("refreshBtn"); advance(); }
+  function toggleDone(id = S.current && S.current.id) {
+    if (id == null) return;
+    const k = today(); const list = S.done[k] || [];
+    if (list.includes(id)) { S.done[k] = list.filter((x) => x !== id); if (!S.done[k].length) delete S.done[k]; toast("Unmarked"); }
+    else { S.done[k] = [...list, id]; toast("Marked as completed today"); }
+    persist(); renderButtons();
+  }
+  function pulse(id) { const b = $(id); b.classList.remove("spin"); void b.offsetWidth; if (id === "refreshBtn") b.classList.add("spin"); }
+
+  // If saving or redrawing fails, still move on to the next prompt
+  const guard = (fn, moveOn) => () => { try { fn(); } catch (e) { console.error(e); if (moveOn) { try { advance(); } catch {} } } };
+  $("likeBtn").onclick = guard(like, true);
+  $("dislikeBtn").onclick = guard(dislike, true);
+  $("refreshBtn").onclick = guard(refresh, true);
+  $("doneBtn").onclick = guard(() => toggleDone(), false);
+  $("exportBtn").onclick = () => S.current && openExport(S.current);
+  $("palette").addEventListener("click", (e) => { const b = e.target.closest(".swatch"); if (b) copyText(b.dataset.hex, "Copied " + b.dataset.hex); });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (!$("onboard").hidden || !$("profile").hidden || !$("detail").hidden || !$("exportSheet").hidden) {
+      if (e.key === "Escape") closeAll();
+      return;
+    }
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); guard(like, true)(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); guard(dislike, true)(); }
+    else if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); guard(refresh, true)(); }
+    else if (e.key.toLowerCase() === "d") guard(() => toggleDone(), false)();
+  });
+  function closeAll() { for (const id of ["onboard", "profile", "detail", "exportSheet"]) if (!$(id).hidden) { if (id === "onboard") finishTour(); else $(id).hidden = true; } }
+
+  async function copyText(text, msg) {
+    try { await navigator.clipboard.writeText(text); toast(msg || "Copied"); return true; }
+    catch { return false; }
+  }
+
+  // ---------- onboarding ----------
+  const STEPS = [
+    { h: "Prompts", p: "Prompts are AI-generated ideas. You can use the title, color palette, story idea and free-to-use visuals to create whatever you like.", illo: "prompt" },
+    { h: "Refresh", p: "Get a brand-new prompt.", icon: "refresh" },
+    { h: "Like", p: "Likes get saved to your profile &amp; let the algorithm know you want to see similar prompts.", icon: "up" },
+    { h: "Dislike", p: "Dislikes let the algorithm know you want to see less similar prompts.", icon: "down" },
+    { h: "Tracker", p: "Keep track of the days you created something. See all your finished prompts in your profile.", icon: "tick" },
+    { h: "Export", p: "Export the prompt so that it’s easier to use.", icon: "export" },
+  ];
+  let step = -1;
+  function renderTour() {
+    const m = $("onboardModal");
+    if (step < 0) {
+      m.innerHTML = `<h2 id="obTitle" style="margin-top:22px">Welcome to inspo.ai!</h2><p>Get AI-generated prompts for your creative projects.</p><button class="btn" id="obGo">How does it work?</button>
+        <p style="margin:14px 0 0"><button class="skip" style="position:static" id="obSkip">Skip and start creating</button></p>`;
+      $("obGo").onclick = () => { step = 0; renderTour(); };
+      $("obSkip").onclick = finishTour;
+    } else {
+      const s = STEPS[step], last = step === STEPS.length - 1, p = S.current;
+      let illo;
+      if (s.illo === "prompt" && p) {
+        const src = $("photo").hidden ? "" : $("photo").src;
+        illo = `<div class="illo"><div class="illo-prompt"><div><div class="t">${esc(shorten(p.t, 26))}</div><div class="ph">${src ? `<img src="${src}" alt="">` : ""}</div></div><div class="pal">${pal(p).map((h) => `<i style="background:${h}"></i>`).join("")}</div></div></div>`;
+      } else illo = `<div class="illo"><div class="circle">${ICON[s.icon || "refresh"]}</div></div>`;
+      m.innerHTML = `<button class="skip" id="obSkip">Skip</button><span class="step">${step + 1}/${STEPS.length}</span>${illo}<h2 id="obTitle">${s.h}</h2><p>${s.p}</p>
+        <button class="btn" id="obNext">${last ? "Start creating!" : "Next " + ICON.arrow}</button>`;
+      $("obNext").onclick = () => { if (last) finishTour(); else { step++; renderTour(); } };
+      $("obSkip").onclick = finishTour;
+    }
+    const f = m.querySelector(".btn"); f && f.focus({ preventScroll: true });
+  }
+  function startTour() { step = -1; $("onboard").hidden = false; renderTour(); }
+  function finishTour() { $("onboard").hidden = true; local.set("onboarded", true); }
+  const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+  const shorten = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
+
+  // ---------- profile ----------
+  let calMonth = new Date(); calMonth.setDate(1);
+  let meName = "";
+  function openProfile() { renderProfile(); $("profile").hidden = false; $("profile").scrollTop = 0; $("profileClose").focus({ preventScroll: true }); }
+  function renderProfile() {
+    $("meName").textContent = meName || "Your profile";
+    renderCal();
+    const wrap = $("likedWrap");
+    if (!S.liked.length) {
+      wrap.innerHTML = `<div class="empty">Nothing here yet. Tap the thumbs up on a prompt you like and it will be saved here.</div>`;
+    } else {
+      wrap.innerHTML = `<div class="liked-list">${S.liked.map((id) => {
+        const p = byId.get(id); if (!p) return "";
+        const done = Object.values(S.done).some((ids) => ids.includes(p.id));
+        return `<button class="liked-item" data-id="${p.id}"><div class="strip">${pal(p).map((h) => `<i style="background:${h}"></i>`).join("")}</div><span>${esc(p.t)}${done ? "<small>Completed</small>" : ""}</span></button>`;
+      }).join("")}</div>`;
+    }
+    $("countLine").textContent = `${prompts.length.toLocaleString()} prompts, ${Object.keys(photoIndex).length.toLocaleString()} photos.`;
+  }
+  $("likedWrap").addEventListener("click", (e) => { const b = e.target.closest(".liked-item"); if (b) openDetail(byId.get(+b.dataset.id)); });
+  function renderCal() {
+    const y = calMonth.getFullYear(), m = calMonth.getMonth();
+    const first = new Date(y, m, 1), startDow = (first.getDay() + 6) % 7; // Monday first
+    const days = new Date(y, m + 1, 0).getDate();
+    const cells = [];
+    const prevDays = new Date(y, m, 0).getDate();
+    for (let i = startDow - 1; i >= 0; i--) cells.push(`<span class="d out">${prevDays - i}</span>`);
+    let monthCount = 0, activeDays = 0;
+    for (let d = 1; d <= days; d++) {
+      const k = dayKey(new Date(y, m, d)); const n = (S.done[k] || []).length;
+      if (n) { monthCount += n; activeDays++; }
+      cells.push(`<span class="d${n ? " hit" : ""}${k === today() ? " today" : ""}" ${n ? `title="${n} completed"` : ""}>${d}</span>`);
+    }
+    let tail = 1; while (cells.length % 7) cells.push(`<span class="d out">${tail++}</span>`);
+    const label = first.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+    $("cal").innerHTML = `<div class="cal-head"><button class="cal-nav" id="calPrev" aria-label="Previous month">${ICON.left}</button><b>${label}</b><button class="cal-nav" id="calNext" aria-label="Next month">${ICON.right}</button></div>
+      <div class="cal-grid">${["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map((d) => `<span class="dow">${d}</span>`).join("")}${cells.join("")}</div>
+      <p class="cal-foot">${monthCount ? `${monthCount} prompt${monthCount > 1 ? "s" : ""} completed on ${activeDays} day${activeDays > 1 ? "s" : ""}` : "Mark a prompt as done and the day lights up here."}</p>`;
+    $("calPrev").onclick = () => { calMonth.setMonth(calMonth.getMonth() - 1); renderCal(); };
+    $("calNext").onclick = () => { calMonth.setMonth(calMonth.getMonth() + 1); renderCal(); };
+  }
+  $("avatarBtn").onclick = openProfile;
+  $("profileClose").onclick = () => { $("profile").hidden = true; renderButtons(); };
+  $("tourBtn").onclick = () => { $("profile").hidden = true; startTour(); };
+  let resetArmed = false;
+  $("resetBtn").onclick = () => {
+    const b = $("resetBtn");
+    if (!resetArmed) { resetArmed = true; b.textContent = "Tap again to reset"; setTimeout(() => { resetArmed = false; b.textContent = "Reset algorithm"; }, 3500); return; }
+    resetArmed = false; b.textContent = "Reset algorithm";
+    S.queue = []; S.seen.clear(); S.disliked = []; persist(); saveQueue();
+    toast("Algorithm reset. Your likes and tracker are kept.");
+  };
+
+  // ---------- detail of a saved prompt ----------
+  async function openDetail(p) {
+    if (!p) return;
+    const c = pal(p);
+    const everDone = () => Object.values(S.done).some((ids) => ids.includes(p.id));
+    const inner = $("detailInner");
+    inner.innerHTML = `<button class="sheet-close" id="detailClose" aria-label="Back to profile">${ICON.close}</button>
+      <h2 class="dt">${esc(p.t)}</h2>
+      <div class="tools">
+        <button class="check" id="dDone" aria-pressed="${doneToday(p.id)}"><span class="box">${ICON.check}</span>Mark as completed today</button>
+        <button class="check" id="dExport"><span class="box" style="background:none;border:0;color:var(--ink)">${ICON.export}</span>Export</button>
+        <button class="check" id="dUnlike"><span class="box" style="background:none;border:0;color:var(--ink)">${ICON.down}</span>Remove from liked</button>
+      </div>
+      <hr>
+      <div class="swatches">${c.map((h) => `<div><i style="background:${h}"></i>${h}</div>`).join("")}</div>
+      <hr>
+      <div class="ph" id="dPhoto" hidden></div>
+      ${S.stories[p.id] ? `<div><h3 style="margin:0 0 8px;font-size:20px">Story plot:</h3><p class="story-text">${esc(S.stories[p.id])}</p></div>` : ""}
+      <p style="font-size:13px;color:var(--muted);margin:0">${everDone() ? "You've completed this prompt before." : ""}</p>`;
+    $("detail").hidden = false; $("detail").scrollTop = 0;
+    $("detailClose").focus({ preventScroll: true });
+    $("detailClose").onclick = () => { $("detail").hidden = true; renderProfile(); };
+    $("dDone").onclick = guard(() => { toggleDone(p.id); $("dDone").setAttribute("aria-pressed", String(doneToday(p.id))); }, false);
+    $("dExport").onclick = () => openExport(p);
+    $("dUnlike").onclick = () => { S.liked = S.liked.filter((x) => x !== p.id); persist(); $("detail").hidden = true; renderProfile(); toast("Removed from liked prompts"); };
+    const src = await photoFor(p);
+    if (src && !$("detail").hidden) { const d = $("dPhoto"); d.innerHTML = `<img src="${src}" alt="${esc(p.a || "")}">`; d.hidden = false; }
+  }
+
+  // ---------- export: postcard + copy ----------
+  let downloads = null, exportFor = null;
+  function promptText(p) {
+    return `${p.t}\nPalette: ${pal(p).join(" ")}` + (p.u ? `\nPhoto: ${p.u}` : "") + (S.stories[p.id] ? `\n\nStory plot: ${S.stories[p.id]}` : "") + `\n\nfrom inspo.ai`;
+  }
+  async function drawPostcard(p) {
+    const cv = $("postcard"), g = cv.getContext("2d"), W = cv.width, H = cv.height, c = pal(p);
+    try { await Promise.all([document.fonts.load('400 80px "Gelasio"'), document.fonts.load('700 30px "Montserrat"')]); } catch {}
+    const grad = g.createLinearGradient(0, 0, W * 0.6, H); grad.addColorStop(0, c[0]); grad.addColorStop(0.55, c[1]); grad.addColorStop(1, c[2]);
+    g.fillStyle = grad; g.fillRect(0, 0, W, H);
+    const rr = (x, y, w, h, r) => { g.beginPath(); g.roundRect(x, y, w, h, r); };
+    // title card
+    g.fillStyle = "#fff"; g.strokeStyle = "#121117"; g.lineWidth = 5;
+    rr(60, 60, W - 120, 470, 36); g.fill(); g.stroke();
+    g.fillStyle = "#3f3d45"; g.textAlign = "center"; g.textBaseline = "middle";
+    let size = 92, lines;
+    const wrap = (s) => { const words = s.split(" "), out = []; let line = ""; for (const w of words) { const t = line ? line + " " + w : w; if (g.measureText(t).width > W - 220 && line) { out.push(line); line = w; } else line = t; } out.push(line); return out; };
+    do { g.font = `400 ${size}px Gelasio, Georgia, serif`; lines = wrap(p.t); size -= 6; } while (lines.length * size * 1.2 > 380 && size > 40);
+    const lh = (size + 6) * 1.18; lines.forEach((ln, i) => g.fillText(ln, W / 2, 295 + (i - (lines.length - 1) / 2) * lh));
+    // photo
+    const src = await photoFor(p);
+    const px = 60, py = 570, pw = 560, ph = 720;
+    g.fillStyle = c[3]; rr(px, py, pw, ph, 36); g.fill();
+    if (src) {
+      const im = new Image(); im.src = src; try { await im.decode(); } catch {}
+      if (im.naturalWidth) {
+        const s = Math.max(pw / im.naturalWidth, ph / im.naturalHeight), w = im.naturalWidth * s, h = im.naturalHeight * s;
+        g.save(); rr(px, py, pw, ph, 36); g.clip(); g.drawImage(im, px + (pw - w) / 2, py + (ph - h) / 2, w, h); g.restore();
+      }
+    }
+    g.strokeStyle = "#121117"; rr(px, py, pw, ph, 36); g.stroke();
+    // palette
+    g.fillStyle = "#fff"; rr(660, py, W - 720, ph, 36); g.fill(); g.stroke();
+    g.textAlign = "left"; g.font = "700 30px Montserrat, Arial, sans-serif";
+    c.forEach((h, i) => { const y = py + 50 + i * 165; g.fillStyle = h; rr(700, y, 110, 110, 18); g.fill(); g.fillStyle = "#1b1a22"; g.fillText(h, 830, y + 55); });
+    g.fillStyle = "rgba(18,11,143,.9)"; g.font = "400 34px Gelasio, Georgia, serif"; g.textAlign = "right"; g.fillText("inspo.ai", W - 70, H - 30);
+  }
+  async function openExport(p) {
+    exportFor = p;
+    $("copyFallback").hidden = true;
+    $("saveCard").hidden = !downloads && !!window.claude;
+    $("exportSheet").hidden = false;
+    $("copyPrompt").focus({ preventScroll: true });
+    await drawPostcard(p);
+  }
+  $("exportClose").onclick = () => ($("exportSheet").hidden = true);
+  $("exportSheet").addEventListener("click", (e) => { if (e.target.id === "exportSheet") $("exportSheet").hidden = true; });
+  $("copyPrompt").onclick = async () => {
+    const text = promptText(exportFor);
+    if (!(await copyText(text, "Prompt copied"))) { const t = $("copyFallback"); t.value = text; t.hidden = false; t.focus(); t.select(); toast("Select the text to copy it"); }
+  };
+  $("saveCard").onclick = async () => {
+    if (!exportFor) return;
+    const blob = await new Promise((r) => $("postcard").toBlob(r, "image/png"));
+    const name = "inspo-" + exportFor.t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) + ".png";
+    if (!downloads) {  // outside claude.ai: a normal browser download
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 5000); return;
+    }
+    try { await downloads.save({ filename: name, data: blob }); }
+    catch (e) { if (e && e.code !== "cancelled" && e.code !== "declined") toast("The postcard wasn't saved."); }
+  };
+
+  // ---------- boot ----------
+  async function boot() {
+    loadLocal();
+    const [pj, ix, st] = await Promise.all([
+      fetch("data/prompts.json").then((r) => r.json()),
+      fetch("data/photo-index.json").then((r) => r.json()).catch(() => ({})),
+      fetch("data/stories.json").then((r) => r.json()).catch(() => ({})),
+    ]);
+    S.stories = st;
+    prompts = pj.prompts.filter((p) => p.t);
+    byId = new Map(prompts.map((p) => [p.id, p]));
+    photoIndex = ix;
+    const last = local.get("current", null);
+    show(byId.get(last) || byId.get(nextId()), { animate: false });
+    if (!local.get("onboarded", false)) startTour();
+    connect();
+  }
+
+  async function connect() {
+    const claude = window.claude;
+    if (!claude || !claude.use) return;
+    const [user, db, dl] = await Promise.all(["user", "db", "downloads"].map((n) => claude.use(n).catch(() => null)));
+    downloads = dl;
+    if (user) {
+      try {
+        const me = await user.me();
+        meName = me.name || "";
+      } catch {}
+      if (db) {
+        try {
+          const id = await user.id();
+          if (id) {
+            const col = db.collection("data/users/" + id);
+            const ref = col.doc("state");
+            const snap = await ref.get();
+            if (snap.exists) {
+              const d = snap.data() || {};
+              restore(d);
+            } else if (S.liked.length || Object.keys(S.done).length) {
+              await ref.set(saved());   // first visit on this account: keep what this browser had
+            }
+            store = { ref };
+            renderButtons();
+            if (!$("profile").hidden) renderProfile();
+          }
+        } catch {}
+      }
+    }
+  }
+
+  boot().catch(() => { $("title").textContent = "The prompt database didn't load. Reload the page to try again."; });
+})();
+</script>
