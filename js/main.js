@@ -2,6 +2,7 @@ import { mountParticles } from "./particles.js";
 import { loadCal } from "./cal-embed.js";
 import { initLore } from "./lore.js";
 import { initStudy } from "./study.js";
+import { initPanels } from "./panel.js";
 import { swipeReader } from "./swipes.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
@@ -752,4 +753,5 @@ initNudge();
 initMessageButtons();
 initLore();
 initStudy();
+initPanels();
 for (const canvas of document.querySelectorAll("canvas.stipple")) mountParticles(canvas);

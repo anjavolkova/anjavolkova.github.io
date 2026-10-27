@@ -16,6 +16,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <script>
+  // Inside the homepage's panel (js/panel.js): no footer, and its scrolling
+  // stays in the panel.
+  if (/[?&]in=panel\b/.test(location.search) && window.parent !== window) document.documentElement.classList.add("in-panel");
   // Text rises out of a blur as it scrolls into view (js/study.js), so it
   // starts hidden; not with reduced motion. If the script never runs, it all
   // shows once the page has loaded.
