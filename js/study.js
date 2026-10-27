@@ -11,6 +11,26 @@ export function initStudy() {
   if (!study) return;
   revealOnScroll(study);
   sectionPills(study);
+  if (document.documentElement.classList.contains("in-panel")) closesPanel(study);
+}
+
+// Inside the homepage's panel (js/panel.js), the way back to the work (the
+// ← and the other case studies, until they have pages of their own) closes
+// the panel instead, and so does Esc. Other links of the site's open in the
+// page rather than in the panel.
+function closesPanel(study) {
+  const closePanel = () => window.parent.postMessage("close-study", location.origin);
+  study.addEventListener("click", (e) => {
+    const link = e.target.closest("a[href]");
+    if (!link || link.origin !== location.origin) return;
+    if (/\/(index\.html)?$/.test(link.pathname)) {
+      e.preventDefault();
+      closePanel();
+    } else {
+      link.target = "_top";
+    }
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePanel(); });
 }
 
 // The page hid the text from the first paint (html.reveal-on, not with

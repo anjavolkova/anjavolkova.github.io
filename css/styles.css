@@ -2181,6 +2181,12 @@ html:has(.page-study) { scroll-snap-type: none; }
   .study-control--steps { padding: 0 5px; }
 }
 
+/* Inside the homepage's panel (js/panel.js): it ends with the chat (the
+   page under it has the footer), and its scrolling stays in the panel. */
+.in-panel { overscroll-behavior: contain; }
+.in-panel .site-footer { display: none; }
+.in-panel .contact { padding-bottom: 48px; }
+
 /* ---------- Test: work first (preview.html) ---------- */
 
 /* On tablets and wider, a strip with the name takes the hero's place, the
@@ -2264,6 +2270,79 @@ html:has(.page-study) { scroll-snap-type: none; }
     right: 32px;
     width: clamp(560px, 50vw, 720px);
   }
+}
+
+/* The On My Disk case study in a panel from the right, over the page, from
+   the project's "Full study" (js/panel.js). The page dims and blurs as for
+   the message; the panel slides in, and out the same way back. Phones:
+   the whole screen. */
+.study-panel {
+  inset: 0 0 0 auto;
+  width: min(1000px, 72vw);
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 24px 0 0 24px;
+  background: var(--bg);
+  box-shadow: -24px 0 64px rgba(39, 26, 33, 0.16);
+}
+.study-panel::backdrop {
+  background: rgba(39, 26, 33, 0.25);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.study-panel[open] { animation: study-panel-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.study-panel[open]::backdrop { animation: nudge-backdrop-in 0.5s ease both; }
+.study-panel.is-closing { animation: study-panel-out 0.5s cubic-bezier(0.64, 0, 0.78, 0) both; }
+.study-panel.is-closing::backdrop { animation: nudge-backdrop-out 0.5s cubic-bezier(0.75, 0, 0.75, 0.9) both; }
+@keyframes study-panel-in { from { translate: 100% 0; } }
+@keyframes study-panel-out { to { translate: 100% 0; } }
+
+.study-panel-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--bg);
+}
+/* The ×: a pill like the study's own, at the panel's top corner. */
+.study-panel-close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid #f5f1ed;
+  border-radius: 50%;
+  background: rgba(248, 244, 240, 0.94);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  box-shadow:
+    0 1px 1.5px rgba(152, 129, 129, 0.08),
+    0 6px 3px rgba(152, 129, 129, 0.07),
+    0 13px 4px rgba(152, 129, 129, 0.04),
+    0 23px 4.5px rgba(152, 129, 129, 0.01);
+  color: var(--body);
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+.study-panel-close:hover { background: rgba(252, 250, 248, 0.92); }
+.study-panel-close:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
+
+@media (max-width: 1023px) {
+  .study-panel { width: min(100%, 92vw); }
+}
+@media (max-width: 719px) {
+  .study-panel { width: 100%; border-radius: 0; box-shadow: none; }
+  .study-panel-close { top: 12px; left: auto; right: 12px; width: 44px; height: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
