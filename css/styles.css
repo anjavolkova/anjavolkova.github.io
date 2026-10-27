@@ -1233,11 +1233,12 @@ align-self: flex-start;
 }
 /* The pile slides up into the folder all at once (--deal 0, straight),
    then the vellum and the photo of me are laid on top one at a time, each
-   solid within its first moments and coming a little quicker than the one
-   before. In the pile, the top paper fades in first and the ones under it
-   (--deal-under) just after, so nothing shows through it. */
+   solid within its first moments: the vellum 0.55s after the pile, the
+   photo of me only 0.25s after the vellum. In the pile, the top paper
+   fades in first and the ones under it (--deal-under) just after, so
+   nothing shows through it. */
 .intro-play .sheet {
-  --deal-at: calc(0.9s + var(--deal) * 0.57s - var(--deal) * var(--deal) * 0.02s);
+  --deal-at: calc(0.9s + var(--deal) * 0.7s - var(--deal) * var(--deal) * 0.15s);
   animation: intro-deal calc(0.75s - var(--deal) * 0.035s) cubic-bezier(0.4, 0, 0.2, 1) var(--deal-at) backwards;
 }
 .intro-play .sheet > :is(.sheet-img, .sheet-frost) {
