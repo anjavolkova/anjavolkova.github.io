@@ -194,15 +194,21 @@ nav.actions {
   main.feed { grid-template-areas: "title title" "photo palette" "story story" "week week"; }
   main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "week week"; }
 }
+.kbd-hint { display: none; text-align: center; font-size: 12px; color: var(--title); margin: 18px 0 0; }
+/* Desktop: the grid fills the window between the header and the button bar; no page scroll */
 @media (min-width: 980px) {
+  html, body { height: 100%; overflow: hidden; }
+  .stage { height: 100%; min-height: 0; display: flex; flex-direction: column; padding-bottom: 0; }
   main.feed {
+    flex: 1; min-height: 0; width: 100%;
     grid-template-columns: 1.1fr 1.1fr .95fr .8fr;
-    grid-template-rows: minmax(200px, auto) minmax(200px, auto) auto;
+    grid-template-rows: minmax(0, .8fr) minmax(0, .8fr) minmax(0, 1fr);
     grid-template-areas:
       "title title photo palette"
       "title title photo palette"
       "story story story week";
-    padding-top: 26px;
+    padding-top: 22px;
+    padding-bottom: calc(var(--bar-h) + 30px + env(safe-area-inset-bottom, 0px));
   }
   main.feed.has-painting {
     grid-template-areas:
@@ -210,16 +216,33 @@ nav.actions {
       "title title painting palette"
       "story story photo week";
   }
-  .painting-card { aspect-ratio: auto; min-height: 0; }
-  .title-card { min-height: 0; }
-  .photo-card { aspect-ratio: auto; }
-  .story-card { padding: 28px 32px 30px; }
-  .palette-card { padding: 14px; }
-  .swatch i { width: clamp(44px, 4.6vw, 72px); }
+  main.feed > .card { min-height: 0; overflow: hidden; }
+  main.feed > .story-card { overflow: auto; overscroll-behavior: contain; }
+  .painting-card, .photo-card { aspect-ratio: auto; }
+  .title-card { padding: 20px 28px; }
+  .prompt-title { font-size: clamp(32px, min(4vw, 6.5vh), 58px); }
+  .story-card { padding: 24px 32px; }
+  .story-card h2 { font-size: 22px; margin-bottom: 10px; }
+  .palette-card { padding: 12px 14px; gap: 8px; }
+  .swatch i { width: clamp(34px, min(4.6vw, 7.5vh), 72px); }
   .swatch b { font-size: clamp(13px, 1.25vw, 17px); }
-  .kbd-hint { display: block; }
+  .week-card { gap: 8px; padding: 16px 18px; }
+  .week-strip i { max-width: 26px; border-radius: 7px; }
+  .stats b { font-size: 28px; }
 }
-.kbd-hint { display: none; text-align: center; font-size: 12px; color: var(--title); margin: 18px 0 0; }
+@media (min-width: 980px) and (max-height: 820px) {
+  .alt-line { display: none; }
+  .story-card { padding: 18px 30px; }
+  .story-card h2 { font-size: 20px; margin-bottom: 6px; }
+  .story-text { font-size: 15px; line-height: 1.55; }
+}
+@media (min-width: 1280px) {
+  .kbd-hint {
+    display: block; position: fixed; z-index: 5; margin: 0;
+    left: max(24px, env(safe-area-inset-left, 0px));
+    bottom: calc(46px + env(safe-area-inset-bottom, 0px));
+  }
+}
 .kbd-hint kbd { font-family: var(--sans); font-weight: 700; background: rgba(255,255,255,.7); border-radius: 5px; padding: 1px 6px; }
 
 /* ---------- overlays ---------- */
