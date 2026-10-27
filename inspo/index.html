@@ -79,7 +79,7 @@ main.feed {
   padding-block: 20px 0;
   display: grid; gap: 14px;
   grid-template-columns: 1fr 1fr;
-  grid-template-areas: "title title" "photo palette" "story story" "similar similar" "week week";
+  grid-template-areas: "title title" "photo palette" "story story" "week week";
 }
 .card { background: var(--paper); border: 2px solid var(--line); border-radius: var(--r-card); min-width: 0; }
 
@@ -111,7 +111,7 @@ main.feed {
   position: absolute; left: 10px; top: 10px; background: rgba(255,255,255,.88); color: var(--ink);
   font-size: 11px; font-weight: 700; letter-spacing: .04em; border-radius: 8px; padding: 5px 8px;
 }
-main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "similar similar" "week week"; }
+main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "week week"; }
 .palette-card { grid-area: palette; padding: 16px; display: grid; align-content: space-evenly; gap: 12px; }
 .swatch { display: flex; align-items: center; gap: 14px; background: none; border: 0; padding: 0; text-align: left; border-radius: var(--r-btn); }
 .swatch i { width: clamp(52px, 13vw, 76px); aspect-ratio: 1; border-radius: var(--r-btn); flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
@@ -121,19 +121,6 @@ main.feed.has-painting { grid-template-areas: "title title" "painting painting" 
 .story-card { grid-area: story; padding: 24px 22px 26px; }
 
 .tile-label { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
-.similar-card { grid-area: similar; padding: 20px 20px 16px; display: flex; flex-direction: column; }
-.similar-list { list-style: none; margin: 0; padding: 0; display: grid; }
-.similar-list button {
-  width: 100%; background: none; border: 0; border-top: 1px solid var(--lavender-soft); padding: 10px 2px;
-  display: flex; align-items: center; gap: 12px; text-align: left; font-family: var(--serif); font-size: 18px; color: var(--title); line-height: 1.25;
-}
-.similar-list li:first-child button { border-top: 0; }
-.similar-list button:hover { color: var(--ink); }
-.similar-list .dots { display: flex; flex: none; }
-.similar-list .dots i { width: 12px; height: 12px; border-radius: 50%; margin-left: -4px; border: 1.5px solid var(--paper); }
-.similar-list .dots i:first-child { margin-left: 0; }
-.similar-list span { min-width: 0; overflow-wrap: break-word; }
-.similar-note { margin: auto 0 0; padding-top: 10px; font-size: 12px; color: var(--muted); }
 
 .week-card { grid-area: week; padding: 20px; background: var(--lavender); display: flex; flex-direction: column; gap: 14px; text-align: left; font: inherit; color: var(--text); cursor: pointer; }
 .week-card:hover { background: #c1b8f4; }
@@ -204,8 +191,8 @@ nav.actions {
 
 /* ---------- desktop ---------- */
 @media (min-width: 640px) {
-  main.feed { grid-template-areas: "title title" "photo palette" "story story" "similar week"; }
-  main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "similar week"; }
+  main.feed { grid-template-areas: "title title" "photo palette" "story story" "week week"; }
+  main.feed.has-painting { grid-template-areas: "title title" "painting painting" "photo palette" "story story" "week week"; }
 }
 @media (min-width: 980px) {
   main.feed {
@@ -214,15 +201,13 @@ nav.actions {
     grid-template-areas:
       "title title photo palette"
       "title title photo palette"
-      "story story similar week";
+      "story story story week";
     padding-top: 26px;
   }
   main.feed.has-painting {
-    grid-template-rows: minmax(200px, auto) minmax(200px, auto) auto auto;
     grid-template-areas:
       "title title painting palette"
       "title title painting palette"
-      "story story photo similar"
       "story story photo week";
   }
   .painting-card { aspect-ratio: auto; min-height: 0; }
@@ -355,11 +340,6 @@ nav.actions {
       <h2>Story plot:</h2>
       <p class="alt-line" id="altLine"></p>
       <p class="story-text" id="storyText"></p>
-    </section>
-    <section class="card similar-card" aria-labelledby="simLabel">
-      <h3 class="tile-label" id="simLabel">More like this</h3>
-      <ul class="similar-list" id="similar"></ul>
-      <p class="similar-note">Nearest matches by title, palette and photo.</p>
     </section>
     <button class="card week-card" id="weekCard" aria-label="Open your daily tracker">
       <span class="tile-label" style="margin:0">This week</span>
@@ -584,7 +564,6 @@ nav.actions {
     else if (p.p) np.textContent = "This photo is no longer on Pexels.";
 
     $("altLine").textContent = p.a ? "Photo: " + p.a : "";
-    renderSimilar(p);
     const pc = $("paintingCard");
     pc.hidden = !p.g; $("feed").classList.toggle("has-painting", !!p.g);
     if (p.g) { $("painting").src = p.g; $("painting").alt = "AI painting generated from the title " + p.t; }
@@ -592,10 +571,6 @@ nav.actions {
     renderButtons();
   }
 
-  function renderSimilar(p) {
-    $("similar").innerHTML = p.up.slice(0, 4).map((id) => byId.get(id)).filter(Boolean).map((q) =>
-      `<li><button data-id="${q.id}"><span class="dots">${pal(q).map((h) => `<i style="background:${h}"></i>`).join("")}</span><span>${esc(q.t)}</span></button></li>`).join("");
-  }
   function renderWeek() {
     const now = new Date(), mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
     const names = ["M", "T", "W", "T", "F", "S", "S"];
@@ -608,12 +583,6 @@ nav.actions {
     $("statDone").textContent = Object.entries(S.done).filter(([k]) => k.startsWith(ym)).reduce((a, [, v]) => a + v.length, 0);
     $("statLiked").textContent = S.liked.length;
   }
-  $("similar").addEventListener("click", (e) => {
-    const b = e.target.closest("button[data-id]"); if (!b) return;
-    const q = byId.get(+b.dataset.id); if (!q) return;
-    S.queue = S.queue.filter((x) => x !== q.id); S.seen.delete(q.id);
-    show(q); window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-  });
   $("weekCard").onclick = () => openProfile();
 
   function renderButtons() {
