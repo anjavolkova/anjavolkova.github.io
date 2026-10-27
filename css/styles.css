@@ -2025,9 +2025,9 @@ html:has(.page-study) { scroll-snap-type: none; }
 .study-more-link:hover .cta .arrow { transform: rotate(180deg) translateX(-3px); }
 .study-rule--chat { padding-bottom: 0; }
 
-/* The pills at the bottom, like the lore page's: back to the work, where
-   you are (the rule fills as you read), and a step up or down. Shown until
-   the other case studies come up. */
+/* The pills at the bottom, shaped like the lore page's but in this page's
+   colours: back to the work, where you are (the rule fills as you read),
+   and a step up or down. Shown until the other case studies come up. */
 .study-controls {
   position: fixed;
   left: 50%;
@@ -2051,9 +2051,9 @@ html:has(.page-study) { scroll-snap-type: none; }
 .study-control {
   display: flex;
   align-items: center;
-  border: 1px solid #f5f1ed;
+  border: 1px solid var(--panel);
   border-radius: 40px;
-  background: rgba(248, 244, 240, 0.94);   /* over text, not a photo */
+  background: rgba(246, 244, 245, 0.94);   /* --bg, over the text */
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   box-shadow:
@@ -2073,7 +2073,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: 52px;
   transition: background-color 0.25s ease;
 }
-.study-control--back:hover { background: rgba(252, 250, 248, 0.92); }
+.study-control--back:hover { background: rgba(255, 255, 255, 0.96); }
 .study-control--back img { width: 18px; height: 18px; transition: transform 0.2s ease; }
 .study-control--back:hover img { transform: translateX(-2px); }
 .study-control--where {
@@ -2286,7 +2286,6 @@ html:has(.page-study) { scroll-snap-type: none; }
   padding: 0;
   overflow: hidden;
   border: 0;
-  border-radius: 24px 0 0 24px;
   background: var(--bg);
   box-shadow: -24px 0 64px rgba(39, 26, 33, 0.16);
 }
@@ -2320,9 +2319,9 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: 48px;
   height: 48px;
   padding: 0;
-  border: 1px solid #f5f1ed;
+  border: 1px solid var(--panel);
   border-radius: 50%;
-  background: rgba(248, 244, 240, 0.94);
+  background: rgba(246, 244, 245, 0.94);
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   box-shadow:
@@ -2334,14 +2333,14 @@ html:has(.page-study) { scroll-snap-type: none; }
   cursor: pointer;
   transition: background-color 0.25s ease;
 }
-.study-panel-close:hover { background: rgba(252, 250, 248, 0.92); }
+.study-panel-close:hover { background: rgba(255, 255, 255, 0.96); }
 .study-panel-close:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
 
 @media (max-width: 1023px) {
   .study-panel { width: min(100%, 92vw); }
 }
 @media (max-width: 719px) {
-  .study-panel { width: 100%; border-radius: 0; box-shadow: none; }
+  .study-panel { width: 100%; box-shadow: none; }
   .study-panel-close { top: 12px; left: auto; right: 12px; width: 44px; height: 44px; }
 }
 
