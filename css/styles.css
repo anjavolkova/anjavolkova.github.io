@@ -434,6 +434,36 @@ img.is-missing { visibility: hidden; }
   transform: var(--tilt) rotate(4.68deg);
 }
 
+/* On My Disk: its file manager on paper, running off the picture area's
+   right edge (Figma: Component 1, Variant5). Both are Figma's renders,
+   flattened. The paper fills the whole picture area; the screen leans with
+   the pointer about the part that shows. */
+.paper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.shot--screen {
+  left: calc(80.5 * var(--u));
+  top: calc(67 * var(--u));
+  width: calc(1080 * var(--u));
+  height: calc(645 * var(--u));
+  overflow: hidden;
+  border: calc(6 * var(--u)) solid #f4f2f3;
+  border-radius: calc(16 * var(--u));
+  background: var(--white);
+  box-shadow:
+    0 -197px 55px rgba(243, 210, 217, 0),
+    0 -126px 50px rgba(243, 210, 217, 0.01),
+    0 -71px 43px rgba(243, 210, 217, 0.05),
+    0 -32px 32px rgba(243, 210, 217, 0.09),
+    0 -8px 17px rgba(243, 210, 217, 0.1);
+  transform-origin: 20% 50%;
+}
+
 /* The phone is one picture, frame and all, centred in the picture area. As
    it leans, its edge shows on the side that comes forward, light slides
    across the glass and the shadow shifts the other way. The phone in the
