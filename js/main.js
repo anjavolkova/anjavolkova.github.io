@@ -71,6 +71,26 @@ function initNav() {
   update();
 }
 
+// While the menu is over the halftone trees (the homepage hero's, the
+// preview strip's), it takes the case study ←'s colours there (is-on-dark):
+// from when their edge passes its middle, as the ← turns past the opening.
+function initNavTone() {
+  const nav = document.querySelector(".nav");
+  const trees = [...document.querySelectorAll(".hero-photo, .banner-photo")];
+  if (!nav || !trees.length) return;
+  const update = () => {
+    const r = nav.getBoundingClientRect();
+    const middle = r.top + r.height / 2;
+    nav.classList.toggle("is-on-dark", trees.some((el) => {
+      const t = el.getBoundingClientRect();
+      return t.height > 0 && t.top <= middle && t.bottom > middle;
+    }));
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
+}
+
 // Phones: the menu button opens the links as a full-screen menu over a
 // blurred page. Picking a link, the × or Esc closes it. The button stays
 // pinned: cream over the hero photo, plum once the page below reaches it.
@@ -743,6 +763,7 @@ function initIntro() {
 initIntro();
 applyLinks();
 initNav();
+initNavTone();
 initMenu();
 hideMissingImages();
 initTabs();
