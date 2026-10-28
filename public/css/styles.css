@@ -2148,6 +2148,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   font-feature-settings: "rvrn" 1, "case" 1, "cpsp" 1, "ordn" 1;
   text-box: trim-both cap alphabetic;
 }
+.cs-stat-figure--tight { letter-spacing: -0.03em; }   /* "100%", set closer in Figma */
 .cs-stat-text {
   font-family: var(--font-mono);
   font-size: 14px;
