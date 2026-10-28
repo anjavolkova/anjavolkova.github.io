@@ -1,0 +1,26 @@
+---
+// A case study's contents, at the right edge: a short line for each
+// section, the one you're in marked, which open on hover (or keyboard
+// focus) into the sections' names, the one you're in underlined as the
+// menu marks its page. Clicking one goes to it. js/study.js marks where you
+// are; tablets and phones go without.
+interface Item {
+  id: string;        // the heading's id
+  label: string;
+  depth?: 2 | 3;     // 3: a part of the section before
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+<nav class="toc" aria-label="Contents">
+  <ol class="toc-marks" aria-hidden="true">
+    {items.map((item) => <li class={`toc-mark toc-mark--${item.depth ?? 2}`}></li>)}
+  </ol>
+  <div class="toc-panel">
+    <ol class="toc-list">
+      {items.map((item) => <li class={`toc-item toc-item--${item.depth ?? 2}`}><a class="toc-link" href={`#${item.id}`}>{item.label}</a></li>)}
+    </ol>
+  </div>
+</nav>

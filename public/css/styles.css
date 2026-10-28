@@ -2252,8 +2252,101 @@ html:has(.page-study) { scroll-snap-type: none; }
   line-height: 1.2;
 }
 
+/* Going to a section from the contents: its heading stops clear of the ←. */
+.cs :is(h2, h3)[id] { scroll-margin-top: 120px; }
+
+/* The contents (CaseToc.astro), at the right edge, halfway down: a short
+   line for each section, pale, the one you're in in the page's brown (as
+   Notion marks it). Over them, or with the keyboard in them, they open
+   into a sheet of frosted glass, as the message's, with the sections'
+   names; the one you're in is underlined, as the menu marks its page.
+   It comes in once the opening has gone by (is-shown; js/study.js). */
+.toc {
+  position: fixed;
+  z-index: 2;
+  top: 50%;
+  right: clamp(24px, 2.78vw, 40px);
+  translate: 0 -50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.toc.is-shown,
+.toc:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+.toc-marks,
+.toc-list { margin: 0; list-style: none; }
+.toc-marks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px 0 12px 16px;   /* room to aim for */
+  transition: opacity 0.2s ease;
+}
+.toc-mark {
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(81, 63, 73, 0.24);
+  transition: background-color 0.25s ease;
+}
+.toc-mark--3 { width: 10px; }
+.toc-mark.is-current { background: var(--body); }
+.toc-panel {
+  position: absolute;
+  top: 50%;
+  right: -16px;
+  width: 304px;
+  padding: 20px 24px;
+  border: 1px solid var(--body);
+  border-radius: 24px;
+  background: rgba(246, 244, 245, 0.7);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 0;
+  translate: 8px -50%;
+  pointer-events: none;
+  transition: opacity 0.2s ease 0.12s, translate 0.25s ease 0.12s;
+}
+.toc:is(:hover, :focus-within) .toc-panel {
+  opacity: 1;
+  translate: 0 -50%;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.toc:is(:hover, :focus-within) .toc-marks { opacity: 0; }
+.toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.05em;
+  color: var(--body);
+  font-feature-settings: "dlig" 1;
+}
+.toc-item--3 { padding-left: 16px; }
+.toc-link {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  -webkit-box-decoration-break: clone;   /* a long name's lines underlined each */
+  box-decoration-break: clone;
+  transition: background-size 0.25s ease, color 0.25s ease;
+}
+.toc-link:hover,
+.toc-link[aria-current] { background-size: 100% 1px; }
+.toc-link[aria-current] { color: var(--ink); }
+.toc-link:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
+
 @media (max-width: 1023px) {
   .cs { padding-bottom: 160px; }
+  .toc { display: none; }
 }
 
 @media (max-width: 719px) {

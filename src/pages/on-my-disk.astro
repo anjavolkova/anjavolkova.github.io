@@ -1,5 +1,6 @@
 ---
 import Page from "../layouts/Page.astro";
+import CaseToc from "../components/CaseToc.astro";
 // Not indexed while the redesign is in progress (noindex).
 ---
 <Page title="On My Disk — making privacy visible — Anna Volkova" description="On My Disk: making privacy visible in a local-first file manager. A case study by Anna Volkova, product & visual designer." noindex bodyClass="page-study" fontWeights="300;400;500;600" cal={false}>
@@ -30,6 +31,19 @@ import Page from "../layouts/Page.astro";
 
   <!-- The way back to the work: it stays in the corner (js/study.js). -->
   <a class="cs-back" href="/#work" aria-label="All work"><span class="cs-back-arrow" aria-hidden="true"></span></a>
+
+  <!-- The contents, at the right edge once past the opening. -->
+  <CaseToc items={[
+    { id: "overview", label: "Overview" },
+    { id: "impact", label: "Impact" },
+    { id: "problem", label: "The Problem" },
+    { id: "challenge", label: "The Challenge" },
+    { id: "role", label: "My Role" },
+    { id: "solutions", label: "Solutions" },
+    { id: "solution-indicators", label: "Visual indicators for file privacy status", depth: 3 },
+    { id: "solution-onboarding", label: "Control through transparent onboarding", depth: 3 },
+    { id: "solution-search", label: "Natural-language search and filtering, at no cost to privacy", depth: 3 },
+  ]} />
 
   <!-- The opening: the trees, paper burnt over them, and the On My Disk
        screen on top (it drifts up as the page scrolls; js/study.js). -->
