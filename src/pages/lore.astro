@@ -1,19 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#F6F4F5" />
-<meta name="description" content="About Anna Volkova — a folder of bits and pieces: who I am, what I love, what I don’t." />
-<title>Lore — Anna Volkova</title>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://app.cal.com">
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-<script>
+---
+import Page from "../layouts/Page.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import MessageDialog from "../components/MessageDialog.astro";
+---
+<Page title="Lore — Anna Volkova" description="About Anna Volkova — a folder of bits and pieces: who I am, what I love, what I don’t." bodyClass="page-lore">
+<Fragment slot="head">
+<script is:inline>
   // Always open at the top, even on a reload. Links to a section still go there.
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
@@ -24,29 +17,11 @@
     setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
   }
 </script>
-<script type="module" src="js/main.js"></script>
-</head>
-<body class="page-lore">
+</Fragment>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <!-- Phones: the links open from this button as a full-screen menu. -->
-  <button class="menu-toggle is-on-light" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
-    <svg class="menu-icon menu-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg class="menu-icon menu-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
-  <nav class="nav" id="site-nav" aria-label="Main">
-    <a class="nav-brand" href="/" aria-label="Home"><img src="assets/img/brand-mark.png" alt="" width="36" height="39"></a>
-    <ul class="nav-links">
-      <li><a href="/">Work</a></li>
-      <li><a href="/#side-quests">Side quests</a></li>
-      <li><a href="#lore">Lore</a></li>
-    </ul>
-    <span class="nav-rule" aria-hidden="true"></span>
-    <a class="nav-cta" href="#contact">Let’s chat</a>
-  </nav>
-</header>
+<SiteHeader page="lore" />
 
 <main id="main">
 
@@ -160,55 +135,12 @@
   </section>
 </main>
 
-<footer class="site-footer">
-  <p class="footer-credit">Designed &amp; coded with <img loading="lazy" src="assets/img/icons/heart.svg" alt="love" width="15" height="13"> by Anya (since you've scrolled this far you can call me Anya)</p>
-  <ul class="footer-links">
-    <li><a href="#" data-link="linkedin">linkedin</a></li>
-    <li><a href="#" data-link="instagram">instagram</a></li>
-    <li><a href="#" data-link="github">github</a></li>
-    <li><a href="#" data-link="email">email</a></li>
-  </ul>
-</footer>
+<SiteFooter />
 
 <!-- Shown once someone has played with the stipple for 60+ seconds. -->
-<dialog class="nudge" id="nudge" aria-labelledby="nudge-text">
-  <form method="dialog">
-    <button class="nudge-close" aria-label="Close">&times;</button>
-  </form>
-  <h1 class="nudge-text" id="nudge-text">Seems like you’ve been playing with the design of this page for 60+ seconds now...</h1>
-  <p class="nudge-text">so it should be safe to say it would be worth getting in touch ;)</p>
-  <form class="nudge-form">
-    <label for="nudge-name">name</label>
-    <input id="nudge-name" name="name" autocomplete="name" required>
-    <label for="nudge-email">email</label>
-    <input id="nudge-email" name="email" type="email" autocomplete="email" required>
-    <label for="nudge-message">message</label>
-    <textarea id="nudge-message" name="message" rows="4" required></textarea>
-    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="nudge-send" type="submit">Send</button>
-    <p class="nudge-status" role="status"></p>
-  </form>
-</dialog>
+<MessageDialog id="nudge" title="Seems like you’ve been playing with the design of this page for 60+ seconds now..." text="so it should be safe to say it would be worth getting in touch ;)" />
 
 <!-- The letter's "Inquiry form": the same message form, opened from the folder. -->
-<dialog class="nudge" id="inquiry" aria-labelledby="inquiry-text">
-  <form method="dialog">
-    <button class="nudge-close" aria-label="Close">&times;</button>
-  </form>
-  <h1 class="nudge-text" id="inquiry-text">Write to me</h1>
-  <p class="nudge-text">Tell me a little about your project and I’ll get back to you.</p>
-  <form class="nudge-form">
-    <label for="inquiry-name">name</label>
-    <input id="inquiry-name" name="name" autocomplete="name" required>
-    <label for="inquiry-email">email</label>
-    <input id="inquiry-email" name="email" type="email" autocomplete="email" required>
-    <label for="inquiry-message">message</label>
-    <textarea id="inquiry-message" name="message" rows="4" required></textarea>
-    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <button class="nudge-send" type="submit">Send</button>
-    <p class="nudge-status" role="status"></p>
-  </form>
-</dialog>
+<MessageDialog id="inquiry" title="Write to me" text="Tell me a little about your project and I’ll get back to you." />
 
-</body>
-</html>
+</Page>

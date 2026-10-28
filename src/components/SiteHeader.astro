@@ -1,0 +1,29 @@
+---
+// The menu: a pill at the top on tablets and wider, a button that opens it
+// full screen on phones (js/main.js). On the homepage its links go to the
+// homepage's sections; on lore, back to them, the button starting dark as
+// there's no photo under it.
+interface Props {
+  page: "home" | "lore";
+}
+const home = Astro.props.page === "home";
+---
+<header class="site-header">
+  <!-- Phones: the links open from this button as a full-screen menu. -->
+  <button class={home ? "menu-toggle" : "menu-toggle is-on-light"} type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+    <svg class="menu-icon menu-icon--open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg class="menu-icon menu-icon--close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">
+    <a class="nav-brand" href={home ? "#top" : "/"} aria-label={home ? "Back to top" : "Home"}><img src="assets/img/brand-mark.png" alt="" width="36" height="39"></a>
+    <ul class="nav-links">
+      <li><a href={home ? "#work" : "/"}>Work</a></li>
+      <li><a href={home ? "#side-quests" : "/#side-quests"}>Side quests</a></li>
+      {home
+        ? <li><a href="#" data-link="lore">Lore</a></li>
+        : <li><a href="#lore">Lore</a></li>}
+    </ul>
+    <span class="nav-rule" aria-hidden="true"></span>
+    <a class="nav-cta" href="#contact">Let’s chat</a>
+  </nav>
+</header>

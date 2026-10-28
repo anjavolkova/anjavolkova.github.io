@@ -1,20 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<!-- Not indexed while the redesign is in progress. -->
-<meta name="robots" content="noindex" />
-<meta name="theme-color" content="#F6F4F5" />
-<meta name="description" content="On My Disk: making privacy visible in a local-first file manager. A case study by Anna Volkova, product &amp; visual designer." />
-<title>On My Disk — making privacy visible — Anna Volkova</title>
-<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
-<script>
+---
+import Page from "../layouts/Page.astro";
+// Not indexed while the redesign is in progress (noindex).
+---
+<Page title="On My Disk — making privacy visible — Anna Volkova" description="On My Disk: making privacy visible in a local-first file manager. A case study by Anna Volkova, product & visual designer." noindex bodyClass="page-study" fontWeights="300;400;500;600" cal={false}>
+<Fragment slot="head">
+<script is:inline>
   // Inside the homepage's panel (js/panel.js): its scrolling stays in the
   // panel, and the way back closes the panel.
   var inPanel = /[?&]in=panel\b/.test(location.search) && window.parent !== window;
@@ -28,9 +18,7 @@
     setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
   }
 </script>
-<script type="module" src="js/main.js"></script>
-</head>
-<body class="page-study">
+</Fragment>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
@@ -83,5 +71,4 @@
 
 </main>
 
-</body>
-</html>
+</Page>

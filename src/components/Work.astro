@@ -1,0 +1,176 @@
+---
+// Selected work: one showcase, five tabs (js/main.js). With panel, On My
+// Disk's "Full study" opens the case study in a panel over the page
+// (js/panel.js) rather than going to it.
+interface Props {
+  panel?: boolean;
+}
+const { panel = false } = Astro.props;
+---
+  <section class="work" id="work" aria-label="Selected work">
+    <div class="work-tabs" role="tablist" aria-label="Projects">
+      <button class="work-tab" role="tab" id="tab-files" aria-controls="panel-files" aria-selected="true">Private file-sharing app</button>
+      <button class="work-tab" role="tab" id="tab-node" aria-controls="panel-node" aria-selected="false" tabindex="-1">Node Management UI</button>
+      <button class="work-tab" role="tab" id="tab-network" aria-controls="panel-network" aria-selected="false" tabindex="-1">Network Design System</button>
+      <button class="work-tab" role="tab" id="tab-home" aria-controls="panel-home" aria-selected="false" tabindex="-1">Home Network App</button>
+      <button class="work-tab" role="tab" id="tab-smm" aria-controls="panel-smm" aria-selected="false" tabindex="-1">SMM Design</button>
+    </div>
+
+    <!-- Private file-sharing app -->
+    <article class="work-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" tabindex="0">
+      <div class="work-visual">
+        <img loading="lazy" class="work-paper" src="assets/img/work/omd-paper.webp" alt="" width="480" height="664">
+        <div class="stage">
+          <div class="shot shot--screen rise">
+            <img loading="lazy" src="assets/img/work/omd-screen.webp" alt="On My Disk’s file manager: the knowledge base and chat history in the sidebar, files shared with me, and recent files." width="1068" height="633">
+          </div>
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Making privacy visible in a local-first file manager</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 engineer, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2024–2025</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Bineon</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>Most file tools, and most AI assistants, send your files to a data center. On My Disk doesn’t — files and the assistant both live on your device. The design problem was making that believable: privacy is invisible by default, so the interface had to show people where their data was at every point.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          {panel
+            ? <a class="cta" href="on-my-disk" data-link="study-files" data-panel="study-panel">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+            : <a class="cta" href="#" data-link="study-files">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>}
+        </div>
+      </div>
+    </article>
+
+    <!-- Node Management UI -->
+    <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0" hidden>
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Designing the tools that keep the internet running</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>Network operators rely on specialised software to monitor network infrastructure, diagnose faults, and keep services online. I redesigned a legacy network management system, making it easier to understand what’s happening across thousands of devices and resolve problems faster.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-node">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Network Design System -->
+    <article class="work-panel" role="tabpanel" id="panel-network" aria-labelledby="tab-network" tabindex="0" hidden>
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain.webp" alt="" width="758" height="536">
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Building a design system for network management</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Systems Design</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>Network operators should be able to work without wasting time navigating the interface. I built a design system around that — standardising the interface across the product so dense technical data is easier to scan, faults easier to spot, and critical information easier to act on.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-network">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Home Network App -->
+    <article class="work-panel" role="tabpanel" id="panel-home" aria-labelledby="tab-home" tabindex="0" hidden>
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <img loading="lazy" class="grain grain--home" src="assets/img/work/grain.webp" alt="" width="758" height="536">
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Designing a simpler way to manage your home network</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Product designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 PM, 3 engineers, 1 designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Product, UX</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2025–2026</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Multinational IoT company</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>I designed a consumer app for managing your home network — connected devices, setting parental controls, blocking unwanted access, adjusting Wi-Fi settings, and checking network health — all from one place.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-home">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
+    <!-- SMM Design -->
+    <article class="work-panel" role="tabpanel" id="panel-smm" aria-labelledby="tab-smm" tabindex="0" hidden>
+      <div class="work-visual">
+        <div class="stage">
+          <div class="botanical" aria-hidden="true"><img loading="lazy" src="assets/img/work/botanical.webp" alt="" width="1082" height="1200"></div>
+          <div class="shot shot--post tilt">
+            <img loading="lazy" src="assets/img/work/smm-post.webp" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
+          </div>
+          <img loading="lazy" class="grain grain--panel" src="assets/img/work/grain-smm.webp" alt="" width="758" height="536">
+        </div>
+      </div>
+      <div class="work-info">
+        <div class="work-body">
+          <h2 class="work-title">Creating visuals for local beauty businesses</h2>
+          <div class="work-meta-wrap">
+            <dl class="work-meta">
+              <div class="meta-row"><dt>role</dt><dd>Graphic designer</dd></div>
+              <div class="meta-row"><dt>team</dt><dd>1 Social Media Manager, 1 Designer</dd></div>
+              <div class="meta-row"><dt>skills</dt><dd>Graphic design</dd></div>
+              <div class="meta-row meta-row--half"><dt>timeline</dt><dd>2026</dd></div>
+              <div class="meta-row meta-row--half"><dt>client</dt><dd>Local beauty businesses</dd></div>
+            </dl>
+          </div>
+          <div class="work-desc">
+            <p>I worked closely with a talented social media specialist and a skilled photographer to develop engaging social media posts tailored for our clients in the beauty industry. Together, we crafted visually stunning content that resonates with audiences.</p>
+          </div>
+        </div>
+        <div class="work-footer">
+          <a class="cta" href="#" data-link="study-smm">Full study <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </div>
+      </div>
+    </article>
+
+  </section>

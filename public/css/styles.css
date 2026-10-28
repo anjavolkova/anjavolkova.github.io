@@ -2079,6 +2079,30 @@ html:has(.page-study) { scroll-snap-type: none; }
   .in-panel .cs { --cs-pad: 96px; }
 }
 
+/* ---------- 8. Not found (404.html) ---------- */
+
+/* A line in the case study's title type, and the way home. */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 32px;
+  min-height: 100vh;
+  padding: 0 clamp(24px, 12.5vw, 180px);
+}
+.not-found-title {
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 5.56vw, 80px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.09em;
+  color: var(--ink);
+  font-feature-settings: "rvrn" 1, "case" 1, "cpsp" 1, "ordn" 1;
+  text-box: trim-both cap alphabetic;
+}
+.not-found .cta { height: auto; padding: 0; }
+
 /* ---------- Test: work first (preview.html) ---------- */
 
 /* On tablets and wider, a strip with the name takes the hero's place, the

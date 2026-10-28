@@ -1,0 +1,28 @@
+---
+// A message form in a dialog (js/main.js sends it): the stipple's nudge,
+// and lore's inquiry form. Its fields' ids start with the dialog's.
+interface Props {
+  id: string;
+  title: string;
+  text: string;
+}
+const { id, title, text } = Astro.props;
+---
+<dialog class="nudge" id={id} aria-labelledby={`${id}-text`}>
+  <form method="dialog">
+    <button class="nudge-close" aria-label="Close">&times;</button>
+  </form>
+  <h1 class="nudge-text" id={`${id}-text`}>{title}</h1>
+  <p class="nudge-text">{text}</p>
+  <form class="nudge-form">
+    <label for={`${id}-name`}>name</label>
+    <input id={`${id}-name`} name="name" autocomplete="name" required>
+    <label for={`${id}-email`}>email</label>
+    <input id={`${id}-email`} name="email" type="email" autocomplete="email" required>
+    <label for={`${id}-message`}>message</label>
+    <textarea id={`${id}-message`} name="message" rows="4" required></textarea>
+    <input class="nudge-honey" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="nudge-send" type="submit">Send</button>
+    <p class="nudge-status" role="status"></p>
+  </form>
+</dialog>
