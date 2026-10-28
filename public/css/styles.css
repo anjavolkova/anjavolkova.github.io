@@ -2109,7 +2109,8 @@ html:has(.page-study) { scroll-snap-type: none; }
 }
 
 /* Impact: two figures side by side, the botanical drawing darkening each
-   sheet from its outer side. */
+   sheet from its outer side. Under the mouse a sheet rises a little, as
+   the question does (--rise; js/rise.js). */
 .cs-impact {
   display: flex;
   gap: 16px;
@@ -2123,6 +2124,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   gap: 32px;
   min-width: 0;
   padding: 64px 48px;
+  translate: 0 var(--rise, 0px);
 }
 .cs-stat-botanical {
   position: absolute;
