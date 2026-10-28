@@ -1,0 +1,53 @@
+---
+import Page from "../layouts/Page.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import Work from "../components/Work.astro";
+import Quests from "../components/Quests.astro";
+import Contact from "../components/Contact.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import MessageDialog from "../components/MessageDialog.astro";
+---
+<Page title="Anna Volkova — designer" description="Anna Volkova — product & visual designer, driven by curiosity and fun (and also data).">
+<Fragment slot="head">
+<script is:inline>
+  // Always open at the top, even on a reload (browsers otherwise return to
+  // where the page was last scrolled). Links to a section still go there.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  // Page-load intro: hide the hero until js/main.js plays it (skipped with
+  // reduced motion). If the script never runs, show it after 3s anyway.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("intro");
+    setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
+  }
+</script>
+</Fragment>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<SiteHeader page="home" />
+
+<main id="main">
+
+  <!-- 1. Hero -->
+  <Hero />
+
+  <!-- 2. Selected work: one showcase, five tabs. Each project's picture
+       sits on the botanical drawing; those without one yet show just that. -->
+  <Work />
+
+  <!-- 3. Side quests -->
+  <Quests />
+
+  <!-- 4. Contact / booking -->
+  <Contact />
+</main>
+
+<!-- 5. Footer -->
+<SiteFooter />
+
+<!-- Shown once someone has played with the stipple for 60+ seconds. -->
+<MessageDialog id="nudge" title="Seems like you’ve been playing with the design of this page for 60+ seconds now..." text="so it should be safe to say it would be worth getting in touch ;)" />
+
+</Page>

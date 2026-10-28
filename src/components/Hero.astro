@@ -1,0 +1,22 @@
+---
+// The homepage's opening: the stipple portrait, the halftone trees, the
+// hand-lettered name and the intro line.
+---
+  <section class="hero" id="top" aria-labelledby="hero-name">
+    <canvas class="stipple stipple--hero" data-src="assets/img/stipple-source.webp" data-phone-params='{"dotDensity": 47, "threshold": 35, "mouseRadius": 204}' aria-hidden="true"></canvas>
+    <div class="hero-photo">
+      <img src="assets/img/hero-trees-1440.webp" srcset="assets/img/hero-trees-1440.webp 1440w, assets/img/hero-trees.webp 2880w" sizes="101vw" alt="" width="1456" height="517" fetchpriority="high">
+    </div>
+    <h1 class="hero-name" id="hero-name">
+      <span class="visually-hidden">Anna Volkova</span>
+      <picture>
+        <source media="(max-width: 719px)" srcset="assets/img/name-anna-phone.svg" width="335" height="126">
+        <img class="hero-name-anna" src="assets/img/name-anna.svg" alt="" width="737" height="276">
+      </picture>
+      <picture>
+        <source media="(max-width: 719px)" srcset="assets/img/name-volkova-phone.svg" width="401" height="111">
+        <img class="hero-name-volkova" src="assets/img/name-volkova.svg" alt="" width="1006" height="275">
+      </picture>
+    </h1>
+    <p class="hero-intro">Product &amp; visual designer, driven by curiosity&nbsp;and&nbsp;fun<br>(and also data)</p>
+  </section>

@@ -1,0 +1,77 @@
+---
+// Side quests: the collage, each piece with its note.
+---
+  <section class="quests" id="side-quests" aria-labelledby="quests-title">
+    <h2 class="section-title" id="quests-title">Side quests</h2>
+    <div class="quests-layout">
+      <!-- Hand-lettered "Side quests", behind the collage. -->
+      <div class="quests-lettering" aria-hidden="true">
+        <picture>
+          <source media="(max-width: 719px)" srcset="assets/img/lettering-side-phone.svg" width="597" height="283">
+          <img class="lettering-side" src="assets/img/lettering-side.svg" alt="" width="593" height="279">
+        </picture>
+        <picture>
+          <source media="(max-width: 719px)" srcset="assets/img/lettering-quests-phone.svg" width="937" height="273">
+          <img class="lettering-quests" src="assets/img/lettering-quests.svg" alt="" width="933" height="269">
+        </picture>
+      </div>
+      <!-- Each piece reveals its note on hover, keyboard focus or tap. -->
+      <div class="collage">
+        <button class="piece piece--health" type="button" aria-labelledby="quest-health-title" aria-describedby="quest-health-text">
+          <span class="piece-inner paper">
+            <img loading="lazy" src="assets/img/side/health-dashboard.webp" alt="" width="357" height="220">
+            <img loading="lazy" class="paper-grain" src="assets/img/side/paper-grain.webp" alt="">
+          </span>
+        </button>
+        <article class="quest" id="quest-health">
+          <h3 class="quest-title" id="quest-health-title">Health dashboard</h3>
+          <p id="quest-health-text">I built a custom dashboard to track my fatigue and brain fog alongside weather patterns and geomagnetic storms.</p>
+        </article>
+
+        <button class="piece piece--lastfm" type="button" aria-labelledby="quest-lastfm-title" aria-describedby="quest-lastfm-text">
+          <span class="piece-inner paper paper--card">
+            <img loading="lazy" class="paper-grain" src="assets/img/side/paper-grain.webp" alt="">
+            <img loading="lazy" class="lastfm-shot" src="assets/img/side/lastfm-widget.webp" alt="" width="800" height="353">
+          </span>
+        </button>
+        <article class="quest is-active" id="quest-lastfm">
+          <h3 class="quest-title" id="quest-lastfm-title">last.fm x notion widget</h3>
+          <p id="quest-lastfm-text">I built a widget that displays your music statistics in a layout optimised to your Notion dashboard.</p>
+          <a class="cta" href="#" data-link="lastfm-widget">Try it out <img loading="lazy" class="arrow" src="assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+        </article>
+
+        <button class="piece piece--albums" type="button" aria-labelledby="quest-books-title" aria-describedby="quest-books-text">
+          <span class="piece-inner paper">
+            <img loading="lazy" src="assets/img/side/top-albums.webp" alt="" width="266" height="333">
+            <img loading="lazy" class="paper-grain paper-grain--soft" src="assets/img/side/top-albums-grain.webp" alt="">
+          </span>
+        </button>
+        <article class="quest" id="quest-books">
+          <h3 class="quest-title" id="quest-books-title">Books and music account</h3>
+          <p id="quest-books-text">I started a Bookstagram in 2024 to share my honest opinions about my interests. My content has since generated 1.08M impressions and reached 540k+ unique users across Pinterest and Instagram, with a 5.2% engagement rate.</p>
+        </article>
+
+        <button class="piece piece--phone" type="button" aria-labelledby="quest-llm-title" aria-describedby="quest-llm-text">
+          <span class="piece-inner">
+            <img loading="lazy" src="assets/img/side/llm-app.webp" alt="" width="342" height="703">
+          </span>
+        </button>
+        <article class="quest" id="quest-llm">
+          <h3 class="quest-title quest-title--caps" id="quest-llm-title">LLM creative block solver</h3>
+          <p id="quest-llm-text">Master’s project — I trained an LLM &amp; built a recommender system to help artists beat creative block 3 months before ChatGPT dropped.</p>
+        </article>
+
+        <button class="piece piece--coffee" type="button" aria-labelledby="quest-allergy-title" aria-describedby="quest-allergy-text">
+          <span class="piece-inner">
+            <img loading="lazy" src="assets/img/side/coffee.webp" alt="" width="226" height="223">
+          </span>
+          <!-- Hover area: just the cup and saucer, not the image's empty corners. -->
+          <span class="piece-hit" aria-hidden="true"></span>
+        </button>
+        <article class="quest" id="quest-allergy">
+          <h3 class="quest-title" id="quest-allergy-title">Allergy checker</h3>
+          <p id="quest-allergy-text">One time I wrote a python script that tells me which teas in Albert Heijn I'm not allergic to.</p>
+        </article>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,49 @@
+---
+// Every page: the <head> the site shares (fonts, styles, the main script)
+// with the page's own title and description, and any script it runs before
+// the first paint (slot "head"). Scripts are kept as written (is:inline).
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;      // kept out of search engines
+  bodyClass?: string;
+  fontWeights?: string;   // Inter's
+  cal?: boolean;          // connect to the booking calendar's host early
+  root?: string;          // what the site's paths start from: "" for pages at
+                          // the top, "/" for one served at any path (the 404)
+  scripts?: boolean;      // js/main.js
+}
+const {
+  title,
+  description,
+  noindex = false,
+  bodyClass,
+  fontWeights = "400;500;600",
+  cal = true,
+  root = "",
+  scripts = true,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+{noindex && <meta name="robots" content="noindex" />}
+<meta name="theme-color" content="#F6F4F5" />
+<meta name="description" content={description} />
+<title>{title}</title>
+<link rel="icon" type="image/png" sizes="32x32" href={`${root}assets/img/favicon-32.png`}>
+<link rel="apple-touch-icon" href={`${root}assets/img/apple-touch-icon.png`}>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+{cal && <link rel="preconnect" href="https://app.cal.com">}
+<link href={`https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono&family=Inter:wght@${fontWeights}&display=swap`} rel="stylesheet">
+<link rel="stylesheet" href={`${root}css/styles.css`}>
+<slot name="head" />
+{scripts && <script is:inline type="module" src={`${root}js/main.js`}></script>}
+</head>
+<body class={bodyClass}>
+<slot />
+</body>
+</html>

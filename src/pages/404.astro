@@ -1,0 +1,11 @@
+---
+// Any address with no page: GitHub Pages serves this at it, so the page's
+// paths start from the site's top ("/").
+import Page from "../layouts/Page.astro";
+---
+<Page title="Page not found — Anna Volkova" description="There’s no page at this address." noindex bodyClass="page-404" root="/" cal={false} scripts={false}>
+<main id="main" class="not-found">
+  <h1 class="not-found-title">There’s no page here</h1>
+  <a class="cta" href="/">Back to the homepage <img class="arrow" src="/assets/img/icons/arrow-left.svg" alt="" width="20" height="20"></a>
+</main>
+</Page>

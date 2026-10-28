@@ -1,0 +1,83 @@
+---
+import Page from "../layouts/Page.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import Hero from "../components/Hero.astro";
+import Work from "../components/Work.astro";
+import Quests from "../components/Quests.astro";
+import Contact from "../components/Contact.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import MessageDialog from "../components/MessageDialog.astro";
+---
+<Page title="Anna Volkova — designer (work-first test)" description="Anna Volkova — product & visual designer, driven by curiosity and fun (and also data)." noindex bodyClass="page-work-first">
+<Fragment slot="head">
+<script is:inline>
+  // Always open at the top, even on a reload (browsers otherwise return to
+  // where the page was last scrolled). Links to a section still go there.
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+  // Page-load intro: hide the hero until js/main.js plays it (skipped with
+  // reduced motion). If the script never runs, show it after 3s anyway.
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("intro");
+    setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
+  }
+
+  // Work first: the first project waits, hidden from the first paint, for its
+  // entrance (on tablets and wider; js/main.js takes over before the page has
+  // loaded and plays it). If the script never runs, it shows once the page
+  // has loaded anyway.
+  if (matchMedia("(min-width: 720px) and (prefers-reduced-motion: no-preference)").matches) {
+    document.documentElement.classList.add("work-waiting");
+    addEventListener("load", function () { document.documentElement.classList.remove("work-waiting"); });
+  }
+</script>
+</Fragment>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<SiteHeader page="home" />
+
+<main id="main">
+
+  <!-- Test: work first. On tablets and wider, this strip with the name takes
+       the hero's place and the work comes straight after it. Phones keep the
+       hero below. -->
+  <section class="banner" aria-labelledby="banner-name">
+    <img class="banner-photo" src="assets/img/hero-trees-1440.webp" srcset="assets/img/hero-trees-1440.webp 1440w, assets/img/hero-trees.webp 2880w" sizes="100vw" alt="" width="1456" height="517" fetchpriority="high">
+    <div class="banner-text">
+      <h1 class="banner-name" id="banner-name">Anna Volkova</h1>
+      <p class="banner-intro">Product &amp; visual designer, driven by curiosity and fun&nbsp; (and also data)</p>
+    </div>
+  </section>
+
+  <!-- 1. Hero (phones only on this page) -->
+  <Hero />
+
+  <!-- 2. Selected work: one showcase, five tabs. Each project's picture
+       sits on the botanical drawing; those without one yet show just that. -->
+  <Work panel />
+
+  <!-- 3. Side quests -->
+  <Quests />
+
+  <!-- 4. Contact / booking -->
+  <Contact />
+</main>
+
+<!-- 5. Footer -->
+<SiteFooter />
+
+<!-- Shown once someone has played with the stipple for 60+ seconds. -->
+<MessageDialog id="nudge" title="Seems like you’ve been playing with the design of this page for 60+ seconds now..." text="so it should be safe to say it would be worth getting in touch ;)" />
+
+<!-- Test: the On My Disk case study, in a panel from the right over the
+     page, from the project's "Full study" (js/panel.js). Its page loads in
+     the frame once someone heads for that link. -->
+<dialog class="study-panel" id="study-panel" aria-label="On My Disk case study">
+  <button class="study-panel-close" type="button" aria-label="Close the case study">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <iframe class="study-panel-frame" title="On My Disk case study" data-src="on-my-disk?in=panel"></iframe>
+</dialog>
+
+</Page>
