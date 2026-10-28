@@ -2258,7 +2258,7 @@ html:has(.page-study) { scroll-snap-type: none; }
 /* The contents (CaseToc.astro), at the right edge, halfway down: a short
    line for each section, pale, the one you're in in the page's brown (as
    Notion marks it). Over them, or with the keyboard in them, they open
-   into a sheet of frosted glass, as the message's, with the sections'
+   into frosted glass edged in the study's stroke, with the sections'
    names; the one you're in is underlined, as the menu marks its page.
    It comes in once the opening has gone by (is-shown; js/study.js). */
 .toc {
@@ -2293,16 +2293,15 @@ html:has(.page-study) { scroll-snap-type: none; }
   background: rgba(81, 63, 73, 0.24);
   transition: background-color 0.25s ease;
 }
-.toc-mark--3 { width: 10px; }
 .toc-mark.is-current { background: var(--body); }
 .toc-panel {
   position: absolute;
   top: 50%;
   right: -16px;
-  width: 304px;
+  width: max-content;
   padding: 20px 24px;
-  border: 1px solid var(--body);
-  border-radius: 24px;
+  border: 1px solid rgba(194, 175, 184, 0.46);   /* the dividers' */
+  border-radius: 12px;
   background: rgba(246, 244, 245, 0.7);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
@@ -2330,13 +2329,10 @@ html:has(.page-study) { scroll-snap-type: none; }
   color: var(--body);
   font-feature-settings: "dlig" 1;
 }
-.toc-item--3 { padding-left: 16px; }
 .toc-link {
   text-decoration: none;
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   padding-bottom: 2px;
-  -webkit-box-decoration-break: clone;   /* a long name's lines underlined each */
-  box-decoration-break: clone;
   transition: background-size 0.25s ease, color 0.25s ease;
 }
 .toc-link:hover,

@@ -7,7 +7,6 @@
 interface Item {
   id: string;        // the heading's id
   label: string;
-  depth?: 2 | 3;     // 3: a part of the section before
 }
 interface Props {
   items: Item[];
@@ -16,11 +15,11 @@ const { items } = Astro.props;
 ---
 <nav class="toc" aria-label="Contents">
   <ol class="toc-marks" aria-hidden="true">
-    {items.map((item) => <li class={`toc-mark toc-mark--${item.depth ?? 2}`}></li>)}
+    {items.map(() => <li class="toc-mark"></li>)}
   </ol>
   <div class="toc-panel">
     <ol class="toc-list">
-      {items.map((item) => <li class={`toc-item toc-item--${item.depth ?? 2}`}><a class="toc-link" href={`#${item.id}`}>{item.label}</a></li>)}
+      {items.map((item) => <li><a class="toc-link" href={`#${item.id}`}>{item.label}</a></li>)}
     </ol>
   </div>
 </nav>
