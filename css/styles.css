@@ -1746,452 +1746,280 @@ align-self: flex-start;
 
 /* ---------- 7. Case study (on-my-disk.html) ---------- */
 
-/* A long read, after billguo.me/work/ncs: the title and cover, then each
-   section under a soft rule, with its notes in a column of their own on
-   the right (their labels on the left), statements centred and pictures
-   wide. The pictures are placeholders for now (.study-slot). Text rises
-   out of a blur as it comes into view, and pills at the bottom, in place of
-   the menu, go back to the work and from section to section (js/study.js). */
+/* A redesign in progress (Figma: Portfolio, "Desktop - 3"). The opening:
+   halftone trees with paper burnt over them, the On My Disk screen laid on
+   top, then the title, the details and the overview, and the research
+   question on a sheet of paper. Figma's shaders are flattened into the
+   pictures. */
 
 /* A long page: no scroll stops (they hold the homepage's sections). */
 html:has(.page-study) { scroll-snap-type: none; }
 
-.study {
-  --study-pad: 32px;
-  color: var(--body);
-}
-.study mark {
-  padding: 0 0.08em;
-  background: linear-gradient(transparent 56%, rgba(145, 37, 92, 0.16) 56%, rgba(145, 37, 92, 0.16) 94%, transparent 94%);
-  color: inherit;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-.study strong { font-weight: 600; color: var(--ink); }
-
-/* Rising into view: from 12px down and blurred, staggered (js/study.js). */
-.reveal-on .reveal {
-  transition:
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    translate 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0s);
-}
-.reveal-on .reveal:not(.is-in) { opacity: 0; translate: 0 12px; filter: blur(12px); }
-
-/* The type, from the homepage's: the serif for the title, headings and
-   statements, Inter at 16px for reading, and the mono for labels. */
-.study-title,
-.study-statement,
-.study-heading,
-.study-step-head,
-.study-more-title {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  letter-spacing: -0.09em;
-  color: var(--ink);
-  text-wrap: balance;
-}
-.study-lede,
-.study-challenge,
-.study-finding {
-  font-family: var(--font-serif);
-  font-size: clamp(28px, 2.4vw, 34px);
-  line-height: 1.15;
-  letter-spacing: -0.06em;
-  color: var(--ink);
-  text-wrap: pretty;
-}
-.study-text {
-  max-width: 600px;
-  font-size: 16px;
-  line-height: 1.75;
-  letter-spacing: -0.02em;
-  color: var(--body);
-  text-wrap: pretty;
-}
-.study-label,
-.study-details dt,
-.study-more-name {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.3;
-  letter-spacing: -0.05em;
-  color: var(--body);
-}
-
-/* Opening: the title at the foot of the left column, clear of the pills,
-   and the cover filling the right one and running off the edge. */
-.study-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 0.42fr) minmax(0, 0.58fr);
-  gap: 56px;
-  min-height: max(100svh, 640px);
-  padding-top: 32px;
-}
-.study-title {
-  align-self: end;
-  padding: 0 0 120px var(--study-pad);
-  font-size: clamp(56px, 5.6vw, 88px);
-  line-height: 0.875;
-}
-.study-nowrap { white-space: nowrap; }
-.study-visual--hero .study-slot { height: 100%; aspect-ratio: auto; }
-
-/* Visuals: placeholders until the images are in. */
-.study-visual { margin: 0; }
-.study-slot {
+/* The opening, laid out in units of Figma's 1440px frame (--u), up to that
+   width. The screen drifts down a little as the page scrolls (--drift;
+   js/study.js), so it moves slower than the page. */
+.cs-banner {
+  --u: calc(min(100vw, 1440px) / 1440);
+  --drop: 0px;   /* phones: room above the screen for the ← */
   position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: var(--ratio, 16 / 9);
+  height: calc(552 * var(--u) + var(--drop));
   overflow: hidden;
-  background: var(--panel);
+  border-bottom: 1px solid rgba(199, 192, 195, 0.6);
+  background: rgba(233, 226, 229, 0.5);
+  isolation: isolate;
 }
-.study-slot-note {
-  position: relative;
-  max-width: 32ch;
-  padding: 16px;
-  font-size: 15px;
-  line-height: 1.5;
-  letter-spacing: -0.02em;
-  text-align: center;
-  color: var(--body);
-}
-.study-slot-note span {
-  display: block;
-  margin-bottom: 6px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: -0.05em;
-}
-/* The botanical drawing the projects sit on, faint, behind the cover. */
-.study-botanical {
-  position: absolute;
-  right: -10%;
-  top: -12%;
-  width: 92%;
-  opacity: 0.12;
-  mix-blend-mode: darken;
-  pointer-events: none;
-}
-.study-botanical img { width: 100%; height: auto; }
-.study-pair {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-
-/* A section's name on a soft rule with a dot at each end. */
-.study-rule {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 24px;
-  padding: 160px var(--study-pad) 112px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  color: var(--body);
-  white-space: nowrap;
-}
-.study-rule::before,
-.study-rule::after {
-  content: "";
-  height: 5px;
-  background:
-    radial-gradient(circle, var(--line-pale) 1.5px, transparent 2px) 0 50% / 5px 5px no-repeat,
-    linear-gradient(var(--line-pale), var(--line-pale)) 0 50% / 100% 1px no-repeat;
-}
-.study-rule::after { background-position: 100% 50%, 0 50%; }
-
-/* The 12 columns everything lines up on. */
-.study-overview,
-.study-flow,
-.study-more-link {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: 24px;
-}
-.study-overview,
-.study-flow { padding: 0 var(--study-pad); }
-
-/* Overview: the details down the left, the story on the right. */
-.study-details {
-  grid-column: 2 / 6;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-.study-details dt { margin-bottom: 6px; }
-.study-details dd {
-  font-size: 16px;
-  line-height: 1.5;
-  letter-spacing: -0.04em;
-  color: var(--body);
-}
-.study-intro { grid-column: 7 / 12; }
-.study-lede { text-indent: 3em; }
-.study-impact { margin-top: 88px; }
-.study-label { margin-bottom: 20px; }
-
-/* The rest: notes in the right-hand column with their labels to the left,
-   statements centred, pictures wide. */
-.study-flow { row-gap: 120px; }
-.study-flow > * { grid-column: 2 / 12; }
-.study-flow > .study-statement { grid-column: 3 / 11; }
-.study-flow > .study-note {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: subgrid;
-  align-items: start;
-}
-.study-note > * { grid-column: 7 / 12; }
-.study-note > .study-label { grid-column: 2 / 6; margin: 0; padding-top: 0.4em; }
-.study-note > .study-heading { margin-bottom: 24px; }
-.study-flow > .study-visual + .study-note,
-.study-flow > .study-pair + .study-note { margin-top: 32px; }
-
-.study-statement {
-  font-size: clamp(40px, 3.9vw, 56px);
-  line-height: 1;
-  text-align: center;
-}
-.study-heading {
-  font-size: clamp(36px, 3.2vw, 46px);
-  line-height: 0.95;
-}
-
-/* Outcome: the findings two by two, each led by what it found. */
-.study-findings {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 88px 72px;
-}
-.study-findings li {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.study-finding { max-width: 560px; font-size: clamp(26px, 2.1vw, 30px); }
-
-/* Next steps: three, numbered. */
-.study-steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 48px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  counter-reset: step;
-}
-.study-steps li {
-  counter-increment: step;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.study-steps li::before {
-  content: counter(step, decimal-leading-zero);
-  margin-bottom: 20px;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: -0.05em;
-}
-.study-step-head {
-  font-size: clamp(30px, 2.5vw, 36px);
-  line-height: 0.95;
-}
-
-/* After the read: the other case studies, then a chat. */
-.study-more-list { padding: 0 var(--study-pad); }
-.study-more-link {
-  align-items: baseline;
-  padding: 26px 0;
-  color: inherit;
-  text-decoration: none;
-}
-.study-more-name { grid-column: 2 / 6; }
-.study-more-title {
-  grid-column: 7 / 11;
-  font-size: clamp(32px, 2.9vw, 42px);
-  line-height: 0.95;
-  transition: color 0.2s ease;
-}
-.study-more-link .cta { grid-column: 11 / 13; justify-self: end; height: auto; padding: 0; }
-.study-more-link:hover .study-more-title { color: var(--accent); }
-.study-more-link:hover .cta { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-.study-more-link:hover .cta .arrow { transform: rotate(180deg) translateX(-3px); }
-.study-rule--chat { padding-bottom: 0; }
-
-/* The pills at the bottom, shaped like the lore page's but in this page's
-   colours: back to the work, where you are (the rule fills as you read),
-   and a step up or down. Shown until the other case studies come up. */
-.study-controls {
-  position: fixed;
-  left: 50%;
-  bottom: 24px;
-  z-index: 40;
-  display: flex;
-  gap: 8px;
-  width: min(480px, calc(100vw - 32px));
-  height: 52px;
-  opacity: 0;
-  visibility: hidden;
-  translate: -50% 12px;
-  transition: opacity 0.4s ease, translate 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.4s;
-}
-.study-controls.is-shown {
-  opacity: 1;
-  visibility: visible;
-  translate: -50% 0;
-  transition: opacity 0.4s ease, translate 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s;
-}
-.study-control {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--panel);
-  border-radius: 40px;
-  background: rgba(246, 244, 245, 0.94);   /* --bg, over the text */
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
-  box-shadow:
-    0 1px 1.5px rgba(152, 129, 129, 0.08),
-    0 6px 3px rgba(152, 129, 129, 0.07),
-    0 13px 4px rgba(152, 129, 129, 0.04),
-    0 23px 4.5px rgba(152, 129, 129, 0.01);
-  font-family: var(--font-mono);
-  font-size: 16px;
-  line-height: 1;
-  letter-spacing: -0.05em;
-  color: var(--body);
-}
-.study-control--back {
-  flex: none;
-  justify-content: center;
-  width: 52px;
-  transition: background-color 0.25s ease;
-}
-.study-control--back:hover { background: rgba(255, 255, 255, 0.96); }
-.study-control--back img { width: 18px; height: 18px; transition: transform 0.2s ease; }
-.study-control--back:hover img { transform: translateX(-2px); }
-.study-control--where {
-  flex: 1;
-  min-width: 0;
-  gap: 16px;
-  padding: 0 22px;
-}
-.study-control--steps { flex: none; gap: 2px; padding: 0 7px; }
-.study-sections-step {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-}
-.study-sections-step:hover { background: rgba(233, 226, 229, 0.7); }
-.study-sections-step:disabled { opacity: 0.3; cursor: default; background: transparent; }
-.study-sections-step img { width: 18px; height: 18px; rotate: 90deg; }
-.study-sections-step[data-step="1"] img { rotate: -90deg; }
-.study-control:focus-visible,
-.study-sections-step:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
-.study-sections-label {
-  flex: none;
-  white-space: nowrap;
-}
-.study-sections-label.is-new span { display: inline-block; animation: study-label-in 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
-.study-sections-rule {
-  position: relative;
-  flex: 1;
-  height: 1px;
-  overflow: hidden;
-  background: var(--line-pale);
-}
-.study-sections-fill {
+.cs-banner-trees {
   position: absolute;
   inset: 0;
-  background: var(--body);
-  transform-origin: left;
-  scale: var(--read, 0) 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-@keyframes study-label-in { from { opacity: 0; translate: 0 6px; filter: blur(4px); } }
+/* Paper, turned on its side and darkened a quarter, burnt into the trees. */
+.cs-banner-paper {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(571 * var(--u));
+  container-type: size;
+  mix-blend-mode: color-burn;
+}
+.cs-banner-paper img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100cqh;
+  height: 100cqw;
+  translate: -50% -50%;
+  rotate: -90deg;
+}
+.cs-banner-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.cs-mockup {
+  position: absolute;
+  left: 50%;
+  top: calc(93.7 * var(--u) + var(--drop));
+  width: calc(976 * var(--u));
+  height: calc(583 * var(--u));
+  overflow: hidden;
+  border: max(2px, calc(4 * var(--u))) solid rgba(245, 242, 244, 0.8);
+  border-radius: 4px;
+  background: var(--white);
+  box-shadow:
+    0 191px 54px rgba(67, 4, 23, 0),
+    0 122px 49px rgba(67, 4, 23, 0.01),
+    0 69px 41px rgba(67, 4, 23, 0.05),
+    0 31px 31px rgba(67, 4, 23, 0.09),
+    0 8px 17px rgba(67, 4, 23, 0.1);
+  translate: -50% var(--drift, 0px);
+  rotate: -0.32deg;
+  will-change: translate;
+}
+/* The screen as far down as the opening shows it. */
+.cs-mockup img { width: 100%; height: auto; }
+
+/* Back to the work: a frosted circle, lightening what's under it, with the
+   site's arrow in the page's colour. */
+.cs-back {
+  position: absolute;
+  left: max(16px, calc(45 * var(--u)));
+  top: max(16px, calc(33 * var(--u)));
+  display: grid;
+  place-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow:
+    0 23px 4.5px rgba(152, 129, 129, 0.01),
+    0 13px 4px rgba(152, 129, 129, 0.04),
+    0 6px 3px rgba(152, 129, 129, 0.07),
+    0 1px 1.5px rgba(152, 129, 129, 0.08);
+}
+.cs-back::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border: 1px solid var(--bg);
+  border-radius: 40px;
+  background: rgba(246, 244, 245, 0.4);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  mix-blend-mode: lighten;
+  transition: background-color 0.25s ease;
+}
+.cs-back:hover::before { background: rgba(246, 244, 245, 0.6); }
+.cs-back:focus-visible { outline: 1px solid var(--bg); outline-offset: 3px; }
+.cs-back-arrow {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  background: var(--bg);
+  -webkit-mask: url("../assets/img/icons/arrow-left.svg") center / 20px 20px no-repeat;
+  mask: url("../assets/img/icons/arrow-left.svg") center / 20px 20px no-repeat;
+  transition: translate 0.2s ease;
+}
+.cs-back:hover .cs-back-arrow { translate: -2px 0; }
+
+/* The read: 180px in from each side of the 1440px frame (less on narrower
+   windows), the title, then the details and the overview side by side, then
+   the question. */
+.cs {
+  --cs-pad: clamp(24px, 12.5vw, 180px);
+  display: flex;
+  flex-direction: column;
+  gap: 104px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 56px var(--cs-pad) 270px;
+  color: var(--body);
+}
+.cs-title {
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 5.56vw, 80px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.09em;
+  color: var(--ink);
+  font-feature-settings: "rvrn" 1, "case" 1, "cpsp" 1, "ordn" 1;
+  text-box: trim-both cap alphabetic;
+}
+
+.cs-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  padding: 0 64px;
+}
+.cs-details,
+.cs-overview { flex: 1 0 0; min-width: 0; }
+.cs-details {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.cs-details div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cs-details dt,
+.cs-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  color: var(--body);
+  font-feature-settings: "dlig" 1;
+  text-box: trim-both cap alphabetic;
+}
+.cs-details dd {
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: -0.04em;
+  text-box: trim-both cap alphabetic;
+}
+.cs-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cs-overview-text {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.21;
+  color: var(--ink);
+}
+.cs-overview-text p + p { margin-top: 1.21em; }   /* a line between them */
+
+/* The question, on a sheet of paper: the paper's grain over the page's
+   colour, the botanical drawing darkening it. Under the mouse it rises a
+   little and its shadow deepens, on the lore papers' spring (--rise,
+   --lift; js/study.js). */
+.cs-question {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 231px;
+  margin: 0 clamp(0px, 3.9vw, 56px);
+  padding: 64px clamp(24px, 11.67vw, 168px);
+  border: 1px solid rgba(194, 175, 184, 0.26);
+  background: rgb(233 229 231);   /* the page's colour under Figma's paper grain */
+  box-shadow:
+    0 53px 15px rgba(194, 179, 179, 0),
+    0 34px 14px rgba(194, 179, 179, 0.02),
+    0 19px 11px rgba(194, 179, 179, 0.07),
+    0 9px 9px rgba(194, 179, 179, 0.12),
+    0 2px 5px rgba(194, 179, 179, 0.14),
+    0 8px 22px rgb(39 26 33 / calc(0.28 * var(--lift, 0)));
+  translate: 0 var(--rise, 0px);
+}
+.cs-question-paper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: luminosity;
+  opacity: 0.58;
+}
+.cs-question-botanical {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 76.9%;   /* 745 of the sheet's 968px */
+  height: auto;
+  min-height: 100%;   /* a taller sheet: it covers it, cropped at the sides */
+  object-fit: cover;
+  translate: -50% -50%;
+  mix-blend-mode: darken;
+}
+.cs-question-text {
+  position: relative;
+  flex: 1;
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 3.9vw, 56px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.09em;
+  text-align: center;
+  color: var(--ink);
+  font-feature-settings: "rvrn" 1, "case" 1, "cpsp" 1, "ordn" 1;
+  text-box: trim-both cap alphabetic;
+}
 
 @media (max-width: 1023px) {
-  .study-hero { grid-template-columns: minmax(0, 1fr); gap: 48px; min-height: 0; padding-top: 96px; }
-  .study-title { padding: 0 var(--study-pad); }
-  .study-visual--hero .study-slot { height: auto; aspect-ratio: 4 / 3; }
-  .study-details { grid-column: 1 / 5; }
-  .study-intro { grid-column: 6 / 13; }
-  .study-flow > *,
-  .study-flow > .study-statement { grid-column: 1 / -1; }
-  .study-note > * { grid-column: 6 / 13; }
-  .study-note > .study-label { grid-column: 1 / 5; }
-  .study-more-name { grid-column: 1 / 5; }
-  .study-more-title { grid-column: 6 / 11; }
+  .cs { gap: 80px; padding-bottom: 160px; }
+  .cs-intro { padding: 0; }
 }
 
 @media (max-width: 719px) {
-  .study { --study-pad: 16px; }
-  .study-hero { gap: 40px; padding-top: 72px; }
-  .study-title { font-size: 48px; }
-  .study-rule { padding: 96px var(--study-pad) 56px; gap: 16px; }
-  .study-overview,
-  .study-flow,
-  .study-more-link { grid-template-columns: minmax(0, 1fr); }
-  .study-details {
-    grid-column: 1;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 16px;
-    margin-bottom: 56px;
-  }
-  .study-intro { grid-column: 1; }
-  .study-lede,
-  .study-challenge { font-size: 26px; }
-  .study-impact { margin-top: 64px; }
-  .study-flow { row-gap: 72px; }
-  .study-flow > .study-note { grid-template-columns: minmax(0, 1fr); }
-  .study-note > *,
-  .study-note > .study-label { grid-column: 1; }
-  .study-note > .study-label { margin-bottom: 16px; padding-top: 0; }
-  .study-flow > .study-visual + .study-note,
-  .study-flow > .study-pair + .study-note { margin-top: 0; }
-  .study-statement { font-size: 36px; }
-  .study-heading { font-size: 34px; }
-  .study-pair { gap: 12px; }
-  .study-findings { grid-template-columns: minmax(0, 1fr); gap: 56px; }
-  .study-finding { font-size: 24px; }
-  .study-steps { grid-template-columns: minmax(0, 1fr); gap: 48px; }
-  .study-steps li::before { margin-bottom: 4px; }
-  .study-more-link { gap: 10px; padding: 22px 0; }
-  .study-more-name,
-  .study-more-title,
-  .study-more-link .cta { grid-column: 1; justify-self: start; }
-  .study-more-title { font-size: 32px; }
-  .study-rule--chat { padding-bottom: 0; }
-  .study-controls { bottom: 16px; height: 48px; }
-  .study-control--back { width: 48px; }
-  .study-control--where { padding: 0 16px; gap: 12px; }
-  .study-control--steps { padding: 0 5px; }
+  .cs-banner { --u: calc(100vw / 1100); --drop: 56px; }
+  .cs { --cs-pad: 20px; gap: 56px; padding-top: 40px; padding-bottom: 120px; }
+  .cs-intro { flex-direction: column; gap: 48px; }
+  .cs-details,
+  .cs-overview { flex: none; width: 100%; }
+  .cs-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 16px; }
+  .cs-overview-text { font-size: 18px; }
+  .cs-question { min-height: 0; padding: 40px 24px; }
+  .cs-question-botanical { width: 140%; }
 }
 
-/* Inside the homepage's panel (js/panel.js): it ends with the chat (the
-   page under it has the footer), and its scrolling stays in the panel. */
+/* Inside the homepage's panel (js/panel.js): its scrolling stays in the
+   panel. Where the panel has its × (in its top left corner, 560px and
+   wider) that closes it, so there's no ←, and the read keeps clear of the
+   ×; on phones the ← closes it (js/study.js). */
 .in-panel { overscroll-behavior: contain; }
-.in-panel .study { --study-pad: 24px; }
-.in-panel .study-hero { padding-top: 24px; }
-.in-panel .study-visual--hero { padding: 0 var(--study-pad); }
-/* The panel's × sits in the left margin (24px in, 48px wide). */
-@media (min-width: 560px) { .in-panel .study { --study-pad: 96px; } }
-.in-panel .site-footer { display: none; }
-.in-panel .contact { padding-inline: var(--study-pad); padding-bottom: 48px; }
+@media (min-width: 560px) {
+  .in-panel .cs-back { display: none; }
+  .in-panel .cs { --cs-pad: 96px; }
+}
 
 /* ---------- Test: work first (preview.html) ---------- */
 
