@@ -199,6 +199,14 @@ img.is-missing { visibility: hidden; }
   background: currentColor;
 }
 
+/* Over the halftone trees, the case study ←'s colours there: darkened
+   glass, the rim and the words in the page's colour (is-on-dark;
+   js/main.js). Phones have the menu button instead. */
+@media (min-width: 720px) {
+  .nav { transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease; }
+  .nav.is-on-dark { border-color: var(--bg); background: rgba(39, 26, 33, 0.3); color: var(--bg); }
+}
+
 /* Phones only (see the end of the file). */
 .menu-toggle,
 .nav-brand { display: none; }
@@ -268,20 +276,22 @@ img.is-missing { visibility: hidden; }
 /* Page-load intro. html.intro hides the hero (set in <head> unless reduced
    motion is on); html.intro-play, added once the hero images are ready,
    plays it: the photo dissolves in, the name slides up into place, then
-   the intro line and the menu arrive. */
+   the intro line and the menu arrive. Text comes out of a blur as it
+   arrives, as on billguo.me's case studies. */
 .intro:not(.intro-play) :is(.hero-photo, .stipple--hero, .hero-intro, .nav, .menu-toggle) { opacity: 0; }
 .intro:not(.intro-play) .hero-name img { opacity: 0; }
 
 .intro-play .hero-photo { animation: intro-fade 1.6s ease backwards; }
 .intro-play .stipple--hero { animation: intro-fade 1.4s ease 0.5s backwards; }
-.intro-play .hero-name-anna { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s backwards; }
-.intro-play .hero-name-volkova { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards; }
+.intro-play .hero-name-anna { animation: intro-name 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s backwards; }
+.intro-play .hero-name-volkova { animation: intro-name 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards; }
 .intro-play .hero-intro { animation: intro-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.4s backwards; }
 .intro-play :is(.nav, .menu-toggle) { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
 
 @keyframes intro-fade { from { opacity: 0; } }
 @keyframes intro-slide { from { opacity: 0; transform: translateY(40px); } }
-@keyframes intro-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes intro-name { from { opacity: 0; transform: translateY(40px); filter: blur(12px); } }
+@keyframes intro-rise { from { opacity: 0; transform: translateY(10px); filter: blur(12px); } }
 @keyframes intro-drop { from { opacity: 0; translate: 0 -12px; -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px); } }
 
 /* ---------- 2. Selected work ---------- */
@@ -335,13 +345,13 @@ img.is-missing { visibility: hidden; }
 .work-panel[hidden] { display: none; }
 
 /* Switching projects: the current one fades out, then the new one comes in.
-   Only what changes moves: the picture fades and the text rises in one
-   block after another. The botanical drawing, the grain and the borders
+   Only what changes moves: the picture fades and the text rises out of a
+   blur, one block after another. The botanical drawing, the grain and the borders
    stay put. */
 .work-panel.is-leaving :is(.shot, .work-body, .work-footer > *) { animation: panel-out 0.16s ease-in both; }
 .work-panel.is-entering .shot { animation: panel-fade 0.5s ease both; }
 .work-panel.is-entering .work-body > *,
-.work-panel.is-entering .work-footer > * { animation: panel-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--arrive, 0s) both; }
+.work-panel.is-entering .work-footer > * { animation: panel-rise 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) var(--arrive, 0s) both; }
 .work-panel.is-entering .work-body > :nth-child(2) { animation-delay: calc(var(--arrive, 0s) + 0.06s); }
 .work-panel.is-entering .work-body > :nth-child(3) { animation-delay: calc(var(--arrive, 0s) + 0.12s); }
 .work-panel.is-entering .work-footer > * { animation-delay: calc(var(--arrive, 0s) + 0.18s); }
@@ -354,7 +364,7 @@ img.is-missing { visibility: hidden; }
 
 @keyframes panel-out { to { opacity: 0; } }
 @keyframes panel-fade { from { opacity: 0; } }
-@keyframes panel-rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes panel-rise { from { opacity: 0; transform: translateY(12px); filter: blur(12px); } }
 .work-panel:focus-visible { outline-offset: -2px; }
 
 /* Project visual: a 504 × 714 stage, pulled up beside the tab row. */
@@ -1855,7 +1865,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   rotate: -0.32deg;
   will-change: translate;
 }
-/* The screen as far down as the opening shows it. */
+/* The whole screen: as it drifts up, its foot comes into the opening. */
 .cs-mockup img { width: 100%; height: auto; }
 
 /* Back to the work, staying in the top left corner: a circle of darkened
@@ -1902,15 +1912,18 @@ html:has(.page-study) { scroll-snap-type: none; }
 
 /* Page-load intro (html.intro / html.intro-play, as on the homepage): the
    trees dissolve in as the homepage's do, the screen comes up from a little
-   below, then the read arrives as a project's text does in the work tabs,
-   and the ← drops in as the homepage's menu does. */
-.intro:not(.intro-play) :is(.cs-banner-trees, .cs-banner-paper, .cs-mockup, .cs > *, .cs-back) { opacity: 0; }
+   below, and the ← drops in as the homepage's menu does. Then the read
+   arrives block by block as it comes into view, out of a blur as a
+   project's text does in the work tabs, blocks arriving together 60ms
+   apart (.is-revealed, --reveal-delay; js/study.js; html.reveals once it's
+   running, else they show with the intro). */
+.intro:not(.intro-play) :is(.cs-banner-trees, .cs-banner-paper, .cs-mockup, .cs-back),
+.intro:not(.intro-play) .cs-block,
+.reveals .cs-block:not(.is-revealed) { opacity: 0; }
 .intro-play :is(.cs-banner-trees, .cs-banner-paper) { animation: intro-fade 1.6s ease backwards; }
 .intro-play .cs-mockup { animation: intro-slide 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards; }
-.intro-play .cs > * { animation: panel-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.1s backwards; }
-.intro-play .cs > :nth-child(2) { animation-delay: 1.16s; }
-.intro-play .cs > :nth-child(3) { animation-delay: 1.22s; }
 .intro-play .cs-back { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
+.cs-block.is-revealed { animation: panel-rise 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) var(--reveal-delay, 0s) backwards; }
 
 /* The read: 180px in from each side of the 1440px frame (less on narrower
    windows), the title, then the details and the overview side by side, then

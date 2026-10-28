@@ -2,10 +2,13 @@
 // as the page scrolls, so it moves faster than the page; the research
 // question rises a little under the mouse, as the lore page's papers do
 // (js/rise.js). Neither moves with reduced motion. The ← stays in the
-// corner, and turns brown past the opening.
+// corner, and turns brown past the opening. With the page's intro, the read
+// arrives block by block as it comes into view.
 import { riseOnHover } from "./rise.js";
 
-const DRIFT = 0.4;             // px the screen moves up per px scrolled
+const DRIFT = 0.2;             // px the screen moves up per px scrolled
+const REVEAL_AFTER = 1100;     // ms into the intro: the screen is up by then
+const REVEAL_STEP = 60;        // ms between blocks arriving together
 
 export function initStudy() {
   const study = document.querySelector(".study");
@@ -17,6 +20,7 @@ export function initStudy() {
   if (banner) drift(banner, reducedMotion);
   if (banner && back) recolor(back, banner);
   if (question) riseOnHover(question);
+  if (document.documentElement.classList.contains("intro")) reveal(study);
   if (document.documentElement.classList.contains("in-panel")) closesPanel(study);
 }
 
@@ -38,6 +42,36 @@ function drift(banner, reducedMotion) {
   window.addEventListener("scroll", queue, { passive: true });
   window.addEventListener("resize", queue);
   update();
+}
+
+// The read's blocks (.cs-block) arrive as they come into view, as on
+// billguo.me's case studies, out of a blur (the CSS): the first ones once
+// the intro has brought the screen up, the rest as they're scrolled to,
+// those arriving together REVEAL_STEP apart, in reading order.
+function reveal(study) {
+  const root = document.documentElement;
+  const blocks = [...study.querySelectorAll(".cs-block")];
+  root.classList.add("reveals");
+  const watch = () => {
+    const seen = new IntersectionObserver((entries) => {
+      entries.filter((entry) => entry.isIntersecting).map((entry) => entry.target)
+        .sort((a, b) => blocks.indexOf(a) - blocks.indexOf(b))
+        .forEach((block, i) => {
+          block.style.setProperty("--reveal-delay", `${i * REVEAL_STEP}ms`);
+          block.classList.add("is-revealed");
+          seen.unobserve(block);
+        });
+    }, { rootMargin: "0px 0px -12% 0px" });
+    for (const block of blocks) seen.observe(block);
+  };
+  const afterIntro = () => setTimeout(watch, REVEAL_AFTER);
+  if (root.classList.contains("intro-play")) { afterIntro(); return; }
+  const wait = new MutationObserver(() => {
+    if (!root.classList.contains("intro-play")) return;
+    wait.disconnect();
+    afterIntro();
+  });
+  wait.observe(root, { attributes: true, attributeFilter: ["class"] });
 }
 
 // Once the opening has scrolled up past the middle of the ←, the ← is over
