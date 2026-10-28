@@ -24,7 +24,7 @@ import Page from "../layouts/Page.astro";
 
 <!-- Case study: On My Disk, a redesign in progress (Figma: Portfolio,
      "Desktop - 3"). The halftone trees, the On My Disk screen and the
-     botanical drawing are Figma's renders, shaders and all, flattened into
+     botanical drawings are Figma's renders, shaders and all, flattened into
      pictures. -->
 <main id="main" class="study">
 
@@ -60,12 +60,100 @@ import Page from "../layouts/Page.astro";
       </section>
     </div>
 
+    <h2 class="cs-divider cs-block" id="impact"><span>Impact</span></h2>
+
+    <!-- What changed, in two figures, on paper with the botanical drawing. -->
+    <div class="cs-impact">
+      <div class="cs-stat cs-paper cs-block">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <img class="cs-stat-botanical cs-stat-botanical--right" src="assets/img/on-my-disk/impact-botanical-1.webp" alt="" width="364" height="258">
+        <p class="cs-stat-figure">100%</p>
+        <p class="cs-stat-text">of participants correctly identified the file’s location as local in the post-redesign survey.</p>
+      </div>
+      <div class="cs-stat cs-paper cs-block">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <img class="cs-stat-botanical cs-stat-botanical--left" src="assets/img/on-my-disk/impact-botanical-2.webp" alt="" width="369" height="258">
+        <p class="cs-stat-figure">2.4x</p>
+        <p class="cs-stat-text">More sign ups since rolling out the new design &amp; private AI features.</p>
+      </div>
+    </div>
+
+    <hr class="cs-rule">
+
+    <!-- Screens on paper: the placeholder for now. Each screen rises a little
+         under the mouse; its paper stays put (js/study.js). -->
+    <div class="cs-gallery">
+      <div class="cs-frame cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot"><img loading="lazy" src="assets/img/on-my-disk/placeholder-screen.webp" alt="On My Disk’s file manager (a placeholder for now)." width="841" height="502"></div>
+      </div>
+      <div class="cs-gallery-row">
+        <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+        <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+      </div>
+    </div>
+
+    <hr class="cs-rule">
+
+    <div class="cs-pair">
+      <section aria-labelledby="problem">
+        <h2 class="cs-label cs-block" id="problem">The Problem</h2>
+        <p class="cs-text cs-block">When testing a previous version of the UI with three participants, every participant but one assumed their files were sitting on someone else’s server.</p>
+      </section>
+      <section aria-labelledby="challenge">
+        <h2 class="cs-label cs-block" id="challenge">The Challenge</h2>
+        <p class="cs-text cs-block">Make file storage, privacy status, and access permissions understandable at a glance, without compromising the simplicity of the interface.</p>
+      </section>
+    </div>
+
     <!-- The research question, on paper with the botanical drawing. It rises
          a little under the mouse, as the lore page's papers do (js/study.js). -->
     <div class="cs-question cs-block">
       <img class="cs-question-paper" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
       <img class="cs-question-botanical" src="assets/img/on-my-disk/card-botanical.webp" alt="" width="745" height="231">
       <p class="cs-question-text">How do you make users trust that their files never leave their device?</p>
+    </div>
+
+    <section class="cs-role" aria-labelledby="role">
+      <h2 class="cs-label cs-block" id="role">My Role</h2>
+      <p class="cs-text cs-block">I was the sole product designer, responsible for end-to-end UX and UI design. Working alongside one engineer, I led the research, from defining research questions and recruiting participants to moderating sessions and analyzing findings. I developed the design system, prototyped key interactions, and delivered the final visual design.</p>
+    </section>
+
+    <h2 class="cs-divider cs-block" id="solutions"><span>Solutions</span></h2>
+
+    <!-- Each solution: what and why, on the right or the left, then its
+         screen on paper. -->
+    <div class="cs-solutions">
+      <section class="cs-solution cs-solution--right" aria-labelledby="solution-indicators">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="solution-indicators">Visual indicators for file privacy status</h3>
+          <p class="cs-solution-desc cs-block">I made the distinction between public and private files visible at a glance through status indicators with color and visual cues.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/on-my-disk/placeholder-screen.webp" alt="On My Disk’s file manager (a placeholder for now)." width="841" height="502"></div>
+        </div>
+      </section>
+      <section class="cs-solution" aria-labelledby="solution-onboarding">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="solution-onboarding">Control through transparent onboarding</h3>
+          <p class="cs-solution-desc cs-block">In a research survey of 27 participants, 15 named control over their data as their most important factor when considering AI search, so an option to pick a local model or opt out during onboarding was added.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/on-my-disk/placeholder-screen.webp" alt="On My Disk’s file manager (a placeholder for now)." width="841" height="502"></div>
+        </div>
+      </section>
+      <section class="cs-solution cs-solution--right" aria-labelledby="solution-search">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="solution-search">Natural-language search and filtering, at no cost to privacy</h3>
+          <p class="cs-solution-desc cs-block">Since participants named memory reliance and confusion about directory structure the as most common issues when retrieving files, LLM search -- which you can run locally -- was added.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/on-my-disk/placeholder-screen.webp" alt="On My Disk’s file manager (a placeholder for now)." width="841" height="502"></div>
+        </div>
+      </section>
     </div>
   </article>
 

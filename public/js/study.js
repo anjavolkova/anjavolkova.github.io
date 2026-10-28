@@ -1,9 +1,10 @@
 // Case study pages (on-my-disk.html). The screen in the opening drifts up
 // as the page scrolls, so it moves faster than the page; the research
 // question rises a little under the mouse, as the lore page's papers do
-// (js/rise.js). Neither moves with reduced motion. The ← stays in the
-// corner, and turns brown past the opening. With the page's intro, the read
-// arrives block by block as it comes into view.
+// (js/rise.js), and so do the screens on paper, their paper staying put.
+// None of it moves with reduced motion. The ← stays in the corner, and turns
+// brown past the opening. With the page's intro, the read arrives block by
+// block as it comes into view.
 import { riseOnHover } from "./rise.js";
 
 const DRIFT = 0.2;             // px the screen moves up per px scrolled
@@ -20,6 +21,10 @@ export function initStudy() {
   if (banner) drift(banner, reducedMotion);
   if (banner && back) recolor(back, banner);
   if (question) riseOnHover(question);
+  for (const frame of study.querySelectorAll(".cs-frame")) {
+    const shot = frame.querySelector(".cs-shot");
+    if (shot) riseOnHover(shot, frame);
+  }
   if (document.documentElement.classList.contains("intro")) reveal(study);
   if (document.documentElement.classList.contains("in-panel")) closesPanel(study);
 }
