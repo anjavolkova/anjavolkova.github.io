@@ -3,6 +3,7 @@ import { loadCal } from "./cal-embed.js";
 import { initLore } from "./lore.js";
 import { initStudy } from "./study.js";
 import { initPanels } from "./panel.js";
+import { riseOnHover } from "./rise.js";
 import { swipeReader } from "./swipes.js";
 
 // Destinations still to be supplied. Any link left empty keeps href="#".
@@ -13,7 +14,7 @@ const LINKS = {
   "study-network": "",
   "study-home": "",
   "study-smm": "",
-  "study-files": "",
+  "study-files": "on-my-disk",
   "lastfm-widget": "https://lastfm-notion-widget.vercel.app/",
   booking: "https://cal.com/anna-volkova-selo8r/30min",
   linkedin: "https://www.linkedin.com/in/iamannavolkova/",
@@ -410,7 +411,9 @@ function initWorkArrival() {
 // (the side nearest the pointer comes forward), easing after the pointer,
 // and settles flat again once it leaves. This sets how far it leans, from
 // -1 to 1 each way (--lean-x, --lean-y) and 0 to 1 in all (--lean); the CSS
-// turns that into the tilt, the phone's edge, its glare and its shadow.
+// turns that into the tilt, the phone's edge, its glare and its shadow. A
+// picture marked .rise rises straight up instead, as the lore page's papers
+// do (js/rise.js).
 const TILT_EASE = 0.16;    // seconds: how quickly the picture catches up
 
 function initWorkTilt() {
@@ -418,6 +421,7 @@ function initWorkTilt() {
   for (const visual of document.querySelectorAll(".work-visual")) {
     const shot = visual.querySelector(".shot");
     if (!shot) continue;
+    if (shot.classList.contains("rise")) { riseOnHover(shot, visual); continue; }
     const target = { x: 0, y: 0 };
     const now = { ...target };
     let raf = null;
