@@ -267,19 +267,18 @@ img.is-missing { visibility: hidden; }
 
 /* Page-load intro. html.intro hides the hero (set in <head> unless reduced
    motion is on); html.intro-play, added once the hero images are ready,
-   plays it: the photo settles in, the name slides up into place, then
+   plays it: the photo dissolves in, the name slides up into place, then
    the intro line and the menu arrive. */
 .intro:not(.intro-play) :is(.hero-photo, .stipple--hero, .hero-intro, .nav, .menu-toggle) { opacity: 0; }
 .intro:not(.intro-play) .hero-name img { opacity: 0; }
 
-.intro-play .hero-photo { animation: intro-photo 1.6s cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+.intro-play .hero-photo { animation: intro-fade 1.6s ease backwards; }
 .intro-play .stipple--hero { animation: intro-fade 1.4s ease 0.5s backwards; }
 .intro-play .hero-name-anna { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s backwards; }
 .intro-play .hero-name-volkova { animation: intro-slide 1s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards; }
 .intro-play .hero-intro { animation: intro-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.4s backwards; }
 .intro-play :is(.nav, .menu-toggle) { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
 
-@keyframes intro-photo { from { opacity: 0; transform: scale(1.06); } }
 @keyframes intro-fade { from { opacity: 0; } }
 @keyframes intro-slide { from { opacity: 0; transform: translateY(40px); } }
 @keyframes intro-rise { from { opacity: 0; transform: translateY(10px); } }
@@ -1792,8 +1791,8 @@ align-self: flex-start;
 html:has(.page-study) { scroll-snap-type: none; }
 
 /* The opening, laid out in units of Figma's 1440px frame (--u), up to that
-   width. The screen drifts down a little as the page scrolls (--drift;
-   js/study.js), so it moves slower than the page. */
+   width. The screen drifts up as the page scrolls (--drift; js/study.js),
+   so it moves faster than the page. */
 .cs-banner {
   --u: calc(min(100vw, 1440px) / 1440);
   --drop: 0px;   /* phones: room above the screen for the ← */
@@ -1846,6 +1845,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   border-radius: 4px;
   background: var(--white);
   box-shadow:
+    0 0 0 max(2px, calc(4 * var(--u))) rgba(245, 242, 244, 0.8),   /* Figma's stroke, outside the screen */
     0 191px 54px rgba(67, 4, 23, 0),
     0 122px 49px rgba(67, 4, 23, 0.01),
     0 69px 41px rgba(67, 4, 23, 0.05),
@@ -1866,36 +1866,28 @@ html:has(.page-study) { scroll-snap-type: none; }
   --u: calc(min(100vw, 1440px) / 1440);   /* the opening's */
   position: fixed;
   z-index: 2;
-  left: max(16px, calc(45 * var(--u)));
-  top: max(16px, calc(33 * var(--u)));
+  left: calc(max(16px, calc(45 * var(--u))) + 1px);
+  top: calc(max(16px, calc(33 * var(--u))) + 1px);
   display: grid;
   place-items: center;
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
+  border: 1px solid currentColor;
   border-radius: 50%;
   color: var(--bg);
+  background: rgba(39, 26, 33, 0.3);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   box-shadow:
     0 23px 4.5px rgba(152, 129, 129, 0.01),
     0 13px 4px rgba(152, 129, 129, 0.04),
     0 6px 3px rgba(152, 129, 129, 0.07),
     0 1px 1.5px rgba(152, 129, 129, 0.08);
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, background-color 0.25s ease;
 }
-.cs-back::before {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border: 1px solid currentColor;
-  border-radius: 40px;
-  background: rgba(39, 26, 33, 0.3);
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
-  transition: background-color 0.25s ease;
-}
-.cs-back:hover::before { background: rgba(39, 26, 33, 0.42); }
-.cs-back.is-on-light { color: var(--body); }
-.cs-back.is-on-light::before { background: rgba(246, 244, 245, 0.94); }
-.cs-back.is-on-light:hover::before { background: rgba(255, 255, 255, 0.96); }
+.cs-back:hover { background: rgba(39, 26, 33, 0.42); }
+.cs-back.is-on-light { color: var(--body); background: rgba(246, 244, 245, 0.94); }
+.cs-back.is-on-light:hover { background: rgba(255, 255, 255, 0.96); }
 .cs-back:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
 .cs-back-arrow {
   position: relative;
@@ -1907,6 +1899,18 @@ html:has(.page-study) { scroll-snap-type: none; }
   transition: translate 0.2s ease;
 }
 .cs-back:hover .cs-back-arrow { translate: -2px 0; }
+
+/* Page-load intro (html.intro / html.intro-play, as on the homepage): the
+   trees dissolve in as the homepage's do, the screen comes up from a little
+   below, then the read arrives as a project's text does in the work tabs,
+   and the ← drops in as the homepage's menu does. */
+.intro:not(.intro-play) :is(.cs-banner-trees, .cs-banner-paper, .cs-mockup, .cs > *, .cs-back) { opacity: 0; }
+.intro-play :is(.cs-banner-trees, .cs-banner-paper) { animation: intro-fade 1.6s ease backwards; }
+.intro-play .cs-mockup { animation: intro-slide 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards; }
+.intro-play .cs > * { animation: panel-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.1s backwards; }
+.intro-play .cs > :nth-child(2) { animation-delay: 1.16s; }
+.intro-play .cs > :nth-child(3) { animation-delay: 1.22s; }
+.intro-play .cs-back { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
 
 /* The read: 180px in from each side of the 1440px frame (less on narrower
    windows), the title, then the details and the overview side by side, then

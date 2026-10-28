@@ -17,7 +17,16 @@
 <script>
   // Inside the homepage's panel (js/panel.js): its scrolling stays in the
   // panel, and the way back closes the panel.
-  if (/[?&]in=panel\b/.test(location.search) && window.parent !== window) document.documentElement.classList.add("in-panel");
+  var inPanel = /[?&]in=panel\b/.test(location.search) && window.parent !== window;
+  if (inPanel) document.documentElement.classList.add("in-panel");
+
+  // Page-load intro: hide the opening and the read until js/main.js plays
+  // it (skipped with reduced motion, and in the panel, which loads before
+  // it opens). If the script never runs, show it after 3s anyway.
+  if (!inPanel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("intro");
+    setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
+  }
 </script>
 <script type="module" src="js/main.js"></script>
 </head>
@@ -35,7 +44,7 @@
   <a class="cs-back" href="/#work" aria-label="All work"><span class="cs-back-arrow" aria-hidden="true"></span></a>
 
   <!-- The opening: the trees, paper burnt over them, and the On My Disk
-       screen on top (it drifts as the page scrolls; js/study.js). -->
+       screen on top (it drifts up as the page scrolls; js/study.js). -->
   <header class="cs-banner">
     <img class="cs-banner-trees" src="assets/img/on-my-disk/banner-halftone.webp" alt="" width="1440" height="552">
     <div class="cs-banner-paper"><img src="assets/img/on-my-disk/banner-paper.webp" alt="" width="576" height="1024"></div>

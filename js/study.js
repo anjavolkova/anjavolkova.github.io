@@ -1,11 +1,11 @@
-// Case study pages (on-my-disk.html). The screen in the opening drifts down
-// as the page scrolls, so it moves slower than the page; the research
+// Case study pages (on-my-disk.html). The screen in the opening drifts up
+// as the page scrolls, so it moves faster than the page; the research
 // question rises a little under the mouse, as the lore page's papers do
 // (js/rise.js). Neither moves with reduced motion. The ← stays in the
 // corner, and turns brown past the opening.
 import { riseOnHover } from "./rise.js";
 
-const DRIFT = 0.4;             // px the screen moves down per px scrolled
+const DRIFT = 0.4;             // px the screen moves up per px scrolled
 
 export function initStudy() {
   const study = document.querySelector(".study");
@@ -28,7 +28,7 @@ function drift(banner, reducedMotion) {
     queued = false;
     const scrolled = reducedMotion.matches ? 0 : Math.max(0, -banner.getBoundingClientRect().top);
     if (scrolled > banner.offsetHeight) return;   // out of sight
-    mockup.style.setProperty("--drift", `${(scrolled * DRIFT).toFixed(1)}px`);
+    mockup.style.setProperty("--drift", `${(-scrolled * DRIFT).toFixed(1)}px`);
   };
   const queue = () => {
     if (queued) return;
