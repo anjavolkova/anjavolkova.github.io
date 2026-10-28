@@ -1978,7 +1978,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   text-box: trim-both cap alphabetic;
 }
 .cs-details dd {
-  font-size: 16px;
+  font-size: 18px;
   line-height: normal;
   letter-spacing: -0.04em;
   text-box: trim-both cap alphabetic;
