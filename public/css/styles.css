@@ -1923,18 +1923,23 @@ html:has(.page-study) { scroll-snap-type: none; }
 .intro-play .cs-mockup { animation: intro-slide 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s backwards; }
 .intro-play .cs-back { animation: intro-drop 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1.5s backwards; }
 .cs-block.is-revealed { animation: panel-rise 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) var(--reveal-delay, 0s) backwards; }
+/* Pictures come up without the blur, as on the reference. */
+.cs-block--media.is-revealed { animation-name: media-rise; }
+@keyframes media-rise { from { opacity: 0; transform: translateY(6px); } }
 
 /* The read: 180px in from each side of the 1440px frame (less on narrower
-   windows), the title, then the details and the overview side by side, then
-   the question. */
+   windows), its parts 136px apart: the title, the details and the overview,
+   the impact, screens, the problem and the challenge, the question, my role
+   and the solutions. All but the title sit a further 56px in (--cs-inset). */
 .cs {
   --cs-pad: clamp(24px, 12.5vw, 180px);
+  --cs-inset: clamp(0px, 3.9vw, 56px);
   display: flex;
   flex-direction: column;
-  gap: 104px;
+  gap: clamp(72px, 9.44vw, 136px);
   max-width: 1440px;
   margin: 0 auto;
-  padding: 56px var(--cs-pad) 270px;
+  padding: 72px var(--cs-pad) 286px;
   color: var(--body);
 }
 .cs-title {
@@ -1951,8 +1956,8 @@ html:has(.page-study) { scroll-snap-type: none; }
 .cs-intro {
   display: flex;
   align-items: flex-start;
-  gap: 48px;
-  padding: 0 64px;
+  gap: clamp(48px, 7.2vw, 104px);
+  padding: 0 var(--cs-inset);
 }
 .cs-details,
 .cs-overview { flex: 1 0 0; min-width: 0; }
@@ -1988,7 +1993,8 @@ html:has(.page-study) { scroll-snap-type: none; }
   flex-direction: column;
   gap: 16px;
 }
-.cs-overview-text {
+.cs-overview-text,
+.cs-text {
   font-size: 20px;
   font-weight: 300;
   line-height: 1.21;
@@ -2010,7 +2016,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   margin: 0 clamp(0px, 3.9vw, 56px);
   padding: 64px clamp(24px, 11.67vw, 168px);
   border: 1px solid rgba(194, 175, 184, 0.26);
-  background: rgb(233 229 231);   /* the page's colour under Figma's paper grain */
+  background: rgb(230 226 228);   /* under the paper grain: Figma's 233 229 231 with it */
   box-shadow:
     0 53px 15px rgba(194, 179, 179, 0),
     0 34px 14px rgba(194, 179, 179, 0.02),
@@ -2052,9 +2058,199 @@ html:has(.page-study) { scroll-snap-type: none; }
   text-box: trim-both cap alphabetic;
 }
 
+/* A section's name between two lines, and a plain line between parts. */
+.cs-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  color: var(--body);
+  font-feature-settings: "dlig" 1;
+}
+.cs-divider::before,
+.cs-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(194, 175, 184, 0.46);
+}
+.cs-divider span { text-box: trim-both cap alphabetic; }
+.cs-rule {
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: rgba(194, 175, 184, 0.46);
+}
+
+/* A sheet of paper, as the question's: the paper's grain over the page's
+   colour, with a softer shadow. */
+.cs-paper {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(194, 175, 184, 0.26);
+  background: rgb(230 226 228);
+  box-shadow:
+    0 9px 9px rgba(194, 179, 179, 0.12),
+    0 2px 5px rgba(194, 179, 179, 0.14);
+}
+.cs-paper-grain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: luminosity;
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+/* Impact: two figures side by side, the botanical drawing darkening each
+   sheet from its outer side. */
+.cs-impact {
+  display: flex;
+  gap: 16px;
+  padding: 0 var(--cs-inset);
+}
+.cs-stat {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  min-width: 0;
+  padding: 64px 48px;
+}
+.cs-stat-botanical {
+  position: absolute;
+  top: 0;
+  width: auto;
+  height: 100%;
+  mix-blend-mode: darken;
+  pointer-events: none;
+}
+.cs-stat-botanical--right { right: 0; }
+.cs-stat-botanical--left { left: 0; }
+.cs-stat-figure,
+.cs-stat-text { position: relative; }
+.cs-stat-figure {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 4.44vw, 64px);
+  font-weight: 400;
+  line-height: 1.125;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-feature-settings: "rvrn" 1, "case" 1, "cpsp" 1, "ordn" 1;
+  text-box: trim-both cap alphabetic;
+}
+.cs-stat-text {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  color: var(--body);
+  font-feature-settings: "dlig" 1;
+  text-box: trim-both cap alphabetic;
+}
+
+/* Screens on paper: a sheet the width of the read (968 by 627 in the
+   frame), the screen in the middle of it (841 by 502). Under the mouse the
+   screen rises a little, on the lore papers' spring, while the sheet stays
+   put (--rise; js/study.js). Below, two sheets side by side, as tall. */
+.cs-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 var(--cs-inset);
+}
+.cs-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 968 / 627;
+}
+.cs-gallery-row {
+  display: flex;
+  gap: 16px;
+  aspect-ratio: 968 / 627;
+}
+.cs-gallery-row .cs-frame { aspect-ratio: auto; }
+.cs-gallery-row .cs-frame:first-child { flex: 614 1 0; }
+.cs-gallery-row .cs-frame:last-child { flex: 338 1 0; }
+.cs-shot {
+  position: relative;
+  width: 86.88%;   /* 841 of 968 */
+  aspect-ratio: 841 / 502;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow:
+    0 53px 15px rgba(194, 179, 179, 0),
+    0 34px 14px rgba(194, 179, 179, 0.02),
+    0 19px 11px rgba(194, 179, 179, 0.07),
+    0 9px 9px rgba(194, 179, 179, 0.12),
+    0 2px 5px rgba(194, 179, 179, 0.14);
+  translate: 0 var(--rise, 0px);
+}
+.cs-shot img { width: 100%; height: 100%; object-fit: cover; }
+
+/* The problem and the challenge side by side, as the details and the
+   overview; my role across the read. */
+.cs-pair {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(48px, 7.2vw, 104px);
+  padding: 0 var(--cs-inset);
+}
+.cs-pair > section,
+.cs-role {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cs-pair > section { flex: 1 0 0; min-width: 0; }
+.cs-role { padding: 0 var(--cs-inset); }
+.cs-role .cs-text { line-height: 1.2; }
+
+/* Solutions: what and why, half the read wide on the right or the left,
+   then the screen on paper. */
+.cs-solutions {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(88px, 10.56vw, 152px);
+  padding: 0 var(--cs-inset);
+}
+.cs-solution {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 3.9vw, 56px);
+}
+.cs-solution-text {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: max(50%, min(100%, 420px));
+  color: var(--ink);
+}
+.cs-solution--right .cs-solution-text { align-self: flex-end; }
+.cs-solution-title {
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 3.33vw, 48px);
+  font-weight: 400;
+  line-height: 0.896;   /* 43px at 48 */
+  letter-spacing: -0.05em;
+  font-feature-settings: "dlig" 1;
+  text-box: trim-both cap alphabetic;
+}
+.cs-solution-desc {
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
 @media (max-width: 1023px) {
-  .cs { gap: 80px; padding-bottom: 160px; }
-  .cs-intro { padding: 0; }
+  .cs { padding-bottom: 160px; }
 }
 
 @media (max-width: 719px) {
@@ -2067,6 +2263,13 @@ html:has(.page-study) { scroll-snap-type: none; }
   .cs-overview-text { font-size: 18px; }
   .cs-question { min-height: 0; padding: 40px 24px; }
   .cs-question-botanical { width: 140%; }
+  .cs-impact,
+  .cs-pair { flex-direction: column; }
+  .cs-impact { gap: 16px; }
+  .cs-pair { gap: 48px; }
+  .cs-stat { flex: none; padding: 40px 24px; }
+  .cs-pair > section { flex: none; width: 100%; }
+  .cs-text { font-size: 18px; }
 }
 
 /* Inside the homepage's panel (js/panel.js): its scrolling stays in the
