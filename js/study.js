@@ -1,21 +1,74 @@
-// Case study pages (on-my-disk.html). Text rises out of a blur as it scrolls
-// into view, a little apart when several come in together. In place of the
-// menu, pills at the bottom go back to the work, say which section you're
-// in (with a rule that fills as you read), and step up or down to the
-// previous or next one.
-const REVEAL_STAGGER = 80;   // ms between things that come into view together
-const SECTION_GAP = 40;      // px left above a section after a step
+// Case study pages (on-my-disk.html). The screen in the opening drifts down
+// a little as the page scrolls, so it moves slower than the page; the
+// research question rises a little under the mouse, as the lore page's
+// papers do. Neither moves with reduced motion (the question's shadow still
+// deepens).
+const DRIFT = 0.15;            // px the screen moves down per px scrolled
+const HOVER_STIFFNESS = 320;   // the lore papers' hover spring (js/lore.js)
+const RISE = 4;                // px it rises, as they do
 
 export function initStudy() {
   const study = document.querySelector(".study");
   if (!study) return;
-  revealOnScroll(study);
-  sectionPills(study);
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const banner = study.querySelector(".cs-banner");
+  const question = study.querySelector(".cs-question");
+  if (banner) drift(banner, reducedMotion);
+  if (question) riseOnHover(question, reducedMotion);
   if (document.documentElement.classList.contains("in-panel")) closesPanel(study);
 }
 
-// Inside the homepage's panel (js/panel.js), the way back to the work (the
-// ← and the other case studies, until they have pages of their own) closes
+function drift(banner, reducedMotion) {
+  const mockup = banner.querySelector(".cs-mockup");
+  if (!mockup) return;
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const scrolled = reducedMotion.matches ? 0 : Math.max(0, -banner.getBoundingClientRect().top);
+    if (scrolled > banner.offsetHeight) return;   // out of sight
+    mockup.style.setProperty("--drift", `${(scrolled * DRIFT).toFixed(1)}px`);
+  };
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
+  update();
+}
+
+// The same critically damped spring as a lore paper's hover: it rises RISE
+// px, straight up, and its shadow comes in to a quarter of a lifted
+// paper's.
+function riseOnHover(el, reducedMotion) {
+  let hover = 0;
+  let speed = 0;
+  let to = 0;
+  let raf = null;
+  let last = 0;
+
+  const frame = (now) => {
+    const dt = Math.min(1 / 30, Math.max(0, now - last) / 1000 || 1 / 60);
+    last = now;
+    speed += (HOVER_STIFFNESS * (to - hover) - 2 * Math.sqrt(HOVER_STIFFNESS) * speed) * dt;
+    hover += speed * dt;
+    const settled = Math.abs(hover - to) < 0.002 && Math.abs(speed) < 0.01;
+    if (settled) { hover = to; speed = 0; }
+    const motion = reducedMotion.matches ? 0 : 1;
+    el.style.setProperty("--rise", `${(-RISE * hover * motion).toFixed(2)}px`);
+    el.style.setProperty("--lift", (hover * 0.25).toFixed(3));
+    raf = settled ? null : requestAnimationFrame(frame);
+  };
+  const set = (on) => {
+    to = on ? 1 : 0;
+    if (raf == null) { last = performance.now(); raf = requestAnimationFrame(frame); }
+  };
+  el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") set(true); });
+  el.addEventListener("pointerleave", () => set(false));
+}
+
+// Inside the homepage's panel (js/panel.js), the way back to the work closes
 // the panel instead, and so does Esc. Other links of the site's open in the
 // page rather than in the panel.
 function closesPanel(study) {
@@ -31,75 +84,4 @@ function closesPanel(study) {
     }
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closePanel(); });
-}
-
-// The page hid the text from the first paint (html.reveal-on, not with
-// reduced motion); reveal-ready tells it this script is here to show it.
-function revealOnScroll(study) {
-  const root = document.documentElement;
-  root.classList.add("reveal-ready");
-  if (!root.classList.contains("reveal-on")) return;
-  const observer = new IntersectionObserver((entries) => {
-    entries.filter((entry) => entry.isIntersecting).forEach(({ target }, i) => {
-      target.style.setProperty("--reveal-delay", `${i * REVEAL_STAGGER}ms`);
-      target.classList.add("is-in");
-      observer.unobserve(target);
-    });
-  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.1 });
-  for (const el of study.querySelectorAll(".reveal")) observer.observe(el);
-}
-
-// You're in the last section whose rule has passed the top third of the
-// window (before the first, the opening: the label it starts with). The
-// pills show until the list of the other case studies is halfway up the
-// window; that's the end of the read.
-function sectionPills(study) {
-  const pills = study.querySelector(".study-controls");
-  const rules = [...study.querySelectorAll("[data-section]")];
-  if (!pills || !rules.length) return;
-  const label = pills.querySelector(".study-sections-label");
-  const opening = label.textContent.trim();
-  const [up, down] = pills.querySelectorAll(".study-sections-step");
-  const end = study.querySelector(".study-more-list");
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let current = null;
-
-  const update = () => {
-    const line = window.innerHeight / 3;
-    const index = rules.findLastIndex((rule) => rule.getBoundingClientRect().top < line);
-    const endTop = end ? end.getBoundingClientRect().top + window.scrollY : document.documentElement.scrollHeight;
-    const read = window.scrollY / Math.max(1, endTop - window.innerHeight / 2);
-    pills.style.setProperty("--read", Math.min(1, Math.max(0, read)).toFixed(4));
-    pills.classList.toggle("is-shown", read < 1);
-    if (index === current) return;
-    const first = current === null;
-    current = index;
-    up.disabled = index < 0;
-    down.disabled = index >= rules.length - 1;
-    label.querySelector("span").textContent = index < 0 ? opening : rules[index].textContent.trim();
-    if (first || reducedMotion.matches) return;
-    label.classList.remove("is-new");
-    void label.offsetWidth;   // restart the swap
-    label.classList.add("is-new");
-  };
-
-  // Up from the first section goes back to the top. (Measured from the
-  // section, as its rule may not have risen into place yet.)
-  const step = (by) => {
-    const target = rules[current + by]?.closest("section");
-    const top = target ? target.getBoundingClientRect().top + window.scrollY - SECTION_GAP : 0;
-    window.scrollTo({ top, behavior: reducedMotion.matches ? "auto" : "smooth" });
-  };
-  up.addEventListener("click", () => step(-1));
-  down.addEventListener("click", () => step(1));
-
-  let queued = false;
-  const queue = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(() => { queued = false; update(); });
-  };
-  window.addEventListener("scroll", queue, { passive: true });
-  window.addEventListener("resize", queue);
-  update();
 }
