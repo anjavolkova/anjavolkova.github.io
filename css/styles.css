@@ -1851,7 +1851,6 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: calc(976 * var(--u));
   height: calc(583 * var(--u));
   overflow: hidden;
-  border: max(2px, calc(4 * var(--u))) solid rgba(245, 242, 244, 0.8);
   border-radius: 4px;
   background: var(--white);
   box-shadow:
@@ -1862,10 +1861,10 @@ html:has(.page-study) { scroll-snap-type: none; }
     0 31px 31px rgba(67, 4, 23, 0.09),
     0 8px 17px rgba(67, 4, 23, 0.1);
   translate: -50% var(--drift, 0px);
-  rotate: -0.32deg;
   will-change: translate;
 }
-/* The whole screen: as it drifts up, its foot comes into the opening. */
+/* Figma's render of the whole screen (Main 1), filling the box. As the
+   screen drifts up, its foot comes into the opening. */
 .cs-mockup img { width: 100%; height: auto; }
 
 /* Back to the work, staying in the top left corner: a circle of darkened
