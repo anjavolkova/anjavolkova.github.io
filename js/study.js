@@ -1,20 +1,22 @@
 // Case study pages (on-my-disk.html). The screen in the opening drifts down
-// a little as the page scrolls, so it moves slower than the page; the
-// research question rises a little under the mouse, as the lore page's
-// papers do. Neither moves with reduced motion (the question's shadow still
-// deepens).
-const DRIFT = 0.15;            // px the screen moves down per px scrolled
-const HOVER_STIFFNESS = 320;   // the lore papers' hover spring (js/lore.js)
-const RISE = 4;                // px it rises, as they do
+// as the page scrolls, so it moves slower than the page; the research
+// question rises a little under the mouse, as the lore page's papers do
+// (js/rise.js). Neither moves with reduced motion. The ← stays in the
+// corner, and turns brown past the opening.
+import { riseOnHover } from "./rise.js";
+
+const DRIFT = 0.4;             // px the screen moves down per px scrolled
 
 export function initStudy() {
   const study = document.querySelector(".study");
   if (!study) return;
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const banner = study.querySelector(".cs-banner");
+  const back = study.querySelector(".cs-back");
   const question = study.querySelector(".cs-question");
   if (banner) drift(banner, reducedMotion);
-  if (question) riseOnHover(question, reducedMotion);
+  if (banner && back) recolor(back, banner);
+  if (question) riseOnHover(question);
   if (document.documentElement.classList.contains("in-panel")) closesPanel(study);
 }
 
@@ -38,34 +40,17 @@ function drift(banner, reducedMotion) {
   update();
 }
 
-// The same critically damped spring as a lore paper's hover: it rises RISE
-// px, straight up, and its shadow comes in to a quarter of a lifted
-// paper's.
-function riseOnHover(el, reducedMotion) {
-  let hover = 0;
-  let speed = 0;
-  let to = 0;
-  let raf = null;
-  let last = 0;
-
-  const frame = (now) => {
-    const dt = Math.min(1 / 30, Math.max(0, now - last) / 1000 || 1 / 60);
-    last = now;
-    speed += (HOVER_STIFFNESS * (to - hover) - 2 * Math.sqrt(HOVER_STIFFNESS) * speed) * dt;
-    hover += speed * dt;
-    const settled = Math.abs(hover - to) < 0.002 && Math.abs(speed) < 0.01;
-    if (settled) { hover = to; speed = 0; }
-    const motion = reducedMotion.matches ? 0 : 1;
-    el.style.setProperty("--rise", `${(-RISE * hover * motion).toFixed(2)}px`);
-    el.style.setProperty("--lift", (hover * 0.25).toFixed(3));
-    raf = settled ? null : requestAnimationFrame(frame);
+// Once the opening has scrolled up past the middle of the ←, the ← is over
+// the page's colour and turns brown (is-on-light), as the phone menu's
+// button does past the photo (js/main.js).
+function recolor(back, banner) {
+  const update = () => {
+    const r = back.getBoundingClientRect();
+    back.classList.toggle("is-on-light", banner.getBoundingClientRect().bottom < r.top + r.height / 2);
   };
-  const set = (on) => {
-    to = on ? 1 : 0;
-    if (raf == null) { last = performance.now(); raf = requestAnimationFrame(frame); }
-  };
-  el.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") set(true); });
-  el.addEventListener("pointerleave", () => set(false));
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", update);
+  update();
 }
 
 // Inside the homepage's panel (js/panel.js), the way back to the work closes

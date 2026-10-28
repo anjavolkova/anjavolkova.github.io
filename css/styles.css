@@ -421,6 +421,9 @@ img.is-missing { visibility: hidden; }
   --tilt: perspective(calc(1000 * var(--u))) rotateX(calc(var(--lean-y, 0) * 2.5deg)) rotateY(calc(var(--lean-x, 0) * -2.5deg));
   transform: var(--tilt);
 }
+/* Or, instead, it rises a little while the pointer is over the area,
+   straight up, as the lore page's papers do (--rise; js/rise.js). */
+.rise { translate: 0 var(--rise, 0px); }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
 
 .shot--post {
@@ -436,9 +439,9 @@ img.is-missing { visibility: hidden; }
 
 /* On My Disk: its file manager on paper, running off the picture area's
    right edge (Figma: Component 1, Variant5). Both are Figma's renders,
-   flattened. The paper fills the whole picture area; the screen leans with
-   the pointer about the part that shows. */
-.paper {
+   flattened. The paper fills the whole picture area; the screen rises
+   under the pointer. */
+.work-paper {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -461,7 +464,6 @@ img.is-missing { visibility: hidden; }
     0 -71px 43px rgba(243, 210, 217, 0.05),
     0 -32px 32px rgba(243, 210, 217, 0.09),
     0 -8px 17px rgba(243, 210, 217, 0.1);
-  transform-origin: 20% 50%;
 }
 
 /* The phone is one picture, frame and all, centred in the picture area. As
@@ -1566,8 +1568,12 @@ align-self: flex-start;
   .work-visual :is(.grain, .botanical) { display: none; }
   #panel-smm .work-visual { --u: calc(440px / 714); height: 361px; }
   #panel-smm .stage { top: -45px; }
-  #panel-files .work-visual { --u: calc(500px / 714); height: 458px; }
-  #panel-files .stage { top: calc(31px - 74.5 * var(--u)); }
+  /* On My Disk's screen on its paper, as in Figma's frame (480 by 664),
+     from edge to edge of the screen: the paper fills the box and the screen
+     runs off its right and bottom. */
+  #panel-files .work-visual { --u: calc(100cqw / 480); height: auto; margin-inline: -16px; aspect-ratio: 480 / 664; overflow: hidden; }
+  #panel-files .stage { left: 0; top: 0; }
+  #panel-files .shot--screen { left: calc(74 * var(--u)); top: calc(36 * var(--u)); }
 
   .work-meta-wrap { order: 3; }
   .work-meta { display: flex; flex-direction: column; }
@@ -1852,10 +1858,14 @@ html:has(.page-study) { scroll-snap-type: none; }
 /* The screen as far down as the opening shows it. */
 .cs-mockup img { width: 100%; height: auto; }
 
-/* Back to the work: a frosted circle, lightening what's under it, with the
-   site's arrow in the page's colour. */
+/* Back to the work, staying in the top left corner: a circle of darkened
+   glass with a rim and the site's arrow in the page's colour over the
+   opening; past it, the page's colour with the rim and the arrow in brown,
+   as the phone menu's button turns (is-on-light; js/study.js). */
 .cs-back {
-  position: absolute;
+  --u: calc(min(100vw, 1440px) / 1440);   /* the opening's */
+  position: fixed;
+  z-index: 2;
   left: max(16px, calc(45 * var(--u)));
   top: max(16px, calc(33 * var(--u)));
   display: grid;
@@ -1863,31 +1873,35 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  color: var(--bg);
   box-shadow:
     0 23px 4.5px rgba(152, 129, 129, 0.01),
     0 13px 4px rgba(152, 129, 129, 0.04),
     0 6px 3px rgba(152, 129, 129, 0.07),
     0 1px 1.5px rgba(152, 129, 129, 0.08);
+  transition: color 0.25s ease;
 }
 .cs-back::before {
   content: "";
   position: absolute;
   inset: 1px;
-  border: 1px solid var(--bg);
+  border: 1px solid currentColor;
   border-radius: 40px;
-  background: rgba(246, 244, 245, 0.4);
+  background: rgba(39, 26, 33, 0.3);
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
-  mix-blend-mode: lighten;
   transition: background-color 0.25s ease;
 }
-.cs-back:hover::before { background: rgba(246, 244, 245, 0.6); }
-.cs-back:focus-visible { outline: 1px solid var(--bg); outline-offset: 3px; }
+.cs-back:hover::before { background: rgba(39, 26, 33, 0.42); }
+.cs-back.is-on-light { color: var(--body); }
+.cs-back.is-on-light::before { background: rgba(246, 244, 245, 0.94); }
+.cs-back.is-on-light:hover::before { background: rgba(255, 255, 255, 0.96); }
+.cs-back:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
 .cs-back-arrow {
   position: relative;
   width: 20px;
   height: 20px;
-  background: var(--bg);
+  background: currentColor;
   -webkit-mask: url("../assets/img/icons/arrow-left.svg") center / 20px 20px no-repeat;
   mask: url("../assets/img/icons/arrow-left.svg") center / 20px 20px no-repeat;
   transition: translate 0.2s ease;
@@ -1968,8 +1982,7 @@ html:has(.page-study) { scroll-snap-type: none; }
 
 /* The question, on a sheet of paper: the paper's grain over the page's
    colour, the botanical drawing darkening it. Under the mouse it rises a
-   little and its shadow deepens, on the lore papers' spring (--rise,
-   --lift; js/study.js). */
+   little, on the lore papers' spring (--rise; js/rise.js). */
 .cs-question {
   position: relative;
   isolation: isolate;
@@ -1987,8 +2000,7 @@ html:has(.page-study) { scroll-snap-type: none; }
     0 34px 14px rgba(194, 179, 179, 0.02),
     0 19px 11px rgba(194, 179, 179, 0.07),
     0 9px 9px rgba(194, 179, 179, 0.12),
-    0 2px 5px rgba(194, 179, 179, 0.14),
-    0 8px 22px rgb(39 26 33 / calc(0.28 * var(--lift, 0)));
+    0 2px 5px rgba(194, 179, 179, 0.14);
   translate: 0 var(--rise, 0px);
 }
 .cs-question-paper {
