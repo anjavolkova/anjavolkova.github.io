@@ -4,7 +4,8 @@
 // page's papers do (js/rise.js), and so do the screens on paper, their paper
 // staying put.
 // None of it moves with reduced motion. The ← stays in the corner, and turns
-// brown past the opening. With the page's intro, the read arrives block by
+// brown past the opening; the contents come in at the right edge then, the
+// section you're in marked. With the page's intro, the read arrives block by
 // block as it comes into view.
 import { riseOnHover } from "./rise.js";
 
@@ -18,9 +19,11 @@ export function initStudy() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const banner = study.querySelector(".cs-banner");
   const back = study.querySelector(".cs-back");
+  const toc = study.querySelector(".toc");
   const question = study.querySelector(".cs-question");
   if (banner) drift(banner, reducedMotion);
   if (banner && back) recolor(back, banner);
+  if (banner && toc) contents(toc, banner);
   if (question) riseOnHover(question);
   for (const stat of study.querySelectorAll(".cs-stat")) riseOnHover(stat);
   for (const frame of study.querySelectorAll(".cs-frame")) {
@@ -91,6 +94,41 @@ function recolor(back, banner) {
   };
   window.addEventListener("scroll", update, { passive: true });
   window.addEventListener("resize", update);
+  update();
+}
+
+// The contents (src/components/CaseToc.astro) come in once the opening has
+// gone up past them (is-shown). The section you're in is the last whose
+// heading has gone above a third of the way down the window, and any
+// heading beside it (the problem and the challenge are one place): its
+// mark and its name are marked (is-current, aria-current).
+function contents(toc, banner) {
+  const links = [...toc.querySelectorAll(".toc-link")];
+  const marks = [...toc.querySelectorAll(".toc-mark")];
+  const headings = links.map((link) => document.getElementById(link.hash.slice(1)));
+  let queued = false;
+  const update = () => {
+    queued = false;
+    const tops = headings.map((h) => (h ? h.getBoundingClientRect().top : Infinity));
+    const line = innerHeight / 3;
+    const passed = tops.filter((top) => top <= line);
+    const here = passed.length ? passed[passed.length - 1] : null;
+    tops.forEach((top, i) => {
+      const current = here !== null && Math.abs(top - here) < 2;
+      marks[i].classList.toggle("is-current", current);
+      if (current) links[i].setAttribute("aria-current", "location");
+      else links[i].removeAttribute("aria-current");
+    });
+    const r = toc.getBoundingClientRect();
+    toc.classList.toggle("is-shown", banner.getBoundingClientRect().bottom < r.top);
+  };
+  const queue = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
   update();
 }
 
