@@ -1,0 +1,32 @@
+---
+import CaseStudy from "../layouts/CaseStudy.astro";
+import CaseFolder from "../components/CaseFolder.astro";
+// Case study: the network management system, the overview only, from its
+// copy in Notion ("mns anonymized, overview at least"). Under NDA, so the
+// opening has no screen, and nothing links here yet.
+---
+<CaseStudy title="Designing the tools that keep the internet running — Anna Volkova" description="Redesigning a legacy network management system. A case study by Anna Volkova, product & visual designer."
+  contents={[
+    { id: "overview", label: "Overview" },
+    { id: "see-more", label: "See more" },
+  ]}>
+    <h1 class="cs-title cs-block">Designing the tools that keep the internet running</h1>
+
+    <div class="cs-intro">
+      <dl class="cs-details">
+        <div class="cs-block"><dt>Role</dt><dd>Product designer</dd></div>
+        <div class="cs-block"><dt>Team</dt><dd>1 PM<br>3 engineers<br>1 designer</dd></div>
+        <div class="cs-block"><dt>Skills</dt><dd>Product, UX</dd></div>
+        <div class="cs-block"><dt>Timeline</dt><dd>2025–2026</dd></div>
+        <div class="cs-block"><dt>Client</dt><dd>Multinational IoT company</dd></div>
+      </dl>
+      <section class="cs-overview" aria-labelledby="overview">
+        <h2 class="cs-label cs-block" id="overview">Overview</h2>
+        <div class="cs-overview-text">
+          <p class="cs-block">Network operators rely on specialised software to monitor network infrastructure, diagnose faults, and keep services online. I redesigned a legacy network management system for the first time in over a decade, making it easier to understand what’s happening across thousands of devices and resolve problems faster.</p>
+        </div>
+      </section>
+    </div>
+
+    <CaseFolder papers={["beauty", "pears"]} />
+</CaseStudy>

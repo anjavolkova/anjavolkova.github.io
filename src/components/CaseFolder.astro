@@ -1,0 +1,81 @@
+---
+// "See more", the end of a case study: a folder of the other case studies
+// (below). A study leaves its own paper out (papers: the ones in it).
+type Paper = "beauty" | "pears";
+interface Props {
+  papers: Paper[];
+}
+const { papers } = Astro.props;
+---
+    <h2 class="cs-divider cs-block" id="see-more"><span>See more</span></h2>
+
+    <!-- The other case studies: a folder of papers that works as the lore
+         page's does (js/lore.js), each paper with a screenshot clipped to it
+         that goes along with it. Scrolling leafs through it while the
+         pointer is on it and all of it is in sight. At the back, never moved, the resume and the
+         letter, with their buttons. Positions are Figma's, in units of the
+         folder's frame (948 of the read's 1080). -->
+    <div class="cs-more cs-block cs-block--media">
+      <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder" data-scroll-leaf="over"
+           aria-label="A folder of my other case studies. Press the right arrow key, swipe or drag to leaf through, and the left arrow key to go back."
+           aria-describedby="more-status">
+        <img class="folder-base" loading="lazy" src="assets/img/lore/folder-1x.webp" srcset="assets/img/lore/folder-1x.webp 1x, assets/img/lore/folder.webp 2x" alt="" width="1125" height="854">
+        <span class="folder-label" aria-hidden="true">Case studies</span>
+        <img class="folder-arrow" loading="lazy" src="assets/img/case-studies/arrow-1x.webp" srcset="assets/img/case-studies/arrow-1x.webp 1x, assets/img/case-studies/arrow.webp 2x" alt="" width="171" height="20">
+
+        <div class="sheet sheet--fixed" data-sheet="resume" style="--x: 473; --y: 9; --w: 475; --h: 730; --cx: 48; --cy: 9; --cw: 379; --ch: 552;">
+          <span class="sheet-lift" aria-hidden="true"></span>
+          <img class="sheet-img" loading="lazy" src="assets/img/lore/resume-1x.webp" srcset="assets/img/lore/resume-1x.webp 1x, assets/img/lore/resume.webp 2x" alt="My resume, in a document wallet." width="475" height="730">
+          <span class="sheet-hit" aria-hidden="true"></span>
+        </div>
+        <div class="sheet sheet--fixed" data-sheet="envelope" style="--x: 616.63; --y: 195.39; --w: 321; --h: 394.5; --cx: 0; --cy: 13.6; --cw: 304; --ch: 381; --cr: -2.57deg;">
+          <span class="sheet-lift" aria-hidden="true"></span>
+          <img class="sheet-img" loading="lazy" src="assets/img/lore/envelope-1x.webp" srcset="assets/img/lore/envelope-1x.webp 1x, assets/img/lore/envelope.webp 2x" alt="A letter sealed with wax, “write to me” on the front." width="321" height="395">
+          <span class="sheet-hit" aria-hidden="true"></span>
+        </div>
+
+        <!-- The papers that move, top of the pile last; --left is where each
+             one lies once it's over on the left-hand side. The screenshot's
+             own area takes the pointer too (sheet-hit--pin). -->
+        {papers.includes("beauty") && (
+        <div class="sheet" data-sheet="beauty" data-label="Visuals for local beauty businesses" style="--x: 453; --y: 32; --w: 478; --h: 694; --left: 5; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
+          <span class="sheet-lift" aria-hidden="true"></span>
+          <img class="sheet-img" loading="lazy" src="assets/img/case-studies/beauty-1x.webp" srcset="assets/img/case-studies/beauty-1x.webp 1x, assets/img/case-studies/beauty.webp 2x" alt="" width="478" height="694">
+          <img class="sheet-pin" loading="lazy" src="assets/img/case-studies/beauty-pin-1x.webp" srcset="assets/img/case-studies/beauty-pin-1x.webp 1x, assets/img/case-studies/beauty-pin.webp 2x" alt="Social media posts for a beauty salon, paper-clipped to the paper." width="428" height="412" style="--pin-x: 63.9; --pin-y: 236.22; --pin-w: 428;">
+          <span class="sheet-hit" aria-hidden="true"></span>
+          <span class="sheet-hit sheet-hit--pin" aria-hidden="true" style="--cx: 84.9; --cy: 243.22; --cw: 359.5; --ch: 287.78;"></span>
+          <div class="visually-hidden">
+            <h3>Visuals for local beauty businesses</h3>
+            <p>Designing engaging social media posts tailored for clients in the beauty industry.</p>
+            <dl><dt>Role</dt><dd>Graphic designer</dd><dt>Team</dt><dd>1 Social Media Manager, 1 Designer</dd><dt>Timeline</dt><dd>2026</dd><dt>Client</dt><dd>Local beauty businesses</dd></dl>
+          </div>
+        </div>
+        )}
+        {papers.includes("pears") && (
+        <div class="sheet" data-sheet="pears" data-label="PeARS Search Engine" style="--x: 465; --y: 10; --w: 478; --h: 694; --left: 17; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
+          <span class="sheet-lift" aria-hidden="true"></span>
+          <img class="sheet-img" loading="lazy" src="assets/img/case-studies/pears-1x.webp" srcset="assets/img/case-studies/pears-1x.webp 1x, assets/img/case-studies/pears.webp 2x" alt="" width="478" height="694">
+          <img class="sheet-pin" loading="lazy" src="assets/img/case-studies/pears-pin-1x.webp" srcset="assets/img/case-studies/pears-pin-1x.webp 1x, assets/img/case-studies/pears-pin.webp 2x" alt="PeARS’ home page, “The people’s search engine”, paper-clipped to the paper." width="448" height="437" style="--pin-x: 1.98; --pin-y: 253.62; --pin-w: 447.5;">
+          <span class="sheet-hit" aria-hidden="true"></span>
+          <span class="sheet-hit sheet-hit--pin" aria-hidden="true" style="--cx: 43.76; --cy: 260.62; --cw: 359.5; --ch: 287.78; --cr: 4.14deg;"></span>
+          <div class="visually-hidden">
+            <h3>PeARS Search Engine</h3>
+            <p>Making contributing to an open-source search engine faster &amp; simpler</p>
+            <dl><dt>Role</dt><dd>UX consultant, Product designer</dd><dt>Team</dt><dd>1 designer, 1 engineer</dd><dt>Timeline</dt><dd>Jan–Mar 2024</dd><dt>Client</dt><dd>Denotation</dd></dl>
+          </div>
+        </div>
+        )}
+
+        <!-- The resume's and the letter's buttons: above all the papers. -->
+        <a class="pill pill--resume" href="#" data-link="resume" data-for="resume" download style="--px: 710.5; --py: 165;">
+          Download PDF
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M17.5 12.5v1c0 1.4 0 2.1-.27 2.64a2.5 2.5 0 0 1-1.1 1.09c-.53.27-1.23.27-2.63.27h-7c-1.4 0-2.1 0-2.63-.27a2.5 2.5 0 0 1-1.1-1.1C2.5 15.6 2.5 14.9 2.5 13.5v-1m11.67-4.17L10 12.5m0 0L5.83 8.33M10 12.5v-10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="pill pill--inquiry" type="button" data-opens="inquiry" data-for="envelope" style="--px: 768.6; --py: 505;">
+          Inquiry form
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5.83 14.17 14.17 5.83m0 0H5.83m8.34 0v8.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <p class="lore-hint" aria-hidden="true">swipe to leaf through</p>
+      <p class="visually-hidden" id="more-status" role="status" aria-live="polite"></p>
+    </div>

@@ -1,0 +1,90 @@
+---
+// A case study (on-my-disk.astro was the first; Figma: Portfolio, "Desktop
+// - 3"): the way back, the contents, the opening (the halftone trees, paper
+// burnt over them and the project's screen on top), the read (the page's
+// own), then the contact section on the stipple, the footer and the
+// message forms. Kept out of search engines while they're in progress.
+import Page from "./Page.astro";
+import CaseToc from "../components/CaseToc.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import MessageDialog from "../components/MessageDialog.astro";
+interface Screen {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+interface Props {
+  title: string;
+  description: string;
+  contents: { id: string; label: string }[];
+  screen?: Screen;   // none: the trees alone (a project under NDA)
+}
+const { title, description, contents, screen } = Astro.props;
+---
+<Page title={title} description={description} noindex bodyClass="page-study" fontWeights="300;400;500;600">
+<Fragment slot="head">
+<script is:inline>
+  // Inside the homepage's panel (js/panel.js): its scrolling stays in the
+  // panel, and the way back closes the panel.
+  var inPanel = /[?&]in=panel\b/.test(location.search) && window.parent !== window;
+  if (inPanel) document.documentElement.classList.add("in-panel");
+
+  // Page-load intro: hide the opening and the read until js/main.js plays
+  // it (skipped with reduced motion, and in the panel, which loads before
+  // it opens). If the script never runs, show it after 3s anyway.
+  if (!inPanel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("intro");
+    setTimeout(function () { document.documentElement.classList.add("intro-play"); }, 3000);
+  }
+</script>
+</Fragment>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main id="main" class="study">
+
+  <!-- The way back to the work: it stays in the corner (js/study.js). -->
+  <a class="cs-back" href="/#work" aria-label="All work"><span class="cs-back-arrow" aria-hidden="true"></span></a>
+
+  <!-- The contents, at the right edge once past the opening. -->
+  <CaseToc items={contents} />
+
+  <!-- The opening: the trees, paper burnt over them, and the project's
+       screen on top (it drifts up as the page scrolls; js/study.js). -->
+  <header class="cs-banner">
+    <img class="cs-banner-trees" src="assets/img/on-my-disk/banner-halftone.webp" alt="" width="1440" height="552">
+    <div class="cs-banner-paper"><img src="assets/img/on-my-disk/banner-paper.webp" alt="" width="576" height="1024"></div>
+    {screen && (
+    <div class="cs-mockup">
+      <img src={screen.src} alt={screen.alt} width={screen.width} height={screen.height}>
+    </div>
+    )}
+  </header>
+
+  <article class="cs">
+    <slot />
+  </article>
+
+  <!-- Contact / booking, on the stipple, which reaches up behind the
+       folder. -->
+  <section class="contact contact--study" id="contact" aria-labelledby="contact-title">
+    <canvas class="stipple stipple--contact" data-src="assets/img/stipple-source.webp" data-fade-right="0.08" aria-hidden="true"></canvas>
+    <h2 class="contact-title" id="contact-title">Tell me what you’re working on</h2>
+    <p class="contact-sub">I’d love to chat and collaborate with you!</p>
+    <div class="booking">
+      <div class="booking-embed"></div>
+    </div>
+  </section>
+
+</main>
+
+<SiteFooter />
+
+<!-- Shown once someone has played with the stipple for 60+ seconds. -->
+<MessageDialog id="nudge" title="Seems like you’ve been playing with the design of this page for 60+ seconds now..." text="so it should be safe to say it would be worth getting in touch ;)" />
+
+<!-- The letter's "Inquiry form": the same message form, opened from the folder. -->
+<MessageDialog id="inquiry" title="Write to me" text="Tell me a little about your project and I’ll get back to you." />
+
+</Page>

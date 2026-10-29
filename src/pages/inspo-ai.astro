@@ -1,0 +1,119 @@
+---
+import CaseStudy from "../layouts/CaseStudy.astro";
+import CaseFolder from "../components/CaseFolder.astro";
+// Case study: inspo.ai, from its copy in Notion ("inspo ai", the part above
+// the line), laid out as On My Disk's. The 2022 screens are the old
+// portfolio's, cut out of their backgrounds; the rest are the live demo's
+// (inspo/), its painting and photo straight from its data.
+---
+<CaseStudy title="inspo.ai — AI prompts for creative block — Anna Volkova" description="inspo.ai: a web app that helps artists beat creative block with AI-generated prompts. A case study by Anna Volkova, product & visual designer."
+  contents={[
+    { id: "overview", label: "Overview" },
+    { id: "role", label: "My Role" },
+    { id: "decisions", label: "Key Design Decisions" },
+    { id: "outcome", label: "Outcome" },
+    { id: "see-more", label: "See more" },
+  ]}
+  screen={{ src: "assets/img/inspo-ai/screen.webp", alt: "inspo.ai on a desktop: the prompt “And Always Find You” with its VQGAN+CLIP painting, its color palette, a Pexels photo and a story plot.", width: 976, height: 583 }}>
+    <h1 class="cs-title cs-block">Helping artists beat creative block with AI-generated prompts</h1>
+
+    <div class="cs-intro">
+      <dl class="cs-details">
+        <div class="cs-block"><dt>Team</dt><dd>Solo</dd></div>
+        <div class="cs-block"><dt>Timeline</dt><dd>2022, 2026</dd></div>
+      </dl>
+      <section class="cs-overview" aria-labelledby="overview">
+        <h2 class="cs-label cs-block" id="overview">Overview</h2>
+        <div class="cs-overview-text">
+          <p class="cs-block">inspo.ai is a web app that helps artists beat creative block by giving them AI-generated prompts: a title, a color palette, a photo and a short story plot. (Yes, I’m aware of the irony.) The challenge was turning AI output that — back when I trained my own model in 2022 — often didn’t make sense, into prompts that actually spark a creative idea.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="cs-role" aria-labelledby="role">
+      <h2 class="cs-label cs-block" id="role">My Role</h2>
+      <div class="cs-text">
+        <p class="cs-block">In 2022 this was my master’s project, and I did it alone, with guidance from my final-assignment mentor and weekly group meetings. I did all the code myself. I gathered and cleaned the data (artwork titles from The Met and Spotify song titles), trained a GPT-2 model on it, generated color palettes through the GPT-3 API, pulled photos from Pexels and built a content-based recommender in Python. I designed four iterations, from a PythonAnywhere website to a high-fidelity Figma prototype, and tested each with artists through a questionnaire, a participatory design session and two remote usability tests.</p>
+        <p class="cs-block">In 2026 I came back and rebuilt the prototype as a working web app with Claude Code. I made the product calls: keeping the original 2022 data and recommender, a responsive bento layout, deliberately old-school AI images, one fixed story plot per prompt, and a curated 100-prompt demo for my portfolio. Claude wrote the code and the story plots — in 2022 the handful of plots in the Figma demo came from Rytr. I directed and reviewed every change.</p>
+      </div>
+    </section>
+
+    <h2 class="cs-divider cs-block" id="decisions"><span>Key Design Decisions</span></h2>
+
+    <!-- Each decision: what and why, on the right or the left, then its
+         pictures on paper. -->
+    <div class="cs-solutions">
+      <section class="cs-solution cs-solution--right" aria-labelledby="decision-context">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-context">Surrounding every title with more context</h3>
+          <p class="cs-solution-desc cs-block">A GPT-2 title on its own was often too strange to act on. The model gave me gems like “Famous Fishing Bane” and “Sh On Your Body Down for Loving One Kiss”. In the first test, one artist asked for a color palette next to each title. In iteration 3, all five testers enjoyed the palette, but only two of five were inspired, and two asked for more content such as paintings or photos. For iteration 4 I added a Pexels photo, an AI image and a short story plot to every prompt. All five testers were pleasantly surprised by the story plots and liked the visuals, and three of five described what they would make.</p>
+        </div>
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-row">
+            <figure class="cs-figure" style="--r: 1;">
+              <div class="cs-phones">
+                <img class="cs-phone" loading="lazy" src="assets/img/inspo-ai/iteration-3.webp" alt="Iteration 3: the title “In the Heart of Today” with its color palette." width="293" height="585">
+              </div>
+              <figcaption class="cs-caption">Iteration 3</figcaption>
+            </figure>
+            <figure class="cs-figure" style="--r: 2;">
+              <div class="cs-phones">
+                <img class="cs-phone" loading="lazy" src="assets/img/inspo-ai/iteration-4-prompt.webp" alt="Iteration 4: the title “If Loving You Is Next” with an AI painting and its color palette." width="294" height="587">
+                <img class="cs-phone" loading="lazy" src="assets/img/inspo-ai/iteration-4-story.webp" alt="Iteration 4: a photo and the prompt’s story plot." width="295" height="588">
+              </div>
+              <figcaption class="cs-caption">Iteration 4</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+      <section class="cs-solution" aria-labelledby="decision-rating">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-rating">Letting rating drive the algorithm</h3>
+          <p class="cs-solution-desc cs-block">In the participatory design session, three of four artists chose like/dislike over a star rating, and three assumed liked prompts would be saved automatically. So like and dislike became the only controls the recommender needs. A like saves the prompt to your profile and moves you to one of its closest matches. A dislike jumps to a deliberately distant prompt rather than a slightly different one. I kept a separate refresh button because most participants wanted one.</p>
+        </div>
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot" style="--w: 56%;"><img loading="lazy" src="assets/img/inspo-ai/buttons.webp" alt="The demo’s button bar: export, dislike, a new prompt, like, and mark as done." width="960" height="220"></div>
+        </div>
+      </section>
+      <section class="cs-solution cs-solution--right" aria-labelledby="decision-rebuild">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-rebuild">Rebuilding with 2022’s data and 2021’s AI instead of modernising</h3>
+          <p class="cs-solution-desc cs-block">When I made the prototype real in 2026, the obvious move was to swap in modern models. I kept the original GPT-2 prompts, palettes and recommender instead. Here is how ancient 2022 now looks: the GPT-3 palette script had to sleep 10 seconds between calls and still hit the rate limit after 815 titles, so I ran it in chunks. The early Dream by Wombo look I used in 2022 is gone; the app now runs on Stable Diffusion, and most hosted versions of the original VQGAN+CLIP method no longer run. I found one Hugging Face Space whose stated purpose is “an attempt to keep VQGAN+CLIP alive” and used it for the images. The point of inspo.ai was always to work with what the AI gives you: a vague, half-formed suggestion leaves room for the artist, where a polished one would replace them.</p>
+        </div>
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-row">
+            <figure class="cs-figure" style="--r: 1;">
+              <div class="cs-shot"><img loading="lazy" src="inspo/data/paintings/15.webp" alt="A VQGAN+CLIP painting generated from the title “for Organ on a Newfoundland Folk Song Variation”." width="512" height="512"></div>
+              <figcaption class="cs-caption">VQGAN+CLIP</figcaption>
+            </figure>
+            <figure class="cs-figure" style="--r: 0.692;">
+              <div class="cs-shot"><img loading="lazy" src="inspo/data/photos/3061984.webp" alt="Its Pexels photo: a person playing an electric organ." width="443" height="640"></div>
+              <figcaption class="cs-caption">Pexels</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-row">
+            <div class="cs-shot" style="--r: 1.674;"><img loading="lazy" src="assets/img/inspo-ai/demo-desktop.webp" alt="The live demo on a desktop: the painting, the photo, the palette and the story plot around the title." width="1600" height="956"></div>
+            <div class="cs-shot" style="--r: 0.462;"><img loading="lazy" src="assets/img/inspo-ai/demo-phone.webp" alt="The live demo on a phone: the title above its painting." width="780" height="1688"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="outcome"><span>Outcome</span></h2>
+
+    <div class="cs-stack">
+      <div class="cs-text">
+        <p class="cs-block">The final 2022 prototype stimulated artists’ creativity. In the last usability test, three of five participants described artworks they would make from the prompts, compared with two of five in iteration 3. Participants were engaged instead of confused. After I redesigned the onboarding, four of five went through it instead of skipping it, and all five could read the text without issues after the contrast fixes.</p>
+        <p class="cs-block">In 2026 the Figma prototype became a working product, live at <a href="inspo/">annavolkova.design/inspo</a>, with 100 selected prompts, the original recommender, a daily tracker and liked prompts on phone and desktop.</p>
+        <p class="cs-block">Looking back, 2022 me was bright-eyed and bushy-tailed, imagining that this emerging tech would be used to help artists — and anyone — spark their human creativity. Four years later, that hope reads very differently. Still, the original idea holds: the AI’s job here is to hand over a strange, unfinished starting point, and the artwork stays with the artist.</p>
+      </div>
+    </div>
+
+    <CaseFolder papers={["beauty", "pears"]} />
+</CaseStudy>

@@ -1,0 +1,93 @@
+---
+import CaseStudy from "../layouts/CaseStudy.astro";
+import CaseFolder from "../components/CaseFolder.astro";
+// Case study: PeARS, from its copy in Notion ("Pears case study"), laid out
+// as On My Disk's. The before & after pictures are still to come: the
+// search page from the work section stands in for them on paper.
+---
+<CaseStudy title="PeARS — making contributing faster & simpler — Anna Volkova" description="PeARS: making contributing to an open-source search engine faster & simpler. A case study by Anna Volkova, product & visual designer."
+  contents={[
+    { id: "overview", label: "Overview" },
+    { id: "impact", label: "Impact" },
+    { id: "role", label: "My Role" },
+    { id: "decisions", label: "Key Design Decisions" },
+    { id: "outcome", label: "Outcome" },
+    { id: "see-more", label: "See more" },
+  ]}
+  screen={{ src: "assets/img/work/pears-screen.webp", alt: "PeARS’ search page: a search for “AI”, with a list of results.", width: 1068, height: 633 }}>
+    <h1 class="cs-title cs-block">Making contributing to an open-source search engine faster &amp; simpler</h1>
+
+    <div class="cs-intro">
+      <dl class="cs-details">
+        <div class="cs-block"><dt>Role</dt><dd>UX consultant<br>Product designer</dd></div>
+        <div class="cs-block"><dt>Team</dt><dd>1 designer<br>1 engineer</dd></div>
+        <div class="cs-block"><dt>Skills</dt><dd>Product, UX</dd></div>
+        <div class="cs-block"><dt>Timeline</dt><dd>Jan–Mar 2024</dd></div>
+      </dl>
+      <section class="cs-overview" aria-labelledby="overview">
+        <h2 class="cs-label cs-block" id="overview">Overview</h2>
+        <div class="cs-overview-text">
+          <p class="cs-block">PeARS is an open-source, privacy-focused search engine designed for researchers and non-profits. Because it relies on users manually submitting web pages to their search engine instances, the challenge was to remove usability barriers that made contributing difficult.</p>
+        </div>
+      </section>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="impact"><span>Impact</span></h2>
+
+    <div class="cs-stack">
+      <p class="cs-text cs-block">All of my design recommendations were shipped. They led to better accessibility — color contrast and touch target size issues were eliminated &amp; night mode implemented. The time needed to submit an entry was reduced by more than half.</p>
+    </div>
+
+    <section class="cs-role" aria-labelledby="role">
+      <h2 class="cs-label cs-block" id="role">My Role</h2>
+      <p class="cs-text cs-block">I worked as an independent UX consultant with the PeARS team over seven weeks, from January to March 2024. I conducted a competitive analysis, UX audit, and usability testing, then delivered wireframes and recommendations covering accessibility, navigation, terminology, and system feedback.</p>
+    </section>
+
+    <h2 class="cs-divider cs-block" id="decisions"><span>Key Design Decisions</span></h2>
+
+    <!-- Each decision: what and why, on the right or the left, then its
+         before & after on paper (the search page, for now). -->
+    <div class="cs-solutions">
+      <section class="cs-solution cs-solution--right" aria-labelledby="decision-terms">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-terms">Replacing technical terminology with familiar language</h3>
+          <p class="cs-solution-desc cs-block">Terms such as “Indexer” and “Pods” were unfamiliar to the core user base of researchers, making it difficult to understand how to submit a website and choose a category. I recommended replacing system-oriented terminology with more familiar language to make these actions easier to understand — “suggest” and “categories”.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+        </div>
+      </section>
+      <section class="cs-solution" aria-labelledby="decision-actions">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-actions">Making contribution actions clearer</h3>
+          <p class="cs-solution-desc cs-block">Users needed clearer ways to contribute web pages to their search engine instances. I recommended more prominent calls to action to make submission options easier to identify. Example — if a query search yields no results, the page shows a “Contribute” button.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+        </div>
+      </section>
+      <section class="cs-solution cs-solution--right" aria-labelledby="decision-consistency">
+        <div class="cs-solution-text">
+          <h3 class="cs-solution-title cs-block" id="decision-consistency">Improving consistency, accessibility, and system feedback</h3>
+          <p class="cs-solution-desc cs-block">Usability testing revealed inconsistent navigation patterns between pages and a lack of feedback during errors, both of which led to confusion and decreased confidence. I recommended consistent navigation across pages, clearer error feedback, improved color contrast, larger touch targets, and a night mode.</p>
+        </div>
+        <div class="cs-frame cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+        </div>
+      </section>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="outcome"><span>Outcome</span></h2>
+
+    <!-- What came of it, side by side, edged as the decisions are. -->
+    <ul class="cs-next cs-next--three">
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">All recommended design changes, including terminology change, consistent navigation and night mode were shipped.</p></li>
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Accessibility issues including color contrast and touch-target sizes were corrected.</p></li>
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Submission time decreased from 38 seconds before the redesign to 17 seconds after implementation, a 55% reduction. Both tests involved one participant already familiar with PeARS, so the result is indicative rather than conclusive.</p></li>
+    </ul>
+
+    <CaseFolder papers={["beauty"]} />
+</CaseStudy>
