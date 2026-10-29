@@ -202,8 +202,11 @@ function hideMissingImages() {
 // between projects; the visual, metadata and CTA swap together.
 //
 // The current panel fades out (.is-leaving) before the new one animates in
-// (.is-entering); see styles.css. Hovering or focusing a tab starts loading
-// its panel's images, so they're ready when it opens.
+// (.is-entering), once its pictures are ready (loaded and decoded, or after
+// READY_WAIT at most), so they come in with it; see styles.css. Every
+// project's pictures load once the page has finished loading and the
+// browser is free; hovering or focusing a tab starts loading its panel's
+// sooner.
 //
 // On desktop, scrolling stops on the showcase and steps through the projects
 // before the page moves on: see stepOnScroll() below.
@@ -211,6 +214,7 @@ function hideMissingImages() {
 // On phones the projects are a feed instead: all of them one after another,
 // each under its name bar (the tab buttons, which do nothing there).
 const PANEL_OUT = 160;
+const READY_WAIT = 2000;   // ms: the longest a project waits for its pictures
 const DESKTOP = window.matchMedia("(min-width: 1024px)");
 const STEP_GAP = 450;      // ms: the soonest the next project can follow
 
@@ -222,6 +226,15 @@ function initTabs() {
   const panels = tabs.map(panelFor);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   let switchTimer = null;
+  let coming = null;         // the panel on its way in
+
+  // A panel's pictures, loaded and decoded, or READY_WAIT, whichever's sooner.
+  const ready = (panel) => {
+    const images = [...panel.querySelectorAll(".work-visual img")];
+    for (const img of images) img.loading = "eager";
+    const decoded = Promise.all(images.map((img) => img.decode().catch(() => {})));
+    return Promise.race([decoded, new Promise((resolve) => setTimeout(resolve, READY_WAIT))]);
+  };
 
   function select(tab, { focus = false } = {}) {
     for (const t of tabs) {
@@ -234,6 +247,7 @@ function initTabs() {
     const next = panelFor(tab);
     const current = panels.find((p) => !p.hidden);
     clearTimeout(switchTimer);
+    coming = null;
     for (const p of panels) p.classList.remove("is-leaving", "is-entering");
     if (next === current) return;
 
@@ -244,12 +258,19 @@ function initTabs() {
     };
     if (reducedMotion.matches || !current) return show();
     current.classList.add("is-leaving");
-    switchTimer = setTimeout(show, PANEL_OUT);
+    coming = next;
+    const out = new Promise((resolve) => { switchTimer = setTimeout(resolve, PANEL_OUT); });
+    Promise.all([out, ready(next)]).then(() => {
+      if (coming !== next) return;   // another project was chosen meanwhile
+      coming = null;
+      show();
+    });
   }
 
   // Switch between tabs (wider screens) and the feed (phones).
   function setMode() {
     clearTimeout(switchTimer);
+    coming = null;
     for (const p of panels) p.classList.remove("is-leaving", "is-entering");
     if (PHONE.matches) {
       tablist.removeAttribute("role");
@@ -277,6 +298,10 @@ function initTabs() {
   const preload = (tab) => {
     for (const img of panelFor(tab).querySelectorAll('img[loading="lazy"]')) img.loading = "eager";
   };
+  const whenFree = window.requestIdleCallback ?? ((fn) => setTimeout(fn, 200));
+  const preloadAll = () => whenFree(() => tabs.forEach(preload), { timeout: 2000 });
+  if (document.readyState === "complete") preloadAll();
+  else window.addEventListener("load", preloadAll, { once: true });
 
   for (const tab of tabs) {
     tab.addEventListener("pointerenter", () => preload(tab));
