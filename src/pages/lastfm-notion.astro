@@ -1,0 +1,228 @@
+---
+import CaseStudy from "../layouts/CaseStudy.astro";
+import CaseFolder from "../components/CaseFolder.astro";
+// Case study: the last.fm widget for Notion, from its copy in Notion
+// ("lastfm x notion case study"), laid out as On My Disk's. The pictures
+// are the Notion page's; the opening's and the final design's are the
+// live widget's (xowaltz), and the outcome's demo is the widget itself.
+// The videos and the competitor chart are still to come: bare sheets of
+// paper stand in for them.
+---
+<CaseStudy title="last.fm × Notion — a listening stats widget — Anna Volkova" description="A last.fm listening statistics widget made for Notion pages. A case study by Anna Volkova, product & visual designer."
+  contents={[
+    { id: "overview", label: "Overview" },
+    { id: "solution", label: "Solution" },
+    { id: "outcome", label: "Outcome" },
+    { id: "problem", label: "Problem" },
+    { id: "process", label: "Design process" },
+    { id: "final-design", label: "Final design" },
+    { id: "insights", label: "Insights" },
+    { id: "whats-next", label: "What’s next" },
+    { id: "see-more", label: "See more" },
+  ]}
+  screen={{ src: "assets/img/lastfm-notion/screen.webp", alt: "The widget’s chart: a grid of the albums listened to in the last 30 days, with the numbers of artists, albums and tracks beside it.", width: 976, height: 583 }}>
+    <h1 class="cs-title cs-block">Listening statistics widget for your Notion page</h1>
+
+    <div class="cs-intro">
+      <dl class="cs-details">
+        <div class="cs-block"><dt>Role</dt><dd>Product Designer<br>Vibe Coder<br>A little bit Actual Coder</dd></div>
+        <div class="cs-block"><dt>Timeline</dt><dd>One Wednesday Afternoon</dd></div>
+        <div class="cs-block"><dt>Skills</dt><dd>Product Design<br>Frontend Developing<br>LLM</dd></div>
+      </dl>
+      <section class="cs-overview" aria-labelledby="overview">
+        <h2 class="cs-label cs-block" id="overview">Overview</h2>
+        <div class="cs-overview-text">
+          <p class="cs-block">What if there was a way to show your recently listened tracks &amp; albums on your Notion page?</p>
+          <p class="cs-block">If you’re not a very specific kind of nerd, you’ve probably never asked yourself that question. I happen to be this very specific kind of nerd; I love music and I love stats and I love a cute Notion homepage. This led me to scour the internet for a last.fm widget created specifically for Notion, and I couldn’t find anything.</p>
+        </div>
+      </section>
+    </div>
+
+    <figure class="cs-stack cs-figure">
+      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/google-results.webp" alt="Google’s results for “last fm notion”: the band Notion’s page on last.fm, and a tutorial on importing last.fm data into Notion." width="1500" height="811"></div>
+      </div>
+      <figcaption class="cs-caption cs-block">Google results show a music artist named ‘Notion’ and a way to import Notion data. Nothing cute and responsive :(<br>Also, I kind of didn’t explain what last.fm is. Or what Notion is, for that matter. Hope you’re still with me.</figcaption>
+    </figure>
+
+    <h2 class="cs-divider cs-block" id="solution"><span>Solution</span></h2>
+
+    <div class="cs-stack">
+      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot" style="--w: 52%;"><img loading="lazy" src="assets/img/lastfm-notion/solution.webp" alt="Bender, from Futurama: “I’ll make my own Notion widget, with lastfm API data and Notion aesthetic”." width="500" height="374"></div>
+      </div>
+      <h3 class="cs-solution-title cs-heading cs-block">A Notion widget that dynamically presents your last.fm music stats, optimized to your Notion dashboard layout</h3>
+      <!-- Each with its video, to come: a bare sheet for now. -->
+      <ul class="cs-trio">
+        <li class="cs-figure">
+          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+          <p class="cs-caption cs-block">Adjust the widget to your layout without breaking it</p>
+        </li>
+        <li class="cs-figure">
+          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+          <p class="cs-caption cs-block">Toggle between ‘chart’ and ‘recent tracks’ view</p>
+        </li>
+        <li class="cs-figure">
+          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+          <p class="cs-caption cs-block">See your listening history for the last 7, 30, 90, 365 days, or all time.</p>
+        </li>
+      </ul>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="outcome"><span>Outcome</span></h2>
+
+    <div class="cs-stack">
+      <h3 class="cs-solution-title cs-heading cs-block">First last.fm chart generator made specifically for Notion</h3>
+      <p class="cs-text cs-block">The widget is live — enter your username or use mine: xowaltz.</p>
+      <!-- The widget itself, live. -->
+      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot"><iframe class="cs-live" src="https://lastfm-notion-widget.vercel.app/" title="The last.fm widget, live" loading="lazy"></iframe></div>
+      </div>
+      <ul class="cs-list cs-text">
+        <li class="cs-block">Posted to r/lastfm on launch day — 19 users from 7 countries tried the widget, with 3 leaving positive comments. There are more than a dozen of us!!!</li>
+        <li class="cs-block">Months later, the widget still has 40+ regular users, with hundred page views a month.</li>
+      </ul>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="problem"><span>Problem</span></h2>
+
+    <div class="cs-stack">
+      <h3 class="cs-solution-title cs-heading cs-block">There’s no way to easily present your last.fm listening data on your Notion homepage.</h3>
+      <h4 class="cs-label cs-block">Pain points</h4>
+      <div class="cs-cols">
+        <div class="cs-solution-text"><p class="cs-solution-desc cs-block">last.fm page itself doesn’t work as an embed, it just copies as a bookmark</p></div>
+        <div class="cs-solution-text"><p class="cs-solution-desc cs-block">Data aggregators made with last.fm API aren’t made with Notion in mind</p></div>
+      </div>
+      <h4 class="cs-label cs-block">Competitor research</h4>
+      <!-- The competitor chart, to come: a bare sheet for now. -->
+      <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
+      <div class="cs-cols">
+        <section class="cs-col">
+          <h5 class="cs-label cs-block">Notion widgets</h5>
+          <p class="cs-text cs-block">Plenty of weather, timer, calendar, clocks… Not much for music.</p>
+        </section>
+        <section class="cs-col">
+          <h5 class="cs-label cs-block">Last.fm chart and stats generators</h5>
+          <p class="cs-text cs-block">last.fm has an accessible API, so there are plenty of user-made tools out there. But no one has developed an app specifically for Notion before.</p>
+        </section>
+      </div>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="process"><span>Design process</span></h2>
+
+    <div class="cs-stack">
+      <h3 class="cs-solution-title cs-heading cs-block">How do I create a visually pleasing &amp; responsive Notion widget for my listening stats?</h3>
+      <p class="cs-text cs-block">I’ve worked with APIs before, and I can code with HTML and CSS, but JavaScript isn’t my strong suit. So I used Claude to help me with the initial setup. I thought the idea was simple enough to be done in the chat without figuring out what an MCP is.</p>
+      <p class="cs-text cs-block">My first prompt:</p>
+      <blockquote class="cs-quote cs-block"><p>Can you make a notion widget that connects to my last.fm? like, shows the last month’s topster in real time</p></blockquote>
+      <p class="cs-text cs-block">I added the result to a Github repo and deployed it through Vercel.</p>
+      <figure class="cs-figure">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/first-try.webp" alt="Claude’s first try: a purple “Last.fm Monthly Topster” page with a configuration form above a grid of albums." width="981" height="787"></div>
+        </div>
+        <figcaption class="cs-caption cs-block">Well…</figcaption>
+      </figure>
+
+      <h3 class="cs-solution-title cs-heading cs-block">Claude handled the API integration, but misunderstood design constraints</h3>
+      <p class="cs-text cs-block">Last.fm’s API is well-documented and Claude handled the integration smoothly. But the Notion aesthetic is nowhere in sight. I had to to be specific about what I want, define the functionality, and craft the visual design around:</p>
+      <ul class="cs-list cs-text">
+        <li class="cs-block">Notion’s embed constraints</li>
+        <li class="cs-block">Responsive grid that works at multiple widths</li>
+        <li class="cs-block">Visual language matching Notion’s aesthetic</li>
+      </ul>
+
+      <h3 class="cs-solution-title cs-heading cs-block">Creating a UI prototype tailored to Notion</h3>
+      <p class="cs-text cs-block">I ended up creating a prototype of the widget in Figma, using a screenshot of a Notion page as a backdrop, copying the HTML code from Dev mode into Claude, and specifying my requirements.</p>
+      <div class="cs-aside">
+        <figure class="cs-figure">
+          <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/figma-mockup.webp" alt="The Figma mockup: the widget on a Notion page, an album grid with the time range and the numbers on its right." width="1758" height="1016"></div>
+          </div>
+          <figcaption class="cs-caption cs-block">Simple Figma mockup</figcaption>
+        </figure>
+        <ul class="cs-notes">
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Album grid is music nerds’ favorite layout → main view</p></li>
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Time range picker on the right to match the pattern already familiar from last.fm</p></li>
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Adjusted the font styles, colors and spacing to match with Notion’s visual language</p></li>
+        </ul>
+      </div>
+
+      <h3 class="cs-solution-title cs-heading cs-block">Specific requirements &amp; HTML from dev mode brought me closer to the desired look, but I still needed to adjust the code manually.</h3>
+      <p class="cs-text cs-block">Claude variants:</p>
+      <div class="cs-aside">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/claude-variant.webp" alt="One of Claude’s variants on a Notion page: the numbers and the controls above a row of albums, with a lot of white space." width="816" height="396"></div>
+        </div>
+        <ul class="cs-notes">
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Too much white space + controls on top don’t work for Notion layout</p></li>
+        </ul>
+      </div>
+      <div class="cs-aside">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/controls-hidden.webp" alt="Another variant in Notion: Notion’s own controls cover the widget’s heading at the top right." width="806" height="342"></div>
+        </div>
+        <ul class="cs-notes">
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Notion controls on top right hide the widget content, making it harder to use</p></li>
+        </ul>
+      </div>
+      <p class="cs-text cs-block">Code adjustments:</p>
+      <div class="cs-aside">
+        <div class="cs-figure">
+          <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/code-chart.webp" alt="The adjusted chart: the albums in a grid, the heading lower down, clear of Notion’s controls." width="1580" height="672"></div>
+          </div>
+          <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/code-recent.webp" alt="The adjusted recent tracks: a list of songs, each with its album cover and how long ago it played." width="1580" height="672"></div>
+          </div>
+        </div>
+        <ul class="cs-notes">
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Moved down the header to make space for the Notion controls</p></li>
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Made hover transitions responsive</p></li>
+          <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Removed scrolling on the chart view, as it made it harder to scroll the Notion page</p></li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="final-design"><span>Final design</span></h2>
+
+    <div class="cs-stack">
+      <h3 class="cs-solution-title cs-heading cs-block">Last.fm widget, optimized for Notion</h3>
+      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-figure">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/final-chart.webp" alt="The widget’s chart: the last 30 days’ albums in a grid, the numbers of artists, albums and tracks beside it." width="1680" height="960"></div>
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/final-recent.webp" alt="The widget’s recent tracks: songs with their album covers and when they played." width="1680" height="960"></div>
+        </div>
+      </div>
+      <p class="cs-text cs-block">I designed and built a responsive last.fm widget for Notion (Figma → HTML/CSS/JS, deployed on Vercel). The widget presents your listening statistics as an album grid, with an option to choose time range. Recent tracks tab shows your listening history. Claude supported the initial JS scaffolding. I refined layout, styling, and interaction details.</p>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="insights"><span>Insights</span></h2>
+
+    <div class="cs-stack">
+      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot" style="--w: 54%;"><img loading="lazy" src="assets/img/lastfm-notion/insights.webp" alt="A woman at a door, captioned “Sometimes… things that are coding… are fun”." width="517" height="291"></div>
+      </div>
+      <p class="cs-text cs-block">But seriously, this was my first time using Vercel and deploying a github repo live to web, and I made a useful (at least to the target audience of 40+ nerds) widget! Don’t be afraid to try things out &amp; bring your ideas to life.</p>
+    </div>
+
+    <h2 class="cs-divider cs-block" id="whats-next"><span>What’s next</span></h2>
+
+    <ul class="cs-next cs-next--three">
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Dark mode that adjusts to Notion settings</p></li>
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Artist &amp; song charts</p></li>
+      <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Layout flexibility — different users have different Notion setups</p></li>
+    </ul>
+
+    <CaseFolder papers={["beauty", "pears"]} />
+</CaseStudy>
