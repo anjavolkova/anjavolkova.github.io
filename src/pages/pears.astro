@@ -2,8 +2,7 @@
 import CaseStudy from "../layouts/CaseStudy.astro";
 import CaseFolder from "../components/CaseFolder.astro";
 // Case study: PeARS, from its copy in Notion ("Pears case study"), laid out
-// as On My Disk's. The before & after pictures are still to come: the
-// search page from the work section stands in for them on paper.
+// as On My Disk's. The before & after screenshots are Figma's (Studies).
 ---
 <CaseStudy title="PeARS — making contributing faster & simpler — Anna Volkova" description="PeARS: making contributing to an open-source search engine faster & simpler. A case study by Anna Volkova, product & visual designer."
   contents={[
@@ -46,16 +45,25 @@ import CaseFolder from "../components/CaseFolder.astro";
     <h2 class="cs-divider cs-block" id="decisions"><span>Key Design Decisions</span></h2>
 
     <!-- Each decision: what and why, on the right or the left, then its
-         before & after on paper (the search page, for now). -->
+         before & after on paper. -->
     <div class="cs-solutions">
       <section class="cs-solution cs-solution--right" aria-labelledby="decision-terms">
         <div class="cs-solution-text">
           <h3 class="cs-solution-title cs-block" id="decision-terms">Replacing technical terminology with familiar language</h3>
           <p class="cs-solution-desc cs-block">Terms such as “Indexer” and “Pods” were unfamiliar to the core user base of researchers, making it difficult to understand how to submit a website and choose a category. I recommended replacing system-oriented terminology with more familiar language to make these actions easier to understand — “suggest” and “categories”.</p>
         </div>
-        <div class="cs-frame cs-paper cs-block cs-block--media">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
           <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
-          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+          <div class="cs-row cs-row--top">
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">Before</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/pods.webp" alt="Before: a pod, “Pod: design”, with its 6 entries and a View button." width="570" height="351"></div>
+            </figure>
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">After</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/categories.webp" alt="After: the Categories page, listing Machine learning, Big Tech and People with their entries." width="1440" height="1282"></div>
+            </figure>
+          </div>
         </div>
       </section>
       <section class="cs-solution" aria-labelledby="decision-actions">
@@ -63,9 +71,19 @@ import CaseFolder from "../components/CaseFolder.astro";
           <h3 class="cs-solution-title cs-block" id="decision-actions">Making contribution actions clearer</h3>
           <p class="cs-solution-desc cs-block">Users needed clearer ways to contribute web pages to their search engine instances. I recommended more prominent calls to action to make submission options easier to identify. Example — if a query search yields no results, the page shows a “Contribute” button.</p>
         </div>
-        <div class="cs-frame cs-paper cs-block cs-block--media">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
           <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
-          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+          <div class="cs-row cs-row--top">
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">Before</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/home-before.webp" alt="Before: the home page, a search bar and a note that every other function has been disabled, with Indexer and Pods in the menu." width="1231" height="855"></div>
+            </figure>
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">After</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/search-results.webp" alt="After: search results with an “Add a resource” button below them, and Add a resource in the menu." width="1440" height="832"></div>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/add-resource.webp" alt="After: the Add a resource page, with the page’s URL, a category and an optional trigger warning." width="1440" height="838"></div>
+            </figure>
+          </div>
         </div>
       </section>
       <section class="cs-solution cs-solution--right" aria-labelledby="decision-consistency">
@@ -73,9 +91,28 @@ import CaseFolder from "../components/CaseFolder.astro";
           <h3 class="cs-solution-title cs-block" id="decision-consistency">Improving consistency, accessibility, and system feedback</h3>
           <p class="cs-solution-desc cs-block">Usability testing revealed inconsistent navigation patterns between pages and a lack of feedback during errors, both of which led to confusion and decreased confidence. I recommended consistent navigation across pages, clearer error feedback, improved color contrast, larger touch targets, and a night mode.</p>
         </div>
-        <div class="cs-frame cs-paper cs-block cs-block--media">
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
           <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
-          <div class="cs-shot"><img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page (a placeholder for the before and after)." width="1068" height="633"></div>
+          <div class="cs-row cs-row--top">
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">Before</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/nav-before.webp" alt="Before: a blue menu bar with Acknowledgments, GitHub, Twitter and Logout." width="638" height="392"></div>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/form-before.webp" alt="Before: the old form’s fields, the browser’s inspector measuring one of its targets at 31 by 38 pixels." width="703" height="331"></div>
+            </figure>
+            <figure class="cs-figure" style="--r: 1;">
+              <figcaption class="cs-caption">After</figcaption>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/home-after.webp" alt="After: the home page, with the same menu and footer as every other page." width="1440" height="1272"></div>
+              <div class="cs-shot"><img loading="lazy" src="assets/img/pears/login.webp" alt="After: the login form, telling you it couldn’t find an account with that email address." width="1692" height="985"></div>
+            </figure>
+          </div>
+        </div>
+        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-row">
+            <div class="cs-shot" style="--r: 0.459;"><img loading="lazy" src="assets/img/pears/phone-home.webp" alt="After, on a phone: the home page." width="804" height="1752"></div>
+            <div class="cs-shot" style="--r: 0.528;"><img loading="lazy" src="assets/img/pears/phone-search.webp" alt="After, on a phone: search results." width="809" height="1533"></div>
+            <div class="cs-shot" style="--r: 0.528;"><img loading="lazy" src="assets/img/pears/phone-add-resource.webp" alt="After, on a phone: the Add a resource page." width="809" height="1533"></div>
+          </div>
         </div>
       </section>
     </div>
@@ -89,5 +126,5 @@ import CaseFolder from "../components/CaseFolder.astro";
       <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Submission time decreased from 38 seconds before the redesign to 17 seconds after implementation, a 55% reduction. Both tests involved one participant already familiar with PeARS, so the result is indicative rather than conclusive.</p></li>
     </ul>
 
-    <CaseFolder papers={["beauty"]} />
+    <CaseFolder current="pears" />
 </CaseStudy>

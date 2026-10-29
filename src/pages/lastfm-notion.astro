@@ -83,7 +83,7 @@ import CaseFolder from "../components/CaseFolder.astro";
       </div>
       <ul class="cs-list cs-text">
         <li class="cs-block">Posted to r/lastfm on launch day — 19 users from 7 countries tried the widget, with 3 leaving positive comments. There are more than a dozen of us!!!</li>
-        <li class="cs-block">Months later, the widget still has 40+ regular users, with hundred page views a month.</li>
+        <li class="cs-block">Months later, the widget still has 40+ regular users, with a hundred page views a month.</li>
       </ul>
     </div>
 
@@ -118,7 +118,7 @@ import CaseFolder from "../components/CaseFolder.astro";
       <p class="cs-text cs-block">I’ve worked with APIs before, and I can code with HTML and CSS, but JavaScript isn’t my strong suit. So I used Claude to help me with the initial setup. I thought the idea was simple enough to be done in the chat without figuring out what an MCP is.</p>
       <p class="cs-text cs-block">My first prompt:</p>
       <blockquote class="cs-quote cs-block"><p>Can you make a notion widget that connects to my last.fm? like, shows the last month’s topster in real time</p></blockquote>
-      <p class="cs-text cs-block">I added the result to a Github repo and deployed it through Vercel.</p>
+      <p class="cs-text cs-block">I added the result to a GitHub repo and deployed it through Vercel.</p>
       <figure class="cs-figure">
         <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
           <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
@@ -128,7 +128,7 @@ import CaseFolder from "../components/CaseFolder.astro";
       </figure>
 
       <h3 class="cs-solution-title cs-heading cs-block">Claude handled the API integration, but misunderstood design constraints</h3>
-      <p class="cs-text cs-block">Last.fm’s API is well-documented and Claude handled the integration smoothly. But the Notion aesthetic is nowhere in sight. I had to to be specific about what I want, define the functionality, and craft the visual design around:</p>
+      <p class="cs-text cs-block">Last.fm’s API is well-documented and Claude handled the integration smoothly. But the Notion aesthetic is nowhere in sight. I had to be specific about what I want, define the functionality, and craft the visual design around:</p>
       <ul class="cs-list cs-text">
         <li class="cs-block">Notion’s embed constraints</li>
         <li class="cs-block">Responsive grid that works at multiple widths</li>
@@ -213,7 +213,7 @@ import CaseFolder from "../components/CaseFolder.astro";
         <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
         <div class="cs-shot" style="--w: 54%;"><img loading="lazy" src="assets/img/lastfm-notion/insights.webp" alt="A woman at a door, captioned “Sometimes… things that are coding… are fun”." width="517" height="291"></div>
       </div>
-      <p class="cs-text cs-block">But seriously, this was my first time using Vercel and deploying a github repo live to web, and I made a useful (at least to the target audience of 40+ nerds) widget! Don’t be afraid to try things out &amp; bring your ideas to life.</p>
+      <p class="cs-text cs-block">But seriously, this was my first time using Vercel and deploying a GitHub repo live to web, and I made a useful (at least to the target audience of 40+ nerds) widget! Don’t be afraid to try things out &amp; bring your ideas to life.</p>
     </div>
 
     <h2 class="cs-divider cs-block" id="whats-next"><span>What’s next</span></h2>
@@ -224,5 +224,5 @@ import CaseFolder from "../components/CaseFolder.astro";
       <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Layout flexibility — different users have different Notion setups</p></li>
     </ul>
 
-    <CaseFolder papers={["beauty", "pears"]} />
+    <CaseFolder current="lastfm-notion" />
 </CaseStudy>

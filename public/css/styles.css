@@ -606,13 +606,15 @@ img.is-missing { visibility: hidden; }
 .cta:hover .arrow { transform: rotate(180deg) translateX(-3px); }
 .cta:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
-/* "View study": with a mouse over a project's picture that has a study, a
-   pill takes the pointer's place and follows it, and a click there opens
-   the study (js/main.js). It comes in as a circle round the arrow, then
+/* "View study": with a mouse over a project's picture that has a study (or
+   a paper with one in the case studies' folder), a pill takes the
+   pointer's place and follows it, and a click there opens the study
+   (js/main.js). It comes in as a circle round the arrow, then
    opens out to the words, which come out of a blur as the site's text
    does; on the way out it closes up first. The page's brown with a cream
    rim (Figma: Component 1, Variant5). */
-.work-visual.has-study { cursor: none; }
+.work-visual.has-study,
+.lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit { cursor: none; }
 .view-study {
   position: fixed;
   z-index: 40;
@@ -2383,6 +2385,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: 100%;
 }
 .cs-row > * { flex: var(--r) 1 0; min-width: 0; }
+.cs-row--top { align-items: flex-start; }   /* before and after, each at its own height */
 .cs-figure {
   display: flex;
   flex-direction: column;
