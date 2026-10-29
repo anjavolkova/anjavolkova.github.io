@@ -483,6 +483,81 @@ function initWorkTilt() {
   }
 }
 
+// "View study": with a mouse over a project's picture that has a study (its
+// "Full study" goes somewhere), the pill takes the pointer's place and
+// follows it, easing after it, and a click there does what "Full study"
+// does. The CSS brings the pill in and out (is-shown).
+const FOLLOW_EASE = 0.08;   // seconds: how quickly the pill catches up
+
+function initViewStudy() {
+  const pill = document.querySelector(".view-study");
+  if (!pill) return;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let any = false;
+  for (const panel of document.querySelectorAll(".work-panel")) {
+    const visual = panel.querySelector(".work-visual");
+    const study = panel.querySelector('.cta[data-link^="study-"]');
+    if (!visual || !study || study.getAttribute("href") === "#") continue;
+    any = true;
+    visual.classList.add("has-study");
+    visual.addEventListener("click", () => {
+      if (!pill.classList.contains("is-shown")) return;
+      pill.classList.remove("is-shown");
+      study.click();
+    });
+  }
+  if (!any) return;
+
+  const target = { x: 0, y: 0 };
+  const now = { x: 0, y: 0 };
+  let pointer = null;
+  let raf = null;
+  let last = 0;
+  const place = () => {
+    pill.style.setProperty("--x", `${now.x.toFixed(1)}px`);
+    pill.style.setProperty("--y", `${now.y.toFixed(1)}px`);
+  };
+  function step(time) {
+    const k = reducedMotion.matches ? 1 : 1 - Math.exp(-Math.min(0.05, (time - last) / 1000) / FOLLOW_EASE);
+    last = time;
+    now.x += (target.x - now.x) * k;
+    now.y += (target.y - now.y) * k;
+    const done = Math.abs(target.x - now.x) < 0.1 && Math.abs(target.y - now.y) < 0.1;
+    if (done) Object.assign(now, target);
+    place();
+    raf = done ? null : requestAnimationFrame(step);
+  }
+  // Show it over a picture with a study, hide it anywhere else. It comes in
+  // where the pointer is, then follows.
+  function update(over) {
+    const shown = pill.classList.contains("is-shown");
+    Object.assign(target, pointer);
+    if (over && !shown) {
+      Object.assign(now, pointer);
+      place();
+      pill.classList.add("is-shown");
+    } else if (!over && shown) {
+      pill.classList.remove("is-shown");
+    }
+    if (raf == null) { last = performance.now(); raf = requestAnimationFrame(step); }
+  }
+  const studyAt = (el) => Boolean(el?.closest?.(".work-panel:not(.is-leaving) .work-visual.has-study"));
+  document.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    pointer = { x: e.clientX, y: e.clientY };
+    update(studyAt(e.target));
+  }, { passive: true });
+  // The page can scroll from under a still pointer, and a swipe on the
+  // showcase can swap the project under it.
+  const recheck = () => { if (pointer) update(studyAt(document.elementFromPoint(pointer.x, pointer.y))); };
+  window.addEventListener("scroll", recheck, { passive: true });
+  const swapped = new MutationObserver(recheck);
+  for (const panel of document.querySelectorAll(".work-panel")) {
+    swapped.observe(panel, { attributes: true, attributeFilter: ["hidden", "class"] });
+  }
+  document.documentElement.addEventListener("mouseleave", () => pill.classList.remove("is-shown"));
+}
+
 // Side quests: resting the pointer on a collage piece (or focusing or
 // tapping it) lifts it, puts it on top of the pile and shows its note.
 // Pieces keep their new place in the pile, so nothing else shuffles. Passing
@@ -769,6 +844,7 @@ hideMissingImages();
 initTabs();
 initWorkArrival();
 initWorkTilt();
+initViewStudy();
 initQuests();
 initQuestCarousel();
 initBooking();

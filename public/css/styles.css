@@ -621,6 +621,73 @@ img.is-missing { visibility: hidden; }
 .cta:hover .arrow { transform: rotate(180deg) translateX(-3px); }
 .cta:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
+/* "View study": with a mouse over a project's picture that has a study, a
+   pill takes the pointer's place and follows it, and a click there opens
+   the study (js/main.js). It comes in as a circle round the arrow, then
+   opens out to the words, which come out of a blur as the site's text
+   does; on the way out it closes up first. The page's brown with a cream
+   rim (Figma: Component 1, Variant5). */
+.work-visual.has-study { cursor: none; }
+.view-study {
+  position: fixed;
+  z-index: 40;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: 45px;
+  padding: 0 11.5px;   /* a circle round the arrow */
+  border: 1px solid #f5f1ed;
+  border-radius: 40px;
+  background: rgba(81, 63, 73, 0.92);
+  -webkit-backdrop-filter: blur(15.4px);
+  backdrop-filter: blur(15.4px);
+  box-shadow:
+    0 1px 1.5px rgba(152, 129, 129, 0.08),
+    0 6px 3px rgba(152, 129, 129, 0.07),
+    0 13px 4px rgba(152, 129, 129, 0.04),
+    0 23px 4.5px rgba(152, 129, 129, 0.01);
+  color: #f5f1ed;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  pointer-events: none;
+  translate: calc(var(--x, 0px) - 50%) calc(var(--y, 0px) - 50%);
+  opacity: 0;
+  scale: 0.5;
+  transition: padding 0.25s ease, opacity 0.2s ease 0.2s, scale 0.25s ease 0.2s;
+}
+.view-study.is-shown {
+  padding: 0 30.5px;
+  opacity: 1;
+  scale: 1;
+  transition: opacity 0.25s ease, scale 0.4s cubic-bezier(0.22, 1, 0.36, 1), padding 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+.view-study-label {
+  display: grid;
+  grid-template-columns: 0fr;
+  transition: grid-template-columns 0.25s ease;
+}
+.view-study-label > span {
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.15s ease, filter 0.15s ease;
+}
+.view-study-label > span > span { display: block; padding-right: 8px; }   /* the gap to the arrow */
+.view-study.is-shown .view-study-label {
+  grid-template-columns: 1fr;
+  transition: grid-template-columns 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+.view-study.is-shown .view-study-label > span {
+  opacity: 1;
+  filter: blur(0);
+  transition: opacity 0.45s ease 0.25s, filter 0.55s ease 0.25s;
+}
+.view-study svg { flex: none; }
+
 /* ---------- 3. Side quests ---------- */
 
 /* Above the contact stipple, which reaches up under the collage. */

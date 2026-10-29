@@ -1,7 +1,8 @@
 ---
 // Selected work: one showcase, five tabs (js/main.js). With panel, On My
 // Disk's "Full study" opens the case study in a panel over the page
-// (js/panel.js) rather than going to it.
+// (js/panel.js) rather than going to it. After it, the "View study" pill
+// that takes the pointer's place over a picture with a study.
 interface Props {
   panel?: boolean;
 }
@@ -174,3 +175,10 @@ const { panel = false } = Astro.props;
     </article>
 
   </section>
+
+<!-- With a mouse over a project's picture that has a study, this takes the
+     pointer's place, and a click there opens the study (js/main.js). -->
+<span class="view-study" aria-hidden="true">
+  <span class="view-study-label"><span><span>View study</span></span></span>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5.83 14.17 14.17 5.83m0 0H5.83m8.34 0v8.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</span>
