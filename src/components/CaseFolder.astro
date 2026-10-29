@@ -1,23 +1,58 @@
 ---
-// "See more", the end of a case study: a folder of the other case studies
-// (below). A study leaves its own paper out (papers: the ones in it).
-type Paper = "beauty" | "pears";
-interface Props {
-  papers: Paper[];
+// "See more", the end of a case study: a folder of the case studies' papers
+// (below), all but the one you're on (current). A paper with a study opens
+// it (href; js/lore.js). Papers are listed bottom of the pile first; their
+// places are Figma's, in units of the folder's frame.
+import ViewStudy from "./ViewStudy.astro";
+interface Paper {
+  id: string;
+  href?: string;        // the paper's study, when there's one
+  label: string;
+  place: string;        // --x, --y, --w, --h, --left, and the paper's own area
+  pin: { width: number; height: number; place: string; alt: string };
+  pinArea: string;      // the screenshot's own area, which takes the pointer too
+  text: string;
+  details: [string, string][];
 }
-const { papers } = Astro.props;
+const PAPERS: Paper[] = [
+  {
+    id: "beauty",
+    label: "Visuals for local beauty businesses",
+    place: "--x: 453; --y: 32; --w: 478; --h: 694; --left: 5; --cx: 38; --cy: 7; --cw: 402; --ch: 555;",
+    pin: { width: 428, height: 412, place: "--pin-x: 63.9; --pin-y: 236.22; --pin-w: 428;", alt: "Social media posts for a beauty salon, paper-clipped to the paper." },
+    pinArea: "--cx: 84.9; --cy: 243.22; --cw: 359.5; --ch: 287.78;",
+    text: "Designing engaging social media posts tailored for clients in the beauty industry.",
+    details: [["Role", "Graphic designer"], ["Team", "1 Social Media Manager, 1 Designer"], ["Timeline", "2026"], ["Client", "Local beauty businesses"]],
+  },
+  {
+    id: "pears",
+    href: "pears",
+    label: "PeARS Search Engine",
+    place: "--x: 465; --y: 10; --w: 478; --h: 694; --left: 17; --cx: 38; --cy: 7; --cw: 402; --ch: 555;",
+    pin: { width: 448, height: 437, place: "--pin-x: 1.98; --pin-y: 253.62; --pin-w: 447.5;", alt: "PeARS’ home page, “The people’s search engine”, paper-clipped to the paper." },
+    pinArea: "--cx: 43.76; --cy: 260.62; --cw: 359.5; --ch: 287.78; --cr: 4.14deg;",
+    text: "Making contributing to an open-source search engine faster & simpler",
+    details: [["Role", "UX consultant, Product designer"], ["Team", "1 designer, 1 engineer"], ["Timeline", "Jan–Mar 2024"], ["Client", "Denotation"]],
+  },
+];
+interface Props {
+  current: string;      // the study's page, left out of the folder
+}
+const { current } = Astro.props;
+const papers = PAPERS.filter((paper) => paper.href !== current);
 ---
     <h2 class="cs-divider cs-block" id="see-more"><span>See more</span></h2>
 
-    <!-- The other case studies: a folder of papers that works as the lore
-         page's does (js/lore.js), each paper with a screenshot clipped to it
-         that goes along with it. Scrolling leafs through it while the
-         pointer is on it and all of it is in sight. At the back, never moved, the resume and the
+    <!-- The case studies: a folder of papers that works as the lore page's
+         does (js/lore.js), each paper with a screenshot clipped to it that
+         goes along with it. Scrolling leafs through it while the pointer is
+         on it and all of it is in sight; a click on a paper with a study
+         opens the study. At the back, never moved, the resume and the
          letter, with their buttons. Positions are Figma's, in units of the
          folder's frame (948 of the read's 1080). -->
     <div class="cs-more cs-block cs-block--media">
       <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder" data-scroll-leaf="over"
-           aria-label="A folder of my other case studies. Press the right arrow key, swipe or drag to leaf through, and the left arrow key to go back."
+           aria-label="A folder of my other case studies. Press the right arrow key, swipe or drag to leaf through, the left arrow key to go back, and Enter to open the study on top."
            aria-describedby="more-status">
         <img class="folder-base" loading="lazy" src="assets/img/lore/folder-1x.webp" srcset="assets/img/lore/folder-1x.webp 1x, assets/img/lore/folder.webp 2x" alt="" width="1125" height="854">
         <span class="folder-label" aria-hidden="true">Case studies</span>
@@ -37,34 +72,20 @@ const { papers } = Astro.props;
         <!-- The papers that move, top of the pile last; --left is where each
              one lies once it's over on the left-hand side. The screenshot's
              own area takes the pointer too (sheet-hit--pin). -->
-        {papers.includes("beauty") && (
-        <div class="sheet" data-sheet="beauty" data-label="Visuals for local beauty businesses" style="--x: 453; --y: 32; --w: 478; --h: 694; --left: 5; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
+        {papers.map((paper) => (
+        <div class="sheet" data-sheet={paper.id} data-label={paper.label} data-href={paper.href} style={paper.place}>
           <span class="sheet-lift" aria-hidden="true"></span>
-          <img class="sheet-img" loading="lazy" src="assets/img/case-studies/beauty-1x.webp" srcset="assets/img/case-studies/beauty-1x.webp 1x, assets/img/case-studies/beauty.webp 2x" alt="" width="478" height="694">
-          <img class="sheet-pin" loading="lazy" src="assets/img/case-studies/beauty-pin-1x.webp" srcset="assets/img/case-studies/beauty-pin-1x.webp 1x, assets/img/case-studies/beauty-pin.webp 2x" alt="Social media posts for a beauty salon, paper-clipped to the paper." width="428" height="412" style="--pin-x: 63.9; --pin-y: 236.22; --pin-w: 428;">
+          <img class="sheet-img" loading="lazy" src={`assets/img/case-studies/${paper.id}-1x.webp`} srcset={`assets/img/case-studies/${paper.id}-1x.webp 1x, assets/img/case-studies/${paper.id}.webp 2x`} alt="" width="478" height="694">
+          <img class="sheet-pin" loading="lazy" src={`assets/img/case-studies/${paper.id}-pin-1x.webp`} srcset={`assets/img/case-studies/${paper.id}-pin-1x.webp 1x, assets/img/case-studies/${paper.id}-pin.webp 2x`} alt={paper.pin.alt} width={paper.pin.width} height={paper.pin.height} style={paper.pin.place}>
           <span class="sheet-hit" aria-hidden="true"></span>
-          <span class="sheet-hit sheet-hit--pin" aria-hidden="true" style="--cx: 84.9; --cy: 243.22; --cw: 359.5; --ch: 287.78;"></span>
+          <span class="sheet-hit sheet-hit--pin" aria-hidden="true" style={paper.pinArea}></span>
           <div class="visually-hidden">
-            <h3>Visuals for local beauty businesses</h3>
-            <p>Designing engaging social media posts tailored for clients in the beauty industry.</p>
-            <dl><dt>Role</dt><dd>Graphic designer</dd><dt>Team</dt><dd>1 Social Media Manager, 1 Designer</dd><dt>Timeline</dt><dd>2026</dd><dt>Client</dt><dd>Local beauty businesses</dd></dl>
+            <h3>{paper.href ? <a href={paper.href} tabindex="-1">{paper.label}</a> : paper.label}</h3>
+            <p>{paper.text}</p>
+            <dl>{paper.details.map(([term, value]) => <><dt>{term}</dt><dd>{value}</dd></>)}</dl>
           </div>
         </div>
-        )}
-        {papers.includes("pears") && (
-        <div class="sheet" data-sheet="pears" data-label="PeARS Search Engine" style="--x: 465; --y: 10; --w: 478; --h: 694; --left: 17; --cx: 38; --cy: 7; --cw: 402; --ch: 555;">
-          <span class="sheet-lift" aria-hidden="true"></span>
-          <img class="sheet-img" loading="lazy" src="assets/img/case-studies/pears-1x.webp" srcset="assets/img/case-studies/pears-1x.webp 1x, assets/img/case-studies/pears.webp 2x" alt="" width="478" height="694">
-          <img class="sheet-pin" loading="lazy" src="assets/img/case-studies/pears-pin-1x.webp" srcset="assets/img/case-studies/pears-pin-1x.webp 1x, assets/img/case-studies/pears-pin.webp 2x" alt="PeARS’ home page, “The people’s search engine”, paper-clipped to the paper." width="448" height="437" style="--pin-x: 1.98; --pin-y: 253.62; --pin-w: 447.5;">
-          <span class="sheet-hit" aria-hidden="true"></span>
-          <span class="sheet-hit sheet-hit--pin" aria-hidden="true" style="--cx: 43.76; --cy: 260.62; --cw: 359.5; --ch: 287.78; --cr: 4.14deg;"></span>
-          <div class="visually-hidden">
-            <h3>PeARS Search Engine</h3>
-            <p>Making contributing to an open-source search engine faster &amp; simpler</p>
-            <dl><dt>Role</dt><dd>UX consultant, Product designer</dd><dt>Team</dt><dd>1 designer, 1 engineer</dd><dt>Timeline</dt><dd>Jan–Mar 2024</dd><dt>Client</dt><dd>Denotation</dd></dl>
-          </div>
-        </div>
-        )}
+        ))}
 
         <!-- The resume's and the letter's buttons: above all the papers. -->
         <a class="pill pill--resume" href="#" data-link="resume" data-for="resume" download style="--px: 710.5; --py: 165;">
@@ -79,3 +100,7 @@ const { papers } = Astro.props;
       <p class="lore-hint" aria-hidden="true">swipe to leaf through</p>
       <p class="visually-hidden" id="more-status" role="status" aria-live="polite"></p>
     </div>
+
+    <!-- With a mouse over a paper with a study, this takes the pointer's
+         place, and a click there opens the study (js/main.js). -->
+    <ViewStudy />

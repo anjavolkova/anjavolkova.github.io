@@ -484,7 +484,9 @@ function initWorkTilt() {
 // "View study": with a mouse over a project's picture that has a study (its
 // "Full study" goes somewhere), the pill takes the pointer's place and
 // follows it, easing after it, and a click there does what "Full study"
-// does. The CSS brings the pill in and out (is-shown).
+// does. Over a paper with a study in the case studies' folder, on top of its
+// pile, it does the same (js/lore.js opens the study). The CSS brings the
+// pill in and out (is-shown).
 const FOLLOW_EASE = 0.08;   // seconds: how quickly the pill catches up
 
 function initViewStudy() {
@@ -504,6 +506,8 @@ function initViewStudy() {
       study.click();
     });
   }
+  const folders = [...document.querySelectorAll(".lore-folder")];
+  if (folders.some((folder) => folder.querySelector(".sheet[data-href]"))) any = true;
   if (!any) return;
 
   const target = { x: 0, y: 0 };
@@ -539,19 +543,24 @@ function initViewStudy() {
     }
     if (raf == null) { last = performance.now(); raf = requestAnimationFrame(step); }
   }
-  const studyAt = (el) => Boolean(el?.closest?.(".work-panel:not(.is-leaving) .work-visual.has-study"));
+  const studyAt = (el) => Boolean(el?.closest?.(
+    ".work-panel:not(.is-leaving) .work-visual.has-study, .lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit",
+  ));
   document.addEventListener("pointermove", (e) => {
     if (e.pointerType !== "mouse") return;
     pointer = { x: e.clientX, y: e.clientY };
     update(studyAt(e.target));
   }, { passive: true });
-  // The page can scroll from under a still pointer, and a swipe on the
-  // showcase can swap the project under it.
+  // The page can scroll from under a still pointer, a swipe on the showcase
+  // can swap the project under it, and the folder's papers move.
   const recheck = () => { if (pointer) update(studyAt(document.elementFromPoint(pointer.x, pointer.y))); };
   window.addEventListener("scroll", recheck, { passive: true });
   const swapped = new MutationObserver(recheck);
   for (const panel of document.querySelectorAll(".work-panel")) {
     swapped.observe(panel, { attributes: true, attributeFilter: ["hidden", "class"] });
+  }
+  for (const folder of folders) {
+    swapped.observe(folder, { attributes: true, attributeFilter: ["class"], subtree: true });
   }
   document.documentElement.addEventListener("mouseleave", () => pill.classList.remove("is-shown"));
 }

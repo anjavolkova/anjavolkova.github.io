@@ -5,6 +5,7 @@
 // that takes the pointer's place over a picture with a study. Every
 // project's picture lies on the same paper, loaded with the page (not
 // lazily) and decoded before it shows, so it stays put between projects.
+import ViewStudy from "./ViewStudy.astro";
 interface Props {
   panel?: boolean;
 }
@@ -103,7 +104,7 @@ const { panel = false } = Astro.props;
             </dl>
           </div>
           <div class="work-desc">
-            <p>Network operators rely on specialised software to monitor network infrastructure, diagnose faults, and keep services online. I redesigned a legacy network management system, making it easier to understand what’s happening across thousands of devices and resolve problems faster.</p>
+            <p>Network operators rely on specialised software to monitor network infrastructure, diagnose faults, and keep services online. I redesigned a legacy network management system for the first time in over a decade, making it easier to understand what’s happening across thousands of devices and resolve problems faster.</p>
           </div>
         </div>
         <div class="work-footer">
@@ -149,7 +150,4 @@ const { panel = false } = Astro.props;
 
 <!-- With a mouse over a project's picture that has a study, this takes the
      pointer's place, and a click there opens the study (js/main.js). -->
-<span class="view-study" aria-hidden="true">
-  <span class="view-study-label"><span><span>View study</span></span></span>
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5.83 14.17 14.17 5.83m0 0H5.83m8.34 0v8.34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</span>
+<ViewStudy />

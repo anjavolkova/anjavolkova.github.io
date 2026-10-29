@@ -4,7 +4,9 @@
 // or swiped across, flicked, tapped, scrolled down, or with the → key (or a
 // sideways trackpad swipe), and ← (or scrolling up) brings the last one back.
 // The resume and the letter stay at the back of the right-hand side, with
-// their buttons.
+// their buttons. In the case studies' folder, a paper with a study
+// (data-href) opens it instead when it's clicked or tapped, or with Enter
+// while it's on top of the pile on the right.
 //
 // Each paper keeps its place and rotation from the Figma layouts and only
 // slides across. Sent by a key or a tap, it eases over in TURN_MS; let go of
@@ -46,6 +48,7 @@ function initFolder(folder) {
     hit: el.querySelector(".sheet-hit"),
     dx: fixed ? 0 : num(el, "--left") - num(el, "--x"),
     label: el.dataset.label || "",
+    href: el.dataset.href || "",
     x: 0, v: 0, target: 0,      // offset across, in units (0 = right, dx = left)
     dir: -1,                    // -1 going left, 1 coming back
     hover: 0, hoverV: 0, hoverTo: 0,
@@ -96,6 +99,13 @@ function initFolder(folder) {
     }
     folder.dataset.left = onLeft;
     folder.classList.toggle("is-through", onLeft === papers.length);
+  }
+
+  // Inside the homepage's panel (js/panel.js), a study opens in the page,
+  // not in the panel.
+  function open(p) {
+    const page = document.documentElement.classList.contains("in-panel") ? window.top : window;
+    page.location.assign(new URL(p.href, location.href));
   }
 
   function announce() {
@@ -326,10 +336,11 @@ function initFolder(folder) {
     folder.classList.remove("is-dragging");
     if (!g.engaged) {
       if (cancelled) return;
-      // A tap: turn the paper tapped; on a touch screen, a tap on the resume
-      // or the letter shows its button.
+      // A tap: open the paper's study, or turn the paper tapped; on a touch
+      // screen, a tap on the resume or the letter shows its button.
       const p = g.paper;
       if (!p) return;
+      if (p.href && (p === topRight() || p === topLeft())) return open(p);
       if (p.fixed) {
         if (g.type !== "mouse") { const on = !p.el.classList.contains("is-revealed"); fixed.forEach((f) => f.el.classList.remove("is-revealed")); p.el.classList.toggle("is-revealed", on); }
         return;
@@ -370,6 +381,12 @@ function initFolder(folder) {
     e.preventDefault();
     if (e.key === "ArrowRight") next();
     else prev();
+  });
+  // Enter, on the folder, opens the study on top of the pile on the right.
+  folder.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || e.target !== folder || !topRight()?.href) return;
+    e.preventDefault();
+    open(topRight());
   });
 
   // Sideways trackpad swipes over the folder count too.
