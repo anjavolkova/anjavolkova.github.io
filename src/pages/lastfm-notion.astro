@@ -38,13 +38,13 @@ import CaseFolder from "../components/CaseFolder.astro";
       </section>
     </div>
 
-    <figure class="cs-stack cs-figure">
-      <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+    <div class="cs-stack">
+      <figure class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
         <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
         <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/google-results.webp" alt="Google’s results for “last fm notion”: the band Notion’s page on last.fm, and a tutorial on importing last.fm data into Notion." width="1500" height="811"></div>
-      </div>
-      <figcaption class="cs-caption cs-block">Google results show a music artist named ‘Notion’ and a way to import Notion data. Nothing cute and responsive :(<br>Also, I kind of didn’t explain what last.fm is. Or what Notion is, for that matter. Hope you’re still with me.</figcaption>
-    </figure>
+        <figcaption class="cs-caption">Google results show a music artist named ‘Notion’ and a way to import Notion data. Nothing cute and responsive :(<br>Also, I kind of didn’t explain what last.fm is. Or what Notion is, for that matter. Hope you’re still with me.</figcaption>
+      </figure>
+    </div>
 
     <h2 class="cs-divider cs-block" id="solution"><span>Solution</span></h2>
 
@@ -56,17 +56,23 @@ import CaseFolder from "../components/CaseFolder.astro";
       <h3 class="cs-solution-title cs-heading cs-block">A Notion widget that dynamically presents your last.fm music stats, optimized to your Notion dashboard layout</h3>
       <!-- Each with its video, to come: a bare sheet for now. -->
       <ul class="cs-trio">
-        <li class="cs-figure">
-          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
-          <p class="cs-caption cs-block">Adjust the widget to your layout without breaking it</p>
+        <li>
+          <figure class="cs-frame cs-frame--fit cs-frame--blank cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <figcaption class="cs-caption">Adjust the widget to your layout without breaking it</figcaption>
+          </figure>
         </li>
-        <li class="cs-figure">
-          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
-          <p class="cs-caption cs-block">Toggle between ‘chart’ and ‘recent tracks’ view</p>
+        <li>
+          <figure class="cs-frame cs-frame--fit cs-frame--blank cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <figcaption class="cs-caption">Toggle between ‘chart’ and ‘recent tracks’ view</figcaption>
+          </figure>
         </li>
-        <li class="cs-figure">
-          <div class="cs-frame cs-paper cs-block cs-block--media"><img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625"></div>
-          <p class="cs-caption cs-block">See your listening history for the last 7, 30, 90, 365 days, or all time.</p>
+        <li>
+          <figure class="cs-frame cs-frame--fit cs-frame--blank cs-paper cs-block cs-block--media">
+            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+            <figcaption class="cs-caption">See your listening history for the last 7, 30, 90, 365 days, or all time.</figcaption>
+          </figure>
         </li>
       </ul>
     </div>
@@ -119,12 +125,10 @@ import CaseFolder from "../components/CaseFolder.astro";
       <p class="cs-text cs-block">My first prompt:</p>
       <blockquote class="cs-quote cs-block"><p>Can you make a notion widget that connects to my last.fm? like, shows the last month’s topster in real time</p></blockquote>
       <p class="cs-text cs-block">I added the result to a GitHub repo and deployed it through Vercel.</p>
-      <figure class="cs-figure">
-        <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
-          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
-          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/first-try.webp" alt="Claude’s first try: a purple “Last.fm Monthly Topster” page with a configuration form above a grid of albums." width="981" height="787"></div>
-        </div>
-        <figcaption class="cs-caption cs-block">Well…</figcaption>
+      <figure class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+        <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+        <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/first-try.webp" alt="Claude’s first try: a purple “Last.fm Monthly Topster” page with a configuration form above a grid of albums." width="981" height="787"></div>
+        <figcaption class="cs-caption">Well…</figcaption>
       </figure>
 
       <h3 class="cs-solution-title cs-heading cs-block">Claude handled the API integration, but misunderstood design constraints</h3>
@@ -138,12 +142,10 @@ import CaseFolder from "../components/CaseFolder.astro";
       <h3 class="cs-solution-title cs-heading cs-block">Creating a UI prototype tailored to Notion</h3>
       <p class="cs-text cs-block">I ended up creating a prototype of the widget in Figma, using a screenshot of a Notion page as a backdrop, copying the HTML code from Dev mode into Claude, and specifying my requirements.</p>
       <div class="cs-aside">
-        <figure class="cs-figure">
-          <div class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
-            <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
-            <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/figma-mockup.webp" alt="The Figma mockup: the widget on a Notion page, an album grid with the time range and the numbers on its right." width="1758" height="1016"></div>
-          </div>
-          <figcaption class="cs-caption cs-block">Simple Figma mockup</figcaption>
+        <figure class="cs-frame cs-frame--fit cs-paper cs-block cs-block--media">
+          <img class="cs-paper-grain" src="assets/img/on-my-disk/card-paper.webp" alt="" width="429" height="625">
+          <div class="cs-shot"><img loading="lazy" src="assets/img/lastfm-notion/figma-mockup.webp" alt="The Figma mockup: the widget on a Notion page, an album grid with the time range and the numbers on its right." width="1758" height="1016"></div>
+          <figcaption class="cs-caption">Simple Figma mockup</figcaption>
         </figure>
         <ul class="cs-notes">
           <li class="cs-solution-text"><p class="cs-solution-desc cs-block">Album grid is music nerds’ favorite layout → main view</p></li>

@@ -1,8 +1,11 @@
 ---
 // "See more", the end of a case study: a folder of the case studies' papers
-// (below), all but the one you're on (current). A paper with a study opens
-// it (href; js/lore.js). Papers are listed bottom of the pile first; their
-// places are Figma's, in units of the folder's frame.
+// (below), all but the one you're on (current), in the order of the list
+// of studies, the first on top. It starts leafed to the next study on the
+// list that has a paper (after the last, the first): the ones before it
+// lie turned over on the left (data-leafed; js/lore.js). A paper with a
+// study opens it (href). Places are Figma's, in units of the folder's
+// frame.
 import ViewStudy from "./ViewStudy.astro";
 interface Paper {
   id: string;
@@ -14,6 +17,9 @@ interface Paper {
   text: string;
   details: [string, string][];
 }
+// The studies, in the homepage's order: the work section's, then the side
+// quests'.
+const STUDIES = ["on-my-disk", "pears", "beauty", "lastfm-notion", "inspo-ai"];
 const PAPERS: Paper[] = [
   {
     id: "beauty",
@@ -36,10 +42,14 @@ const PAPERS: Paper[] = [
   },
 ];
 interface Props {
-  current: string;      // the study's page, left out of the folder
+  current: string;      // the study you're on (its page), left out of the folder
 }
 const { current } = Astro.props;
-const papers = PAPERS.filter((paper) => paper.href !== current);
+const papers = PAPERS.filter((paper) => paper.id !== current)
+  .sort((a, b) => STUDIES.indexOf(a.id) - STUDIES.indexOf(b.id));
+const at = STUDIES.indexOf(current);
+const next = [...STUDIES.slice(at + 1), ...STUDIES.slice(0, at)].find((id) => papers.some((paper) => paper.id === id));
+const leafed = papers.findIndex((paper) => paper.id === next);
 ---
     <h2 class="cs-divider cs-block" id="see-more"><span>See more</span></h2>
 
@@ -51,7 +61,7 @@ const papers = PAPERS.filter((paper) => paper.href !== current);
          letter, with their buttons. Positions are Figma's, in units of the
          folder's frame (948 of the read's 1080). -->
     <div class="cs-more cs-block cs-block--media">
-      <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder" data-scroll-leaf="over"
+      <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder" data-scroll-leaf="over" data-leafed={leafed > 0 ? leafed : undefined}
            aria-label="A folder of my other case studies. Press the right arrow key, swipe or drag to leaf through, the left arrow key to go back, and Enter to open the study on top."
            aria-describedby="more-status">
         <img class="folder-base" loading="lazy" src="assets/img/lore/folder-1x.webp" srcset="assets/img/lore/folder-1x.webp 1x, assets/img/lore/folder.webp 2x" alt="" width="1125" height="854">
@@ -72,7 +82,7 @@ const papers = PAPERS.filter((paper) => paper.href !== current);
         <!-- The papers that move, top of the pile last; --left is where each
              one lies once it's over on the left-hand side. The screenshot's
              own area takes the pointer too (sheet-hit--pin). -->
-        {papers.map((paper) => (
+        {[...papers].reverse().map((paper) => (
         <div class="sheet" data-sheet={paper.id} data-label={paper.label} data-href={paper.href} style={paper.place}>
           <span class="sheet-lift" aria-hidden="true"></span>
           <img class="sheet-img" loading="lazy" src={`assets/img/case-studies/${paper.id}-1x.webp`} srcset={`assets/img/case-studies/${paper.id}-1x.webp 1x, assets/img/case-studies/${paper.id}.webp 2x`} alt="" width="478" height="694">

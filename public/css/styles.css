@@ -1166,7 +1166,7 @@ align-self: flex-start;
   -webkit-tap-highlight-color: transparent;
 }
 .lore-folder:focus { outline: none; }
-.lore-folder:focus-visible { outline: 1px solid var(--body); outline-offset: calc(24 * var(--u)); border-radius: calc(24 * var(--u)); }
+.lore-folder.is-tabbed:focus-visible { outline: 1px solid var(--body); outline-offset: calc(24 * var(--u)); border-radius: calc(24 * var(--u)); }   /* reached with Tab (js/lore.js) */
 .lore-folder > * { position: absolute; }
 .folder-base {
   left: calc(-88 * var(--u));
@@ -2340,13 +2340,14 @@ html:has(.page-study) { scroll-snap-type: none; }
 /* The other studies' parts, in the same hand as On My Disk's: what's under
    a section's name (.cs-stack), a heading there set as a solution's title
    (.cs-heading), a list (.cs-list), a picture on paper at its own
-   proportions (.cs-frame--fit; a screen there is --w of it wide),
-   pictures side by side at one height (.cs-row, each --r wide for every
-   unit high), a caption (.cs-caption), a phone cut out of its old
-   background (.cs-phone), a live page on paper (.cs-live), a quote
-   (.cs-quote), a picture with its notes beside it (.cs-aside, .cs-notes),
-   texts side by side, edged as the solutions are (.cs-cols), and three
-   sheets with a line under each (.cs-trio). */
+   proportions (.cs-frame--fit; a screen there is --w of it wide), or a
+   bare sheet (.cs-frame--blank), pictures side by side at one height
+   (.cs-row, each --r wide for every unit high), a caption, always on the
+   paper at its foot (.cs-caption), phones cut out of their old backgrounds,
+   in groups (.cs-iterations, .cs-phone), a live page on paper (.cs-live),
+   a quote (.cs-quote), a picture with its notes beside it (.cs-aside,
+   .cs-notes), texts side by side, edged as the solutions are (.cs-cols),
+   and three sheets side by side (.cs-trio). */
 .cs-stack {
   display: flex;
   flex-direction: column;
@@ -2373,8 +2374,10 @@ html:has(.page-study) { scroll-snap-type: none; }
 .cs-list li::marker { color: var(--body); }
 .cs-frame--fit {
   aspect-ratio: auto;
+  row-gap: 16px;        /* a screen and its caption */
   padding: 6.4% 6.6%;   /* 62 and 64 of 968, as the screens sit */
 }
+.cs-frame--blank { aspect-ratio: 968 / 627; align-content: end; }
 .cs-frame--fit .cs-shot { width: var(--w, 100%); aspect-ratio: auto; }
 .cs-frame--fit .cs-shot img { height: auto; }
 .cs-row {
@@ -2385,28 +2388,43 @@ html:has(.page-study) { scroll-snap-type: none; }
   width: 100%;
 }
 .cs-row > * { flex: var(--r) 1 0; min-width: 0; }
-.cs-row--top { align-items: flex-start; }   /* before and after, each at its own height */
+/* Before and after, each at its own height, their captions level. */
+.cs-row--top { align-items: stretch; }
+.cs-row--top .cs-caption { margin-top: auto; }
 .cs-figure {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 .cs-caption {
+  position: relative;   /* over the paper's grain */
   font-family: var(--font-mono);
   font-size: 14px;
   line-height: 1.3;
   letter-spacing: -0.05em;
+  text-align: center;
   color: var(--body);
   font-feature-settings: "dlig" 1;
 }
-.cs-row .cs-caption { text-align: center; }
-.cs-phones {
-  display: flex;
-  gap: clamp(8px, 1.4vw, 20px);
+/* Phones in a row, all the same height, in groups, each group (a figure)
+   with its caption under it: Iteration 3's one phone, Iteration 4's two.
+   The empty track doubles the gap between the groups. */
+.cs-iterations {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0 repeat(2, minmax(0, 1fr));
+  column-gap: clamp(8px, 1.4vw, 20px);
+  row-gap: 16px;
+  align-items: end;
+  width: 100%;
 }
+.cs-iterations :is(figure, .cs-phones) { display: contents; }
+.cs-iterations .cs-phone { grid-row: 1; aspect-ratio: 1 / 2; object-fit: contain; }
+.cs-iterations .cs-caption { grid-row: 2; justify-self: center; white-space: nowrap; }
+.cs-iterations figure:first-child :is(.cs-phone, .cs-caption) { grid-column: 1; }
+.cs-iterations figure:last-child .cs-phone:first-child { grid-column: 3; }
+.cs-iterations figure:last-child .cs-phone:last-child { grid-column: 4; }
+.cs-iterations figure:last-child .cs-caption { grid-column: 3 / 5; }
 .cs-phone {
-  flex: 1 1 0;
-  min-width: 0;
   width: 100%;
   height: auto;
   filter: drop-shadow(0 9px 9px rgba(194, 179, 179, 0.24)) drop-shadow(0 2px 5px rgba(194, 179, 179, 0.28));
