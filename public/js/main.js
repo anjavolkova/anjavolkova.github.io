@@ -10,9 +10,7 @@ import { swipeReader } from "./swipes.js";
 const LINKS = {
   lore: "lore",
   resume: "",          // the resume PDF, for the lore page's "Download PDF"
-  "study-node": "",
-  "study-network": "",
-  "study-home": "",
+  "study-pears": "",
   "study-smm": "",
   "study-files": "on-my-disk",
   "lastfm-widget": "https://lastfm-notion-widget.vercel.app/",
