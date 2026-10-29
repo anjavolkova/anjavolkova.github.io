@@ -2,7 +2,9 @@
 // Selected work: one showcase, four tabs (js/main.js). With panel, On My
 // Disk's "Full study" opens the case study in a panel over the page
 // (js/panel.js) rather than going to it. After it, the "View study" pill
-// that takes the pointer's place over a picture with a study.
+// that takes the pointer's place over a picture with a study. Every
+// project's picture lies on the same paper, loaded with the page (not
+// lazily) and decoded before it shows, so it stays put between projects.
 interface Props {
   panel?: boolean;
 }
@@ -19,7 +21,7 @@ const { panel = false } = Astro.props;
     <!-- Private file-sharing app -->
     <article class="work-panel" role="tabpanel" id="panel-files" aria-labelledby="tab-files" tabindex="0">
       <div class="work-visual">
-        <img loading="lazy" class="work-paper" src="assets/img/work/omd-paper.webp" alt="" width="480" height="664">
+        <img class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664" decoding="sync">
         <div class="stage">
           <div class="shot shot--screen rise">
             <img loading="lazy" src="assets/img/work/omd-screen.webp" alt="On My Disk’s file manager: the knowledge base and chat history in the sidebar, files shared with me, and recent files." width="1068" height="633">
@@ -53,7 +55,7 @@ const { panel = false } = Astro.props;
     <!-- Open-source search engine -->
     <article class="work-panel" role="tabpanel" id="panel-pears" aria-labelledby="tab-pears" tabindex="0" hidden>
       <div class="work-visual">
-        <img loading="lazy" class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664">
+        <img class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664" decoding="sync">
         <div class="stage">
           <div class="shot shot--screen shot--pears rise">
             <img loading="lazy" src="assets/img/work/pears-screen.webp" alt="PeARS’ search page: a search for “AI”, with a list of results." width="1068" height="633">
@@ -86,7 +88,7 @@ const { panel = false } = Astro.props;
          there's no study to go to. -->
     <article class="work-panel" role="tabpanel" id="panel-node" aria-labelledby="tab-node" tabindex="0" hidden>
       <div class="work-visual">
-        <img loading="lazy" class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664">
+        <img class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664" decoding="sync">
       </div>
       <div class="work-info">
         <div class="work-body">
@@ -113,7 +115,7 @@ const { panel = false } = Astro.props;
     <!-- SMM design -->
     <article class="work-panel" role="tabpanel" id="panel-smm" aria-labelledby="tab-smm" tabindex="0" hidden>
       <div class="work-visual">
-        <img loading="lazy" class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664">
+        <img class="work-paper" src="assets/img/work/paper.webp" alt="" width="480" height="664" decoding="sync">
         <div class="stage">
           <div class="shot shot--post tilt">
             <img loading="lazy" src="assets/img/work/smm-post.webp" alt="Instagram post designed for a beauty brand: “Kaj izbereš?” with a portrait photograph." width="366" height="457">
