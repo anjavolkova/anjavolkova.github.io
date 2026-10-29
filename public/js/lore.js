@@ -390,9 +390,11 @@ function initFolder(folder) {
   }, { passive: false });
 
   // Scrolling up and down (a trackpad or a mouse wheel) leafs through too,
-  // the way a drag does, while the page is at the top with the whole folder
-  // in sight: down takes the top paper on the right across, up brings the
-  // last one back. The paper follows the swipe (js/swipes.js tells swipes
+  // the way a drag does, while the whole folder is in sight and, on the lore
+  // page, the page is at the top; for a folder further down a page (the case
+  // studies', data-scroll-leaf="over"), while the pointer is on it instead:
+  // down takes the top paper on the right across, up brings the last one
+  // back. The paper follows the swipe (js/swipes.js tells swipes
   // apart); when the swipe lets up it carries on over on the spring, at the
   // speed it was going, unless it was pulled back, and the momentum after it
   // is absorbed. A hard swipe only stretches it a little past where it
@@ -408,7 +410,12 @@ function initFolder(folder) {
   let absorbing = false;        // the momentum of a swipe already used
   let holding = false;          // a swipe held whole: one that came during the pause
   let pauseUntil = -Infinity;
-  const atRest = () => window.scrollY <= 2 && folder.getBoundingClientRect().bottom <= window.innerHeight;
+  const leafOver = folder.dataset.scrollLeaf === "over";
+  const atRest = (e) => {
+    const r = folder.getBoundingClientRect();
+    if (r.bottom > window.innerHeight) return false;
+    return leafOver ? r.top >= 0 && folder.contains(e.target) : window.scrollY <= 2;
+  };
 
   function scrollGrab(p) {
     const fromRight = p === topRight();
@@ -492,7 +499,7 @@ function initFolder(folder) {
     }
     holding = false;
     if (fresh || starts) absorbing = false;
-    if (!e.cancelable || e.ctrlKey || !dy || !atRest()) return;
+    if (!e.cancelable || e.ctrlKey || !dy || !atRest(e)) return;
     const p = dy > 0 ? topRight() : topLeft();
     if (p) {
       e.preventDefault();

@@ -218,11 +218,12 @@ import MessageDialog from "../components/MessageDialog.astro";
 
     <!-- The other case studies: a folder of papers that works as the lore
          page's does (js/lore.js), each paper with a screenshot clipped to it
-         that goes along with it. At the back, never moved, the resume and the
+         that goes along with it. Scrolling leafs through it while the
+         pointer is on it and all of it is in sight. At the back, never moved, the resume and the
          letter, with their buttons. Positions are Figma's, in units of the
          folder's frame (948 of the read's 1080). -->
     <div class="cs-more cs-block cs-block--media">
-      <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder"
+      <div class="lore-folder cs-folder" tabindex="0" role="group" aria-roledescription="folder" data-scroll-leaf="over"
            aria-label="A folder of my other case studies. Press the right arrow key, swipe or drag to leaf through, and the left arrow key to go back."
            aria-describedby="more-status">
         <img class="folder-base" loading="lazy" src="assets/img/lore/folder-1x.webp" srcset="assets/img/lore/folder-1x.webp 1x, assets/img/lore/folder.webp 2x" alt="" width="1125" height="854">

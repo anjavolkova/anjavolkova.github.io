@@ -346,10 +346,10 @@ img.is-missing { visibility: hidden; }
 
 /* Switching projects: the current one fades out, then the new one comes in.
    Only what changes moves: the picture fades and the text rises out of a
-   blur, one block after another. The paper, the grain and the borders
-   stay put. */
-.work-panel.is-leaving :is(.shot, .work-body, .work-footer > *) { animation: panel-out 0.16s ease-in both; }
-.work-panel.is-entering .shot { animation: panel-fade 0.5s ease both; }
+   blur, one block after another. The paper and the borders stay put; a
+   picture's grain (the social post's) comes and goes with it. */
+.work-panel.is-leaving :is(.shot, .grain, .work-body, .work-footer > *) { animation: panel-out 0.16s ease-in both; }
+.work-panel.is-entering :is(.shot, .grain) { animation: panel-fade 0.5s ease both; }
 .work-panel.is-entering .work-body > *,
 .work-panel.is-entering .work-footer > * { animation: panel-rise 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) var(--arrive, 0s) both; }
 .work-panel.is-entering .work-body > :nth-child(2) { animation-delay: calc(var(--arrive, 0s) + 0.06s); }
@@ -360,7 +360,7 @@ img.is-missing { visibility: hidden; }
    play its entrance then: the picture first, the text after a pause
    (--arrive; js/main.js). html.work-waiting does the same from the first
    paint, on a page that opens on the work (preview.html). */
-:is(.work.is-waiting, .work-waiting .work) .work-panel :is(.shot, .work-body > *, .work-footer > *) { opacity: 0; }
+:is(.work.is-waiting, .work-waiting .work) .work-panel :is(.shot, .grain, .work-body > *, .work-footer > *) { opacity: 0; }
 
 @keyframes panel-out { to { opacity: 0; } }
 @keyframes panel-fade { from { opacity: 0; } }
