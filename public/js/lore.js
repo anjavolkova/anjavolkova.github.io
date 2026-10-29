@@ -33,8 +33,16 @@ const RESUME_PAUSE = 1500;  // ms scrolling holds on the resume once the last pa
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
+// The folder's focus ring (styles.css) shows when it's reached with Tab,
+// not when it's clicked and then leafed through with the arrow keys.
+let tabbing = false;
+
 export function initLore() {
-  for (const folder of document.querySelectorAll(".lore-folder")) initFolder(folder);
+  const folders = document.querySelectorAll(".lore-folder");
+  if (!folders.length) return;
+  document.addEventListener("keydown", (e) => { if (e.key === "Tab") tabbing = true; });
+  document.addEventListener("pointerdown", () => { tabbing = false; }, true);
+  for (const folder of folders) initFolder(folder);
 }
 
 function initFolder(folder) {
@@ -73,6 +81,13 @@ function initFolder(folder) {
 
   let onLeft = 0;               // how many papers lie on the left
   let flights = 0;
+  // A case study's folder starts leafed to the next study: the papers
+  // before it lie turned over on the left (data-leafed).
+  for (const p of papers.slice(0, Number(folder.dataset.leafed) || 0)) {
+    p.x = p.target = p.dx;
+    p.flight = ++flights;
+    onLeft += 1;
+  }
   let unit = 1;                 // px per design unit
   const measure = () => { unit = folder.getBoundingClientRect().width / FOLDER_WIDTH || 1; };
 
@@ -536,6 +551,9 @@ function initFolder(folder) {
     if (e.pointerType !== "mouse" || !resume.el.classList.contains("is-revealed")) return;
     if (paperOf(handle(e.target)) !== resume) resume.el.classList.remove("is-revealed");
   }, { passive: true });
+
+  folder.addEventListener("focus", () => folder.classList.toggle("is-tabbed", tabbing));
+  folder.addEventListener("blur", () => folder.classList.remove("is-tabbed"));
 
   // Keep pixel sizes in step with the folder's size.
   new ResizeObserver(() => { measure(); for (const p of all) render(p); }).observe(folder);
