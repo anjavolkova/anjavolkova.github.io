@@ -607,14 +607,15 @@ img.is-missing { visibility: hidden; }
 .cta:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 
 /* "View study": with a mouse over a project's picture that has a study (or
-   a paper with one in the case studies' folder), a pill takes the
-   pointer's place and follows it, and a click there opens the study
-   (js/main.js). It comes in as a circle round the arrow, then
+   a paper with one in the case studies' folder, or a side quest with one),
+   a pill takes the pointer's place and follows it, and a click there opens
+   the study (js/main.js). It comes in as a circle round the arrow, then
    opens out to the words, which come out of a blur as the site's text
    does; on the way out it closes up first. The page's brown with a cream
    rim (Figma: Component 1, Variant5). */
 .work-visual.has-study,
-.lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit { cursor: none; }
+.lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit,
+a.piece[href] { cursor: none; }
 .view-study {
   position: fixed;
   z-index: 40;

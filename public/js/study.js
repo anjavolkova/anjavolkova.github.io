@@ -2,7 +2,7 @@
 // opening drifts up as the page scrolls, so it moves faster than the page;
 // the research question and the impact figures rise a little under the
 // mouse, as the lore page's papers do (js/rise.js), and so do the screens
-// and phones on paper, their paper staying put.
+// and phones on paper, each on its own, their paper staying put.
 // None of it moves with reduced motion. The ← stays in the corner, and turns
 // brown past the opening; the contents come in at the right edge then, the
 // section you're in marked. With the page's intro, the read arrives block by
@@ -26,8 +26,11 @@ export function initStudy() {
   if (banner && toc) contents(toc, banner);
   if (question) riseOnHover(question);
   for (const stat of study.querySelectorAll(".cs-stat")) riseOnHover(stat);
+  // One screen on a paper rises with the mouse anywhere on the paper; of
+  // several, only the one under the mouse.
   for (const frame of study.querySelectorAll(".cs-frame")) {
-    for (const shot of frame.querySelectorAll(".cs-shot, .cs-phone")) riseOnHover(shot, frame);
+    const shots = frame.querySelectorAll(".cs-shot, .cs-phone");
+    for (const shot of shots) riseOnHover(shot, shots.length > 1 ? shot : frame);
   }
   if (document.documentElement.classList.contains("intro")) reveal(study);
   if (document.documentElement.classList.contains("in-panel")) closesPanel(study);

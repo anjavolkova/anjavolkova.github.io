@@ -485,8 +485,9 @@ function initWorkTilt() {
 // "Full study" goes somewhere), the pill takes the pointer's place and
 // follows it, easing after it, and a click there does what "Full study"
 // does. Over a paper with a study in the case studies' folder, on top of its
-// pile, it does the same (js/lore.js opens the study). The CSS brings the
-// pill in and out (is-shown).
+// pile, it does the same (js/lore.js opens the study), and over a side
+// quest with a study (a link). The CSS brings the pill in and out
+// (is-shown).
 const FOLLOW_EASE = 0.08;   // seconds: how quickly the pill catches up
 
 function initViewStudy() {
@@ -508,6 +509,7 @@ function initViewStudy() {
   }
   const folders = [...document.querySelectorAll(".lore-folder")];
   if (folders.some((folder) => folder.querySelector(".sheet[data-href]"))) any = true;
+  if (document.querySelector("a.piece[href]")) any = true;
   if (!any) return;
 
   const target = { x: 0, y: 0 };
@@ -544,7 +546,7 @@ function initViewStudy() {
     if (raf == null) { last = performance.now(); raf = requestAnimationFrame(step); }
   }
   const studyAt = (el) => Boolean(el?.closest?.(
-    ".work-panel:not(.is-leaving) .work-visual.has-study, .lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit",
+    ".work-panel:not(.is-leaving) .work-visual.has-study, .lore-folder:not(.is-dragging) .sheet.is-top[data-href] .sheet-hit, a.piece[href]",
   ));
   document.addEventListener("pointermove", (e) => {
     if (e.pointerType !== "mouse") return;
