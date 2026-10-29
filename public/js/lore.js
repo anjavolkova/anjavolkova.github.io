@@ -1,5 +1,6 @@
-// Lore: a folder of papers (lore.html). The loose papers start in a pile on
-// the right; the top one moves over to the left-hand side when it's dragged
+// Lore: a folder of papers (lore.html), and the case studies' folder at the
+// end of a case study, which works the same way. The loose papers start in
+// a pile on the right; the top one moves over to the left-hand side when it's dragged
 // or swiped across, flicked, tapped, scrolled down, or with the → key (or a
 // sideways trackpad swipe), and ← (or scrolling up) brings the last one back.
 // The resume and the letter stay at the back of the right-hand side, with
@@ -10,7 +11,8 @@
 // after a drag, it carries on (or back) on a spring from where it was, at the
 // speed it was flicked. On the way over it stays flat on the folder, like a
 // sheet being leafed across: it turns a little as it goes and its shadow
-// deepens, attached to it.
+// deepens, attached to it. A screenshot clipped to a paper is part of it,
+// so it goes along with it.
 
 import { swipeReader } from "./swipes.js";
 
@@ -30,9 +32,11 @@ const RESUME_PAUSE = 1500;  // ms scrolling holds on the resume once the last pa
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 export function initLore() {
-  const folder = document.querySelector(".lore-folder");
-  if (!folder) return;
-  const status = document.getElementById("lore-status");
+  for (const folder of document.querySelectorAll(".lore-folder")) initFolder(folder);
+}
+
+function initFolder(folder) {
+  const status = document.getElementById(folder.getAttribute("aria-describedby"));
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const canHover = window.matchMedia("(hover: hover)");
 
@@ -86,11 +90,12 @@ export function initLore() {
       p.el.classList.toggle("is-top", top);
       if (!top) p.el.classList.remove("is-revealed");
     }
-    if (!cloister.el.classList.contains("is-top")) hideCaption();
+    if (!cloister?.el.classList.contains("is-top")) hideCaption();
     for (const link of folder.querySelectorAll("a.pill, button.pill")) {
       link.tabIndex = paperOf(link)?.el.classList.contains("is-top") ? 0 : -1;
     }
     folder.dataset.left = onLeft;
+    folder.classList.toggle("is-through", onLeft === papers.length);
   }
 
   function announce() {
@@ -214,7 +219,7 @@ export function initLore() {
     if (p) setHover(p, true);
   });
 
-  // The cloister photo's caption: a tooltip that fades in just above the
+  // Lore's cloister photo's caption: a tooltip that fades in just above the
   // pointer once it has rested on the photo (on top of its pile) for a
   // moment, and fades out as soon as the pointer moves on.
   const caption = folder.querySelector(".pill--caption");

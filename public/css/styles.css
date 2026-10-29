@@ -298,7 +298,7 @@ img.is-missing { visibility: hidden; }
 
 .work {
   display: grid;
-  grid-template-columns: 35% minmax(0, 1fr);
+  grid-template-columns: calc(100% / 3) minmax(0, 1fr);
   grid-template-rows: var(--tab-h) auto;
   border-bottom: 1px solid var(--line);
   border-top: 1px solid var(--line);
@@ -339,14 +339,14 @@ img.is-missing { visibility: hidden; }
   grid-column: 1 / -1;
   grid-row: 2;
   display: grid;
-  grid-template-columns: 35% minmax(0, 1fr);
+  grid-template-columns: calc(100% / 3) minmax(0, 1fr);
   min-height: calc(666px - var(--tab-h));
 }
 .work-panel[hidden] { display: none; }
 
 /* Switching projects: the current one fades out, then the new one comes in.
    Only what changes moves: the picture fades and the text rises out of a
-   blur, one block after another. The botanical drawing, the grain and the borders
+   blur, one block after another. The paper, the grain and the borders
    stay put. */
 .work-panel.is-leaving :is(.shot, .work-body, .work-footer > *) { animation: panel-out 0.16s ease-in both; }
 .work-panel.is-entering .shot { animation: panel-fade 0.5s ease both; }
@@ -367,7 +367,9 @@ img.is-missing { visibility: hidden; }
 @keyframes panel-rise { from { opacity: 0; transform: translateY(12px); filter: blur(12px); } }
 .work-panel:focus-visible { outline-offset: -2px; }
 
-/* Project visual: a 504 × 714 stage, pulled up beside the tab row. */
+/* Project visual: Figma's picture area (480 by 664, its right edge the
+   border), pulled up beside the tab row. Pictures are placed in its units
+   on the stage, which is centred in it. */
 .work-visual {
   position: relative;
   margin-top: calc(-1 * var(--tab-h));
@@ -375,7 +377,7 @@ img.is-missing { visibility: hidden; }
   background: var(--bg);
   border-right: 1px solid var(--body);
   container-type: size;
-  --u: calc(100cqw / 504);
+  --u: calc(100cqw / 479);
 }
 
 /* No transform on the stage: it must not become a stacking context, so the
@@ -383,33 +385,11 @@ img.is-missing { visibility: hidden; }
 .stage {
   position: absolute;
   left: 0;
-  top: calc(50% - 357 * var(--u));
-  width: calc(504 * var(--u));
-  height: calc(714 * var(--u));
+  top: calc(50% - 332 * var(--u));
+  width: calc(479 * var(--u));
+  height: calc(664 * var(--u));
 }
 .stage > * { position: absolute; }
-
-/* The botanical drawing every project sits on: faint (12%), darkening the
-   panel, turned a little and cropped to a square. */
-.botanical {
-  left: calc(-78.84 * var(--u));
-  top: calc(-5.35 * var(--u));
-  width: calc(752.13 * var(--u));
-  height: calc(752.13 * var(--u));
-  overflow: hidden;
-  rotate: -3.88deg;
-  opacity: 0.12;
-  mix-blend-mode: darken;
-  pointer-events: none;
-}
-.botanical img {
-  position: absolute;
-  left: 0;
-  top: -0.04%;
-  width: 106.03%;
-  height: 112.77%;
-  max-width: none;
-}
 
 /* Grain textures are landscape files turned to portrait, multiplied in. */
 .grain {
@@ -419,9 +399,8 @@ img.is-missing { visibility: hidden; }
   mix-blend-mode: color-burn;
   pointer-events: none;
 }
-.grain--panel { left: calc(-126 * var(--u)); top: calc(88 * var(--u)); }
-.grain--home { left: calc(-111 * var(--u)); top: calc(75 * var(--u)); }
-.grain--faint { opacity: 0.19; }
+/* The social post's grain, over the whole picture (paper and post). */
+.grain--smm { left: calc(-139 * var(--u)); top: calc(100.76 * var(--u)); height: calc(510.48 * var(--u)); }
 
 /* While the pointer is over the picture area, the picture leans towards it
    in 3D. js/main.js sets --lean-x and --lean-y on the area, each from -1 to
@@ -436,8 +415,8 @@ img.is-missing { visibility: hidden; }
 .shot img { width: 100%; height: 100%; object-fit: cover; }
 
 .shot--post {
-  left: calc(72.03 * var(--u));
-  top: calc(142.37 * var(--u));
+  left: calc(60.03 * var(--u));
+  top: calc(118.37 * var(--u));
   width: calc(365.64 * var(--u));
   height: calc(457.05 * var(--u));
   border: 1px solid #C5B7BD;
@@ -446,10 +425,10 @@ img.is-missing { visibility: hidden; }
   transform: var(--tilt) rotate(4.68deg);
 }
 
-/* On My Disk: its file manager on paper, running off the picture area's
-   right edge (Figma: Component 1, Variant5). Both are Figma's renders,
-   flattened. The paper fills the whole picture area; the screen rises
-   under the pointer. */
+/* Each picture lies on paper, filling the picture area: On My Disk's
+   file manager and PeARS' search page run off its right edge (Figma:
+   Component 1). All are Figma's renders, flattened. The screens rise under
+   the pointer. */
 .work-paper {
   position: absolute;
   inset: 0;
@@ -459,8 +438,8 @@ img.is-missing { visibility: hidden; }
   pointer-events: none;
 }
 .shot--screen {
-  left: calc(80.5 * var(--u));
-  top: calc(67 * var(--u));
+  left: calc(80 * var(--u));
+  top: calc(42 * var(--u));
   width: calc(1080 * var(--u));
   height: calc(645 * var(--u));
   overflow: hidden;
@@ -474,6 +453,7 @@ img.is-missing { visibility: hidden; }
     0 -32px 32px rgba(243, 210, 217, 0.09),
     0 -8px 17px rgba(243, 210, 217, 0.1);
 }
+.shot--pears { left: calc(64 * var(--u)); top: calc(74 * var(--u)); }
 
 /* The phone is one picture, frame and all, centred in the picture area. As
    it leans, its edge shows on the side that comes forward, light slides
@@ -539,7 +519,11 @@ img.is-missing { visibility: hidden; }
   padding: 48px 184px 48px 32px;
 }
 
+/* At most 738px: Figma's 742, less what browsers set this type narrower by
+   than Figma does, so the lines break where Figma's do ("local- / first",
+   "an / open-source"). */
 .work-title {
+  max-width: 738px;
   font-family: var(--font-serif);
   font-size: 64px;
   font-weight: 400;
@@ -598,7 +582,8 @@ img.is-missing { visibility: hidden; }
   border-top: 1px solid var(--line);
 }
 
-.cta {
+.cta,
+.work-note {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1331,12 +1316,12 @@ align-self: flex-start;
    (--deal), each sliding in turned a little (--deal-turn) and settling. A paper's picture and the vellum's frosting
    fade in rather than the paper itself: a fading paper would cut the
    frosting off from what's under it. */
-.intro:not(.intro-play) :is(.stipple--lore, .lore-lettering, .lore-folder, .lore-hint) { opacity: 0; }
+.intro:not(.intro-play) .lore :is(.stipple--lore, .lore-lettering, .lore-folder, .lore-hint) { opacity: 0; }
 .intro-play :is(.stipple--lore, .lore-lettering, .page-lore .menu-toggle) { animation: intro-fade 1.4s ease 0.6s backwards; }
 @media (min-width: 720px) {
   .intro-play .page-lore .nav { animation: intro-fade 1.4s ease 0.6s backwards; }
 }
-.intro-play .lore-folder > :is(.folder-base, .folder-label, .folder-arrow) {
+.intro-play .lore .lore-folder > :is(.folder-base, .folder-label, .folder-arrow) {
   animation: intro-slide 1.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 /* The pile slides up into the folder all at once (--deal 0, straight),
@@ -1345,14 +1330,14 @@ align-self: flex-start;
    photo of me only 0.25s after the vellum. In the pile, the top paper
    fades in first and the ones under it (--deal-under) just after, so
    nothing shows through it. */
-.intro-play .sheet {
+.intro-play .lore .sheet {
   --deal-at: calc(0.9s + var(--deal) * 0.7s - var(--deal) * var(--deal) * 0.15s);
   animation: intro-deal calc(0.75s - var(--deal) * 0.035s) cubic-bezier(0.4, 0, 0.2, 1) var(--deal-at) backwards;
 }
-.intro-play .sheet > :is(.sheet-img, .sheet-frost) {
+.intro-play .lore .sheet > :is(.sheet-img, .sheet-frost) {
   animation: intro-fade calc(0.25s - var(--deal) * 0.01s) ease calc(var(--deal-at) + var(--deal-under, 0) * 0.25s) backwards;
 }
-.intro-play .lore-hint { animation: intro-rise 1.6s cubic-bezier(0.22, 1, 0.36, 1) 3.2s backwards; }
+.intro-play .lore .lore-hint { animation: intro-rise 1.6s cubic-bezier(0.22, 1, 0.36, 1) 3.2s backwards; }
 
 @keyframes intro-deal {
   from { translate: calc(24 * var(--u)) calc(120 * var(--u)); rotate: var(--deal-turn); }
@@ -1361,7 +1346,7 @@ align-self: flex-start;
 /* Touch screens: no hover, so the two buttons show once the pile on the
    right is gone. */
 @media (hover: none) {
-  .lore-folder[data-left="6"] > .pill:is(a, button) {
+  .lore-folder.is-through > .pill:is(a, button) {
     opacity: 1;
     visibility: visible;
     translate: -50% var(--rise, -50%);
@@ -1410,13 +1395,13 @@ align-self: flex-start;
     height: 460px;
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    --u: calc(100cqh / 714);
+    --u: calc(100cqh / 664);
   }
-  .stage { left: calc(50% - 252 * var(--u)); top: 0; }
+  .stage { left: calc(50% - 239.5 * var(--u)); top: 0; }
   /* The panel is wider than the stage here, so the grain covers all of it. */
   .stage .grain {
-    left: calc(252 * var(--u));
-    top: calc(357 * var(--u));
+    left: calc(239.5 * var(--u));
+    top: calc(332 * var(--u));
     width: 100cqh;
     height: 100cqw;
     object-fit: cover;
@@ -1605,14 +1590,12 @@ align-self: flex-start;
   .work-tabs { display: contents; }
   #tab-files { order: 1; }
   #panel-files { order: 2; }
-  #tab-node { order: 3; }
-  #panel-node { order: 4; }
-  #tab-network { order: 5; }
-  #panel-network { order: 6; }
-  #tab-home { order: 7; }
-  #panel-home { order: 8; }
-  #tab-smm { order: 9; }
-  #panel-smm { order: 10; }
+  #tab-pears { order: 3; }
+  #panel-pears { order: 4; }
+  #tab-node { order: 5; }
+  #panel-node { order: 6; }
+  #tab-smm { order: 7; }
+  #panel-smm { order: 8; }
 
   .work-tab {
     flex: none;
@@ -1636,19 +1619,20 @@ align-self: flex-start;
 
   .work-title { order: 1; font-size: 48px; line-height: 1.15; text-box: none; }
 
-  /* Pictures, centred, their shadows left uncut, without the grain or the
-     botanical drawing; projects with no picture yet go without. The social
-     post and the phone sit in boxes cropped to them. */
+  /* Pictures, centred, their shadows left uncut, without the grain;
+     projects with no picture go without. The social post sits in a box
+     cropped to it, without its paper. */
   .work-visual { order: 2; border-bottom: 0; overflow: visible; }
   .work-visual:not(:has(.shot)),
-  .work-visual :is(.grain, .botanical) { display: none; }
+  .work-visual .grain,
+  #panel-smm .work-paper { display: none; }
   #panel-smm .work-visual { --u: calc(440px / 714); height: 361px; }
-  #panel-smm .stage { top: -45px; }
-  /* On My Disk's screen on its paper, as in Figma's frame (480 by 664),
-     from edge to edge of the screen: the paper fills the box and the screen
-     runs off its right and bottom. */
-  #panel-files .work-visual { --u: calc(100cqw / 480); height: auto; margin-inline: -16px; aspect-ratio: 480 / 664; overflow: hidden; }
-  #panel-files .stage { left: 0; top: 0; }
+  #panel-smm .stage { left: calc(12 * var(--u)); top: calc(-45px + 24 * var(--u)); }
+  /* On My Disk's and PeARS' screens on their paper, as in Figma's frame
+     (480 by 664), from edge to edge of the screen: the paper fills the box
+     and the screen runs off its right and bottom. */
+  :is(#panel-files, #panel-pears) .work-visual { --u: calc(100cqw / 480); height: auto; margin-inline: -16px; aspect-ratio: 480 / 664; overflow: hidden; }
+  :is(#panel-files, #panel-pears) .stage { left: 0; top: 0; }
   #panel-files .shot--screen { left: calc(74 * var(--u)); top: calc(36 * var(--u)); }
 
   .work-meta-wrap { order: 3; }
@@ -1996,8 +1980,10 @@ html:has(.page-study) { scroll-snap-type: none; }
 
 /* The read: 180px in from each side of the 1440px frame (less on narrower
    windows), its parts 136px apart: the title, the details and the overview,
-   the impact, screens, the problem and the challenge, the question, my role
-   and the solutions. All but the title sit a further 56px in (--cs-inset). */
+   the impact, screens, the problem and the challenge, the question, my role,
+   the solutions, the outcome, the next steps and the other case studies.
+   All but the title sit a further 56px in (--cs-inset). Then the contact
+   section and the footer. */
 .cs {
   --cs-pad: clamp(24px, 12.5vw, 180px);
   --cs-inset: clamp(0px, 3.9vw, 56px);
@@ -2006,7 +1992,7 @@ html:has(.page-study) { scroll-snap-type: none; }
   gap: clamp(72px, 9.44vw, 136px);
   max-width: 1440px;
   margin: 0 auto;
-  padding: 72px var(--cs-pad) 286px;
+  padding: 72px var(--cs-pad);
   color: var(--body);
 }
 .cs-title {
@@ -2284,7 +2270,8 @@ html:has(.page-study) { scroll-snap-type: none; }
 .cs-role .cs-text { line-height: 1.2; }
 
 /* Solutions: what and why, half the read wide on the right or the left,
-   then the screen on paper. */
+   edged on the left in the paper's rim colour, then the screen on paper.
+   The edge comes in with the title (the read's reveal). */
 .cs-solutions {
   display: flex;
   flex-direction: column;
@@ -2301,8 +2288,12 @@ html:has(.page-study) { scroll-snap-type: none; }
   flex-direction: column;
   gap: 32px;
   width: max(50%, min(100%, 420px));
+  padding-left: 32px;
+  border-left: 1px solid rgba(194, 175, 184, 0.26);
   color: var(--ink);
+  transition: border-color 0.7s ease;
 }
+.reveals .cs-solution-text:not(:has(.is-revealed)) { border-color: transparent; }
 .cs-solution--right .cs-solution-text { align-self: flex-end; }
 .cs-solution-title {
   font-family: var(--font-serif);
@@ -2317,6 +2308,70 @@ html:has(.page-study) { scroll-snap-type: none; }
   font-size: 18px;
   font-weight: 300;
   line-height: 1.2;
+}
+
+/* Outcome: three figures side by side, as the impact's, with 56px more
+   room above and below; the botanical drawing runs on from one sheet to the
+   next (the first's from its right, the last's from its left). */
+.cs-outcome {
+  display: flex;
+  gap: 16px;
+  padding: var(--cs-inset);
+}
+.cs-outcome .cs-stat {
+  justify-content: flex-start;
+  padding: 64px 40px;
+}
+.cs-stat-botanical--full { left: 0; width: 100%; object-fit: cover; }
+
+/* Next steps: two side by side, each edged as the solutions are. */
+.cs-next {
+  display: flex;
+  gap: 56px;
+  padding: var(--cs-inset);
+}
+.cs-next .cs-solution-text { flex: 1 0 0; width: auto; min-width: 0; }
+
+/* The other case studies: lore's folder (.lore-folder), 948 of the read's
+   1080 units wide, in the middle, its shadow reaching down over the contact
+   section, above the stipple there. A paper's screenshot is placed on it
+   (--pin-x, --pin-y, --pin-w), so it moves with it. */
+.cs-more {
+  position: relative;
+  z-index: 1;
+  container-type: inline-size;
+}
+.cs-more > * { --u: calc(100cqw / 1080); }
+.cs-more .cs-folder {
+  position: relative;
+  left: auto;
+  top: auto;
+  margin-left: calc(66 * var(--u));
+}
+.cs-folder .folder-label {
+  left: calc(241 * var(--u));
+  translate: -50% 0;
+  white-space: nowrap;
+}
+.cs-folder .folder-arrow {
+  left: calc(149 * var(--u));
+  top: calc(304 * var(--u));
+  width: calc(171 * var(--u));
+}
+.sheet-pin {
+  position: absolute;
+  left: calc(var(--pin-x) * var(--u));
+  top: calc(var(--pin-y) * var(--u));
+  width: calc(var(--pin-w) * var(--u));
+  height: auto;
+  -webkit-user-drag: none;
+}
+
+/* The contact section's stipple starts 480 units above it, at the left
+   edge (Figma), behind the folder. */
+.contact--study .stipple--contact {
+  left: 0;
+  top: calc(-480 * var(--u));
 }
 
 /* Going to a section from the contents: its heading stops clear of the ←. */
@@ -2408,13 +2463,14 @@ html:has(.page-study) { scroll-snap-type: none; }
 .toc-link:focus-visible { outline: 1px solid var(--body); outline-offset: 3px; }
 
 @media (max-width: 1023px) {
-  .cs { padding-bottom: 160px; }
   .toc { display: none; }
+  .cs-outcome { flex-direction: column; }
+  .cs-outcome .cs-stat { flex: none; }
 }
 
 @media (max-width: 719px) {
   .cs-banner { --u: calc(100vw / 1100); --drop: 56px; }
-  .cs { --cs-pad: 20px; gap: 56px; padding-top: 40px; padding-bottom: 120px; }
+  .cs { --cs-pad: 20px; gap: 56px; padding-top: 40px; padding-bottom: 56px; }
   .cs-intro { flex-direction: column; gap: 48px; }
   .cs-details,
   .cs-overview { flex: none; width: 100%; }
@@ -2429,6 +2485,17 @@ html:has(.page-study) { scroll-snap-type: none; }
   .cs-stat { flex: none; padding: 40px 24px; }
   .cs-pair > section { flex: none; width: 100%; }
   .cs-text { font-size: 18px; }
+  .cs-outcome .cs-stat { padding: 40px 24px; }
+  .cs-next { flex-direction: column; gap: 48px; }
+
+  /* The folder close up on its right-hand side, across the whole screen
+     (530 of its units, as on the lore page); papers turned over go off past
+     the left edge. */
+  .cs-more { margin-inline: calc(-1 * var(--cs-pad)); overflow-x: clip; }
+  .cs-more > * { --u: calc(100cqw / 530); }
+  .cs-more .cs-folder { margin-left: calc(100cqw - 954 * var(--u)); }
+  .cs-more .lore-hint { position: static; margin-top: 16px; }
+  .contact--study { --reach: 0px; }
 }
 
 /* Inside the homepage's panel (js/panel.js): its scrolling stays in the
@@ -2546,8 +2613,8 @@ html:has(.page-study) { scroll-snap-type: none; }
   .page-work-first .work-panel {
     min-height: max(calc(600px - var(--tab-h)), calc(100vh - var(--stop-work) - var(--tab-h) - 1px));
   }
-  .page-work-first .work-visual { --u: max(calc(100cqw / 504), calc(100cqh / 714)); }
-  .page-work-first .stage { left: calc(50% - 252 * var(--u)); }
+  .page-work-first .work-visual { --u: max(calc(100cqw / 479), calc(100cqh / 664)); }
+  .page-work-first .stage { left: calc(50% - 239.5 * var(--u)); }
   .page-work-first .nav {
     top: 35px;
     right: 32px;
