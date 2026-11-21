@@ -62,6 +62,11 @@
 }
 .trace-tile.is-selected { background: var(--t-select); border-color: var(--t-select); color: #FFFFFF; }
 
+/* Rotate: the tiles move to their new places at once, then the board turns
+   from where it was, so it looks like a quarter turn. */
+.trace-board.is-turning { animation: trace-turn 280ms ease-out; }
+@keyframes trace-turn { from { transform: rotate(-90deg); } to { transform: none; } }
+
 .trace-line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .trace-line polyline {
   fill: none; stroke: var(--t-select); stroke-opacity: 0.35;
@@ -104,4 +109,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .trace-tile, .trace-bar span { transition: none; }
+  .trace-board.is-turning { animation: none; }
 }

@@ -184,6 +184,7 @@ async function main() {
     line: $("[data-trace-line]"),
     word: $("[data-trace-word]"),
     message: $("[data-trace-message]"),
+    rotate: $("[data-trace-rotate]"),
     hint: $("[data-trace-hint]"),
     hintsLeft: $("[data-trace-hints-left]"),
     share: $("[data-trace-share]"),
@@ -206,7 +207,7 @@ async function main() {
   const number = puzzleNumber();
   const puzzle = makePuzzle(`trace-${day}`, dict);
   const storeKey = `trace:${day}`;
-  const state = Object.assign({ found: [], bonus: [], hints: HINTS, hinted: [] }, load(storeKey));
+  const state = Object.assign({ found: [], bonus: [], hints: HINTS, hinted: [], turns: 0 }, load(storeKey));
   const persist = () => save(storeKey, state);
 
   els.number.textContent = `#${number}`;
@@ -218,10 +219,23 @@ async function main() {
     b.className = "trace-tile";
     b.dataset.index = i;
     b.textContent = letter.toUpperCase();
-    b.setAttribute("aria-label", `${letter.toUpperCase()}, row ${Math.floor(i / SIZE) + 1}, column ${(i % SIZE) + 1}`);
     els.board.appendChild(b);
     return b;
   });
+
+  // Rotation: each tile keeps its index (so the puzzle and the words don't
+  // change) and moves to where a quarter turn clockwise puts it, as many
+  // turns as state.turns. Tiles that touched still touch.
+  function placeTiles() {
+    tiles.forEach((t, i) => {
+      let x = i % SIZE, y = Math.floor(i / SIZE);
+      for (let k = 0; k < state.turns % 4; k++) [x, y] = [SIZE - 1 - y, x];
+      t.style.gridColumn = x + 1;
+      t.style.gridRow = y + 1;
+      t.setAttribute("aria-label", `${puzzle.board[i].toUpperCase()}, row ${y + 1}, column ${x + 1}`);
+    });
+  }
+  placeTiles();
 
   // ----- Current path -----
   let path = [];
@@ -379,6 +393,18 @@ async function main() {
       }
     } else if (e.key === "Escape") clearPath();
   });
+
+  // ----- Rotate: a quarter turn clockwise -----
+  els.rotate.addEventListener("click", () => {
+    clearPath();
+    state.turns = (state.turns + 1) % 4;
+    persist();
+    placeTiles();
+    els.board.classList.remove("is-turning");
+    void els.board.offsetWidth; // restart the animation on quick repeat taps
+    els.board.classList.add("is-turning");
+  });
+  els.board.addEventListener("animationend", () => els.board.classList.remove("is-turning"));
 
   // ----- Hints: the first two letters and length of a word not yet found -----
   els.hint.addEventListener("click", () => {
