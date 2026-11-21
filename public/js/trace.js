@@ -137,8 +137,9 @@ function makePuzzle(seedText, dict) {
   return { board: best.board, required, bonus };
 }
 
-// The tiles that spell a word, if any path does (for typed input).
-function findPath(board, word) {
+// The tiles that spell a word, if any path does (for typed input), starting
+// at tile `start` if given.
+function findPath(board, word, start) {
   const path = [];
   const walk = (i, k) => {
     if (board[i] !== word[k] || path.includes(i)) return false;
@@ -148,6 +149,7 @@ function findPath(board, word) {
     path.pop();
     return false;
   };
+  if (start !== undefined) return walk(start, 0) ? path : null;
   for (let i = 0; i < board.length; i++) if (walk(i, 0)) return path;
   return null;
 }
@@ -218,10 +220,26 @@ async function main() {
     b.type = "button";
     b.className = "trace-tile";
     b.dataset.index = i;
-    b.textContent = letter.toUpperCase();
+    b.innerHTML = `<span class="trace-letter">${letter.toUpperCase()}</span><span class="trace-count" hidden></span>`;
     els.board.appendChild(b);
     return b;
   });
+
+  // Words left: once a third of the words are found, each tile shows how
+  // many words still to find start on it.
+  const COUNTS_AT = Math.ceil(puzzle.required.length / 3);
+  const startsAt = puzzle.board.map((_, i) => puzzle.required.filter((w) => findPath(puzzle.board, w, i)));
+  function showCounts() {
+    const on = state.found.length >= COUNTS_AT && state.found.length < puzzle.required.length;
+    tiles.forEach((t, i) => {
+      const count = t.querySelector(".trace-count");
+      const left = startsAt[i].filter((w) => !state.found.includes(w)).length;
+      count.hidden = !on;
+      count.textContent = left;
+      count.classList.toggle("is-zero", left === 0);
+      t.dataset.left = on ? `, ${left} ${left === 1 ? "word" : "words"} left` : "";
+    });
+  }
 
   // Rotation: each tile keeps its index (so the puzzle and the words don't
   // change) and moves to where a quarter turn clockwise puts it, as many
@@ -232,7 +250,7 @@ async function main() {
       for (let k = 0; k < state.turns % 4; k++) [x, y] = [SIZE - 1 - y, x];
       t.style.gridColumn = x + 1;
       t.style.gridRow = y + 1;
-      t.setAttribute("aria-label", `${puzzle.board[i].toUpperCase()}, row ${y + 1}, column ${x + 1}`);
+      t.setAttribute("aria-label", `${puzzle.board[i].toUpperCase()}, row ${y + 1}, column ${x + 1}${t.dataset.left || ""}`);
     });
   }
   placeTiles();
@@ -288,6 +306,7 @@ async function main() {
       flash("good");
       render();
       if (state.found.length === puzzle.required.length) say("You found every word!", "win");
+      else if (state.found.length === COUNTS_AT) say("Words left now show on each tile", "good");
     } else if (puzzle.bonus.includes(word)) {
       state.bonus.push(word);
       persist();
@@ -440,6 +459,8 @@ async function main() {
     els.hintsLeft.textContent = state.hints;
     els.hint.disabled = state.hints <= 0 || state.found.length === total;
     root.dataset.state = state.found.length === total ? "won" : "playing";
+    showCounts();
+    placeTiles(); // refreshes the tiles' labels with their counts
 
     // Grouped by length: found words shown, the rest as blanks (a hinted
     // word shows its first two letters).

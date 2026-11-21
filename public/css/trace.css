@@ -61,6 +61,16 @@
   transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
 }
 .trace-tile.is-selected { background: var(--t-select); border-color: var(--t-select); color: #FFFFFF; }
+.trace-tile { position: relative; }
+
+/* Words left that start on the tile, at its bottom. */
+.trace-count {
+  position: absolute; left: 0; right: 0; bottom: 7%;
+  font: 600 calc(var(--t-board) * 0.032) / 1 var(--font-sans, system-ui, sans-serif);
+  color: var(--t-muted);
+}
+.trace-count.is-zero { opacity: 0.45; }
+.trace-tile.is-selected .trace-count { color: inherit; opacity: 0.8; }
 
 /* Rotate: the tiles move to their new places at once, then the board turns
    from where it was, so it looks like a quarter turn. */

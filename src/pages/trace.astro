@@ -26,9 +26,9 @@ import Page from "../layouts/Page.astro";
     </div>
     <p class="trace-message" data-trace-message role="status"></p>
     <div class="trace-tools">
-      <button type="button" class="trace-button" data-trace-rotate>Rotate</button>
       <button type="button" class="trace-button" data-trace-hint>Hint (<span data-trace-hints-left>3</span>)</button>
       <button type="button" class="trace-button" data-trace-share>Share</button>
+      <button type="button" class="trace-button" data-trace-rotate>Rotate</button>
     </div>
   </section>
 
@@ -47,6 +47,7 @@ import Page from "../layouts/Page.astro";
       <li>Or tap letters one at a time, then tap the last one again. On a keyboard, type the word and press Enter.</li>
       <li>Words have 4 letters or more. Each tile counts once per word.</li>
       <li>Find every word to finish. Rarer words count as bonus words.</li>
+      <li>Once you’ve found a third of the words, each tile shows how many words left to find start there.</li>
       <li>A new board every day at midnight.</li>
     </ul>
     <p class="trace-credit">Word lists from <a href="http://wordlist.aspell.net/">SCOWL</a> (<a href="assets/words/LICENSE.txt">license</a>).</p>
