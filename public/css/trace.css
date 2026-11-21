@@ -63,9 +63,9 @@
 .trace-tile.is-selected { background: var(--t-select); border-color: var(--t-select); color: #FFFFFF; }
 .trace-tile { position: relative; }
 
-/* Words left that start on the tile, at its bottom. */
+/* Words left that start on the tile, in its bottom-left corner. */
 .trace-count {
-  position: absolute; left: 0; right: 0; bottom: 7%;
+  position: absolute; left: 9%; bottom: 7%;
   font: 600 calc(var(--t-board) * 0.032) / 1 var(--font-sans, system-ui, sans-serif);
   color: var(--t-muted);
 }
