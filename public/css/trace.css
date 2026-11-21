@@ -1,0 +1,107 @@
+/* Trace (js/trace.js). A plain placeholder, to be designed: the colours
+   and sizes are the variables just below. */
+
+.page-trace {
+  --t-bg: var(--bg, #F6F4F5);
+  --t-ink: var(--ink, #201619);
+  --t-muted: var(--line, #7A5D6C);
+  --t-tile: #FFFFFF;
+  --t-tile-border: var(--line-pale, #BDADB5);
+  --t-select: var(--accent, #91255C);
+  --t-good: #2F7D4F;
+  --t-bonus: #B5781F;
+  --t-bad: #B3261E;
+  --t-board: min(88vw, 360px);
+  --t-gap: calc(var(--t-board) * 0.035);
+
+  margin: 0;
+  background: var(--t-bg);
+  color: var(--t-ink);
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.trace {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+.trace-back { color: var(--t-muted); font-size: 14px; }
+.trace-title { margin: 12px 0 4px; font-size: 32px; }
+.trace-title span { color: var(--t-muted); font-weight: 400; }
+.trace-progress { margin: 0 0 8px; color: var(--t-muted); }
+
+.trace-bar { height: 6px; border-radius: 3px; background: var(--t-tile-border); overflow: hidden; }
+.trace-bar span {
+  display: block; height: 100%; background: var(--t-good);
+  width: calc(var(--progress, 0) * 100%); transition: width 300ms ease;
+}
+
+.trace-play { display: flex; flex-direction: column; align-items: center; margin-top: 24px; }
+
+.trace-word {
+  min-height: 1.4em; margin: 0 0 12px;
+  font: 600 24px/1.4 var(--font-mono, ui-monospace, monospace); letter-spacing: 0.1em;
+}
+
+.trace-board-wrap { position: relative; width: var(--t-board); aspect-ratio: 1; }
+
+.trace-board {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--t-gap);
+  width: 100%; height: 100%;
+  touch-action: none; user-select: none; -webkit-user-select: none;
+}
+
+.trace-tile {
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--t-tile-border); border-radius: 14%;
+  background: var(--t-tile); color: var(--t-ink);
+  font: 700 calc(var(--t-board) * 0.1) / 1 var(--font-sans, system-ui, sans-serif);
+  cursor: pointer; padding: 0;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.trace-tile.is-selected { background: var(--t-select); border-color: var(--t-select); color: #FFFFFF; }
+
+.trace-line { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.trace-line polyline {
+  fill: none; stroke: var(--t-select); stroke-opacity: 0.35;
+  stroke-width: calc(var(--t-board) * 0.05); stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* After a submit, the result shows for a moment. */
+[data-flash="good"] .trace-word { color: var(--t-good); }
+[data-flash="bonus"] .trace-word { color: var(--t-bonus); }
+[data-flash="bad"] .trace-word, [data-flash="same"] .trace-word { color: var(--t-bad); }
+
+.trace-message { min-height: 1.4em; margin: 12px 0; color: var(--t-muted); }
+.trace-message[data-kind="good"] { color: var(--t-good); }
+.trace-message[data-kind="bonus"] { color: var(--t-bonus); }
+.trace-message[data-kind="bad"] { color: var(--t-bad); }
+.trace-message[data-kind="win"] { color: var(--t-good); font-weight: 600; }
+
+.trace-tools { display: flex; gap: 8px; }
+.trace-button {
+  font: inherit; padding: 8px 16px; border-radius: 999px;
+  border: 1.5px solid var(--t-tile-border); background: var(--t-tile); color: var(--t-ink); cursor: pointer;
+}
+.trace-button:disabled { opacity: 0.5; cursor: default; }
+
+.trace-lists { margin-top: 32px; }
+.trace-group-title { margin: 20px 0 8px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.trace-group-title span { color: var(--t-muted); font-weight: 400; }
+.trace-words {
+  display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0; padding: 0; list-style: none;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+.trace-words .is-hidden { color: var(--t-tile-border); letter-spacing: 0.1em; }
+.trace-words .is-hinted { color: var(--t-muted); letter-spacing: 0.1em; }
+
+.trace-bonus, .trace-help { margin-top: 24px; }
+.trace-bonus summary, .trace-help summary { cursor: pointer; font-weight: 600; }
+.trace-bonus .trace-words { margin-top: 8px; color: var(--t-bonus); }
+.trace-help ul { padding-left: 20px; line-height: 1.5; }
+.trace-credit { font-size: 13px; color: var(--t-muted); }
+
+@media (prefers-reduced-motion: reduce) {
+  .trace-tile, .trace-bar span { transition: none; }
+}

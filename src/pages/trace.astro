@@ -1,0 +1,54 @@
+---
+import Page from "../layouts/Page.astro";
+// Trace: a daily word game (js/trace.js). The styles in css/trace.css are a
+// placeholder, waiting for a design. The script finds its parts by their
+// data-trace-* attributes, so classes and markup can change freely.
+---
+<Page title="Trace — a daily word game" description="Trace: swipe through touching letters to find every word on today’s board." bodyClass="page-trace" cal={false} scripts={false} noindex>
+<Fragment slot="head">
+<link rel="stylesheet" href="css/trace.css">
+<script is:inline type="module" src="js/trace.js"></script>
+</Fragment>
+
+<main class="trace" data-trace>
+  <header class="trace-head">
+    <a class="trace-back" href="/">← Anna Volkova</a>
+    <h1 class="trace-title">Trace <span data-trace-number></span></h1>
+    <p class="trace-progress" data-trace-progress>Loading…</p>
+    <div class="trace-bar" data-trace-bar aria-hidden="true"><span></span></div>
+  </header>
+
+  <section class="trace-play" aria-label="Board">
+    <p class="trace-word" data-trace-word aria-live="polite"></p>
+    <div class="trace-board-wrap">
+      <div class="trace-board" data-trace-board></div>
+      <svg class="trace-line" aria-hidden="true"><polyline data-trace-line points="" /></svg>
+    </div>
+    <p class="trace-message" data-trace-message role="status"></p>
+    <div class="trace-tools">
+      <button type="button" class="trace-button" data-trace-hint>Hint (<span data-trace-hints-left>3</span>)</button>
+      <button type="button" class="trace-button" data-trace-share>Share</button>
+    </div>
+  </section>
+
+  <section class="trace-lists" aria-label="Words">
+    <div data-trace-found></div>
+    <details class="trace-bonus">
+      <summary>Bonus words (<span data-trace-bonus-count>0</span>)</summary>
+      <ul class="trace-words" data-trace-bonus></ul>
+    </details>
+  </section>
+
+  <details class="trace-help">
+    <summary>How to play</summary>
+    <ul>
+      <li>Swipe through touching letters (across, up and down, or diagonally) to spell a word, then let go.</li>
+      <li>Or tap letters one at a time, then tap the last one again. On a keyboard, type the word and press Enter.</li>
+      <li>Words have 4 letters or more. Each tile counts once per word.</li>
+      <li>Find every word to finish. Rarer words count as bonus words.</li>
+      <li>A new board every day at midnight.</li>
+    </ul>
+    <p class="trace-credit">Word lists from <a href="http://wordlist.aspell.net/">SCOWL</a> (<a href="assets/words/LICENSE.txt">license</a>).</p>
+  </details>
+</main>
+</Page>
