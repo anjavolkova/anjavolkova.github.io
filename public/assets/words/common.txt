@@ -11,6 +11,8 @@ abate
 abated
 abates
 abating
+abbe
+abbes
 abbey
 abbeys
 abbot
@@ -428,6 +430,7 @@ adhering
 adhesion
 adhesive
 adhesives
+adios
 adjacent
 adjective
 adjectives
@@ -1382,6 +1385,10 @@ applicator
 applicators
 applied
 applies
+applique
+appliqued
+appliqueing
+appliques
 apply
 applying
 appoint
@@ -1839,7 +1846,9 @@ atrociously
 atrocities
 atrocity
 attach
+attache
 attached
+attaches
 attaching
 attachment
 attachments
@@ -3068,6 +3077,7 @@ blare
 blared
 blares
 blaring
+blase
 blaspheme
 blasphemed
 blasphemes
@@ -3553,6 +3563,8 @@ bourgeoisie
 bout
 boutique
 boutiques
+boutonniere
+boutonnieres
 bouts
 bovine
 bovines
@@ -4308,6 +4320,8 @@ cadence
 cadences
 cadet
 cadets
+cafe
+cafes
 cafeteria
 cafeterias
 caffeine
@@ -4416,6 +4430,8 @@ campus
 campuses
 canal
 canals
+canape
+canapes
 canaries
 canary
 cancel
@@ -5126,6 +5142,10 @@ chastises
 chastising
 chastity
 chat
+chateau
+chateaux
+chatelaine
+chatelaines
 chats
 chatted
 chatter
@@ -5651,11 +5671,16 @@ cleverer
 cleverest
 cleverly
 cleverness
+cliche
+cliched
+cliches
 click
 clicked
 clicking
 clicks
 client
+clientele
+clienteles
 clients
 cliff
 cliffs
@@ -6523,6 +6548,8 @@ confound
 confounded
 confounding
 confounds
+confrere
+confreres
 confront
 confronted
 confronting
@@ -6660,6 +6687,7 @@ consolidate
 consolidated
 consolidates
 consoling
+consomme
 consonant
 consonants
 consort
@@ -7106,6 +7134,8 @@ corset
 corseted
 corseting
 corsets
+cortege
+corteges
 cortex
 cosmetic
 cosmetics
@@ -7409,6 +7439,8 @@ creator
 creators
 creature
 creatures
+creche
+creches
 credence
 credential
 credentials
@@ -7573,6 +7605,8 @@ crouch
 crouched
 crouches
 crouching
+crouton
+croutons
 crow
 crowbar
 crowbars
@@ -7601,6 +7635,7 @@ crude
 crudely
 cruder
 crudest
+crudites
 crudity
 cruel
 crueler
@@ -8119,6 +8154,8 @@ debunked
 debunking
 debunks
 debut
+debutante
+debutantes
 debuted
 debuting
 debuts
@@ -8199,6 +8236,7 @@ decoded
 decoder
 decodes
 decoding
+decollete
 decompose
 decomposed
 decomposes
@@ -8656,6 +8694,8 @@ deputy
 derail
 derailed
 derailing
+derailleur
+derailleurs
 derailment
 derailments
 derails
@@ -8681,6 +8721,8 @@ deriving
 derogatory
 derrick
 derricks
+derriere
+derrieres
 descend
 descendant
 descendants
@@ -8808,6 +8850,7 @@ detectives
 detector
 detectors
 detects
+detente
 detention
 detentions
 deter
@@ -9711,6 +9754,8 @@ divisor
 divisors
 divorce
 divorced
+divorcee
+divorcees
 divorces
 divorcing
 divulge
@@ -10376,6 +10421,9 @@ echo
 echoed
 echoes
 echoing
+eclair
+eclairs
+eclat
 eclectic
 eclipse
 eclipsed
@@ -10517,6 +10565,7 @@ elaborates
 elaborating
 elaboration
 elaborations
+elan
 elapse
 elapsed
 elapses
@@ -10728,6 +10777,8 @@ emigrates
 emigrating
 emigration
 emigrations
+emigre
+emigres
 eminence
 eminences
 eminent
@@ -11095,6 +11146,8 @@ entreaties
 entreating
 entreats
 entreaty
+entree
+entrees
 entrench
 entrenched
 entrenches
@@ -11147,6 +11200,8 @@ enzymes
 eons
 epaulet
 epaulets
+epee
+epees
 ephemeral
 epic
 epics
@@ -11327,6 +11382,8 @@ ethnic
 ethnics
 ethos
 etiquette
+etude
+etudes
 etymological
 etymologies
 etymology
@@ -12285,7 +12342,9 @@ fetch
 fetched
 fetches
 fetching
+fete
 feted
+fetes
 fetid
 feting
 fetish
@@ -12309,6 +12368,10 @@ fevers
 fewer
 fewest
 fezzes
+fiance
+fiancee
+fiancees
+fiances
 fiasco
 fiascoes
 fibbed
@@ -12592,6 +12655,8 @@ flakier
 flakiest
 flaking
 flaky
+flambe
+flambeed
 flamboyance
 flamboyant
 flamboyantly
@@ -13344,6 +13409,7 @@ frankly
 franks
 frantic
 frantically
+frappe
 fraternal
 fraternities
 fraternity
@@ -14957,6 +15023,8 @@ habitats
 habits
 habitual
 habitually
+habitue
+habitues
 hack
 hacked
 hacker
@@ -17050,6 +17118,8 @@ infusion
 infusions
 ingenious
 ingeniously
+ingenue
+ingenues
 ingenuity
 ingest
 ingested
@@ -17831,6 +17901,8 @@ jailer
 jailers
 jailing
 jails
+jalapeno
+jalapenos
 jalopies
 jalopy
 jamb
@@ -17846,6 +17918,8 @@ jangles
 jangling
 janitor
 janitors
+jardiniere
+jardinieres
 jargon
 jarred
 jarring
@@ -18376,6 +18450,8 @@ kowtow
 kowtowed
 kowtowing
 kowtows
+krona
+kronur
 kudos
 label
 labeled
@@ -19559,6 +19635,7 @@ macho
 macing
 mackerel
 mackerels
+macrame
 macroscopic
 madam
 madame
@@ -19746,6 +19823,7 @@ mandibles
 mandolin
 mandolins
 mane
+manege
 manes
 maneuver
 maneuvered
@@ -19817,6 +19895,7 @@ mannish
 manor
 manors
 manpower
+manque
 mans
 mansion
 mansions
@@ -20027,12 +20106,15 @@ materialize
 materialized
 materializes
 materials
+materiel
 maternal
 maternity
 mates
 math
 mathematical
 mathematics
+matinee
+matinees
 mating
 matriarch
 matriarchal
@@ -20206,6 +20288,8 @@ megaphoning
 megaton
 megatons
 melancholy
+melee
+melees
 mellow
 mellowed
 mellower
@@ -20374,6 +20458,8 @@ methodical
 methodology
 methods
 meticulous
+metier
+metiers
 meting
 metric
 metro
@@ -21365,6 +21451,7 @@ naive
 naively
 naiver
 naivest
+naivete
 naivety
 naked
 nakedness
@@ -22614,6 +22701,7 @@ outrageously
 outrages
 outraging
 outran
+outre
 outright
 outrun
 outrunning
@@ -23285,6 +23373,7 @@ passageway
 passageways
 passbook
 passbooks
+passe
 passed
 passenger
 passengers
@@ -24897,10 +24986,13 @@ precipitate
 precipitated
 precipitates
 precipitous
+precis
 precise
+precised
 precisely
 preciser
 precisest
+precising
 precision
 preclude
 precluded
@@ -25531,6 +25623,8 @@ protective
 protector
 protectors
 protects
+protege
+proteges
 protein
 proteins
 protest
@@ -26575,6 +26669,7 @@ rechargeable
 recharged
 recharges
 recharging
+recherche
 recipe
 recipes
 recipient
@@ -27970,6 +28065,7 @@ riskiest
 risking
 risks
 risky
+risque
 rite
 rites
 ritual
@@ -28138,6 +28234,8 @@ rotting
 rotund
 rotunda
 rotundas
+roue
+roues
 rouge
 rouged
 rouges
@@ -28606,6 +28704,10 @@ sauntering
 saunters
 sausage
 sausages
+saute
+sauteed
+sauteing
+sautes
 savage
 savaged
 savagely
@@ -28983,6 +29085,8 @@ seaming
 seams
 seamstress
 seamstresses
+seance
+seances
 seaport
 seaports
 sear
@@ -30448,6 +30552,8 @@ smoothing
 smoothly
 smoothness
 smooths
+smorgasbord
+smorgasbords
 smote
 smother
 smothered
@@ -30708,6 +30814,8 @@ soil
 soiled
 soiling
 soils
+soiree
+soirees
 sojourn
 sojourned
 sojourning
@@ -30849,6 +30957,8 @@ sorta
 sorted
 sorting
 sorts
+souffle
+souffles
 sought
 soul
 souls
@@ -30864,6 +30974,8 @@ soundproofs
 sounds
 soundtrack
 soup
+soupcon
+soupcons
 souped
 souping
 soups
@@ -34086,6 +34198,7 @@ toucans
 touch
 touchdown
 touchdowns
+touche
 touched
 touches
 touchier
@@ -35886,6 +35999,8 @@ victories
 victorious
 victors
 victory
+vicuna
+vicunas
 video
 videos
 videotape

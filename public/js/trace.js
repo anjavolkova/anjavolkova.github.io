@@ -211,6 +211,11 @@ async function main() {
   const puzzle = makePuzzle(`trace-${day}`, dict);
   const storeKey = `trace:${day}`;
   const state = Object.assign({ found: [], bonus: [], hints: HINTS, hinted: [], turns: 0 }, load(storeKey));
+  // Keep only words this board has (if the word lists change, a day's board
+  // can too).
+  state.found = state.found.filter((w) => puzzle.required.includes(w));
+  state.bonus = state.bonus.filter((w) => puzzle.bonus.includes(w));
+  state.hinted = state.hinted.filter((w) => puzzle.required.includes(w));
   const persist = () => save(storeKey, state);
 
   els.number.textContent = `#${number}`;
