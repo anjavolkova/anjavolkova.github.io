@@ -189,6 +189,7 @@ async function main() {
     rotate: $("[data-trace-rotate]"),
     hint: $("[data-trace-hint]"),
     hintsLeft: $("[data-trace-hints-left]"),
+    hintText: $("[data-trace-hint-text]"),
     share: $("[data-trace-share]"),
     found: $("[data-trace-found]"),
     bonus: $("[data-trace-bonus]"),
@@ -435,6 +436,12 @@ async function main() {
     state.hinted.push(word);
     persist();
     render();
+    // Point at it on the board: the tile it starts on pulses.
+    const start = findPath(puzzle.board, word)[0];
+    tiles[start].classList.remove("is-hint");
+    void tiles[start].offsetWidth;
+    tiles[start].classList.add("is-hint");
+    tiles[start].addEventListener("animationend", () => tiles[start].classList.remove("is-hint"), { once: true });
   });
 
   // ----- Share -----
@@ -458,6 +465,14 @@ async function main() {
     els.bar.style.setProperty("--progress", state.found.length / total);
     els.hintsLeft.textContent = state.hints;
     els.hint.disabled = state.hints <= 0 || state.found.length === total;
+
+    // Hints still open (hinted, not yet found), under the board.
+    const open = state.hinted.filter((w) => !state.found.includes(w));
+    els.hintText.hidden = !open.length;
+    els.hintText.innerHTML = open.length
+      ? `${open.length > 1 ? "Hints" : "Hint"}: ` +
+        open.map((w) => `<strong>${w.slice(0, 2).toUpperCase()}${"·".repeat(w.length - 2)}</strong> <span>${w.length} letters</span>`).join(", ")
+      : "";
     root.dataset.state = state.found.length === total ? "won" : "playing";
     showCounts();
     placeTiles(); // refreshes the tiles' labels with their counts

@@ -94,6 +94,13 @@
 .trace-message[data-kind="bad"] { color: var(--t-bad); }
 .trace-message[data-kind="win"] { color: var(--t-good); font-weight: 600; }
 
+/* Open hints, under the board, and the tile a new hint starts on. */
+.trace-hint-text { margin: 0 0 12px; color: var(--t-ink); text-align: center; }
+.trace-hint-text strong { color: var(--t-select); font-family: var(--font-mono, ui-monospace, monospace); letter-spacing: 0.1em; }
+.trace-hint-text span { color: var(--t-muted); font-size: 0.9em; }
+.trace-tile.is-hint { animation: trace-hint 1.2s ease-in-out 2; }
+@keyframes trace-hint { 50% { border-color: var(--t-select); box-shadow: 0 0 0 4px color-mix(in srgb, var(--t-select) 30%, transparent); } }
+
 .trace-tools { display: flex; gap: 8px; }
 .trace-button {
   font: inherit; padding: 8px 16px; border-radius: 999px;
@@ -109,7 +116,7 @@
   font-family: var(--font-mono, ui-monospace, monospace);
 }
 .trace-words .is-hidden { color: var(--t-tile-border); letter-spacing: 0.1em; }
-.trace-words .is-hinted { color: var(--t-muted); letter-spacing: 0.1em; }
+.trace-words .is-hinted { color: var(--t-select); font-weight: 600; letter-spacing: 0.1em; }
 
 .trace-bonus, .trace-help { margin-top: 24px; }
 .trace-bonus summary, .trace-help summary { cursor: pointer; font-weight: 600; }
@@ -120,4 +127,5 @@
 @media (prefers-reduced-motion: reduce) {
   .trace-tile, .trace-bar span { transition: none; }
   .trace-board.is-turning { animation: none; }
+  .trace-tile.is-hint { animation: none; border-color: var(--t-select); }
 }
